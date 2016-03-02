@@ -1,0 +1,18 @@
+html, body, .gearAppMain{
+	font-family: 'Roboto', sans-serif;
+	background-color: #ecf0f1;
+	height: 110%;
+	width: 100%;
+	margin:0px;
+	padding: 0px;
+}
+
+.footer{
+	clear: both;
+	background-color: #ecf0f1;
+	text-align: center;
+	padding: 10px;
+	padding-bottom: 20px;
+}
+
+

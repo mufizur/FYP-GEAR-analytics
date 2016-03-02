@@ -1,0 +1,19 @@
+<div class = "loginContainer">
+	<form class = "loginForm">
+		<div class = "row">
+			<div class = "medium-offset-2 medium-8 small-offset-0 small-12 columns">
+				<label>Username
+					<input type="text" placeholder="e.g. user@client.com" ng-model="user.username"/>
+				</label>
+
+				<label>Password
+					<input type="password" placeholder="e.g. user123" ng-model="user.password"/>
+				</label>
+
+				<br/>
+				<a ng-click="login(user)" class="button success loginButton">Enter</a>
+			</div>
+		</div>
+
+	</form>
+</div>

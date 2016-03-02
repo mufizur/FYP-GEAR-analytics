@@ -1,0 +1,12 @@
+[
+    {"sessionNum" : 1,  "sessionProgress": 30},
+    {"sessionNum" : 2,  "sessionProgress": 20},
+    {"sessionNum" : 3,  "sessionProgress": 50},
+    {"sessionNum" : 4,  "sessionProgress": 40},
+    {"sessionNum" : 5,  "sessionProgress": 40},
+    {"sessionNum" : 6,  "sessionProgress": 80},
+    {"sessionNum" : 7,  "sessionProgress": 70},
+    {"sessionNum" : 8,  "sessionProgress": 60},
+    {"sessionNum" : 9,  "sessionProgress": 50},
+    {"sessionNum" : 10, "sessionProgress": 100}
+]

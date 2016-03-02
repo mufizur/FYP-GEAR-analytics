@@ -1,0 +1,10 @@
+
+Summary of URLS
+/user?username=''&password=''
+
+
+/patients		       			- returns all the patients 
+/patients/<patientId>	       			- returns one particiular patient 
+/patients/<patientId>/sessions	       		- returns all the sessions of the patient 
+/patients/<patientId>/sessions/<sessionId>	- returns all the exercises in the session
+/patients/<patientId>/sessions/<sessionId>/<exerciseId> - returns exercise 

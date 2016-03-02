@@ -1,0 +1,116 @@
+.websiteHeader{
+	background-color: #2f2f2f;
+	color:white;
+	height: 45px;
+}
+
+.applicationName{
+	font-size: 1.5em;
+	margin-left: 10px;
+}
+.platformname{
+	color:#e74c3c;
+	padding-left: 5px; 
+	font-size: 1.5em;
+}
+
+.logout-button-span{
+	float: right;
+	background-color: #2980b9; 
+	color: white;
+	vertical-align: top;
+	padding: 10px;
+	padding-bottom: 5px;
+	padding-top: 5px;
+	margin-right: 20px;
+	margin-top: 5px;
+}
+
+.logout-button-span:hover{
+	background-color: green;
+}
+
+.button-logout, .button-logout:hover{
+	color: white;
+}
+
+.menuIcons{
+	padding: 10px;
+	width : 50px;
+	height: 50px;	
+}
+
+.menuIconsDiv:hover{
+	background-color: rgba(255,255,255,0.4);
+}
+
+.arrow-right{
+	width : 0; 
+	height: 0; 
+	border-top   : 10px solid transparent;
+	border-bottom: 10px solid transparent; 
+	border-right : 10px solid white; 
+	display: inline-block;
+	vertical-align: middle;
+	float: right;
+	margin-top: 15px;
+}
+
+.selectedIcon{
+	background-color: #e74c3c;
+}
+
+.container{
+	height: inherit;
+	width : inherit;
+}
+.containerTable{
+	height: inherit;
+	width : inherit;
+	border-spacing: 0px;
+}
+
+.containerColumn{
+	vertical-align: top;
+}
+
+.sideSelectionOverviewDiv{
+	padding-top: 25%;
+}
+
+#sideSelectionDiv{
+	background:rgba(0,0,0, 0.6);
+	color  :white;
+	width  :150px;
+	padding:0px;
+	margin :0px;
+}
+
+.progressBarText{
+	font-size: 0.8em;
+	text-align: left;
+	padding-left: 5px;
+}
+
+.verticalLabel{
+	padding: 10px;
+	background-color: #efefef;
+}
+
+.horitzontalLabel{
+	padding: 10px;
+	background-color: #efefef;
+	float:right;
+}
+
+.ct-series-a .ct-point {
+  stroke: #f1c40f !important;
+  stroke-width: 20px;
+}
+
+.toolTip{
+	padding: 10px;
+	position: relative;
+	background-color: yellow;
+	width: 100px;
+}

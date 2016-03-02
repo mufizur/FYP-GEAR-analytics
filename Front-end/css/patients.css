@@ -1,0 +1,109 @@
+#patientSearchDiv{
+	background-color:rgba(0,0,0,0.8);
+	width :150px; !important
+}
+
+.patientListSearch{
+	padding: 10px;
+	background-color: #f1f1f1;
+	border-top: 1px solid #a1a1a1;
+	text-align: center;
+}
+
+.patientListSearch:hover{
+	background-color: #ffffff;
+}
+
+.patientListSearch:active{
+	background-color: rgba(255,255,255,1.0);
+}
+
+.patientSearchImgUrl{
+	width: 50px;
+	height: 50px;
+	border-radius: 25px;
+	-webkit-border-radius: 25px;
+	-moz-border-radius: 25px;
+}
+
+.patientListSearchSelected{
+	background-color: green;
+}
+
+.patientProfileInformationElements{
+	position: relative;
+	display: inline-block;
+}
+
+.patientProfileImgUrl{
+	height: 100px;
+	width: 100px;
+	border-radius: 50px;
+	-webkit-border-radius: 50px;
+	-moz-border-radius: 50px;
+}
+
+.patientProfileInfo{
+	margin-left: 10px;
+	vertical-align: middle;
+}
+
+.patientProfileName{
+	font-size: 2em;
+}
+
+.patientInjuryName{
+	font-size: 1.5em;
+}
+
+.patientProfileInjury{
+	background-color: #efefef;
+	padding: 20px;
+	margin-top: 20px;
+	margin-bottom: 20px;
+}
+.patientAdmissionDate{
+	text-align: right;
+}
+
+.ct-bar{
+	stroke : #f1c40f !important;
+	stroke-width:20px !important;
+}
+
+.ct-series-a > .ct-bar{
+	stroke: green !important;
+}
+
+.ct-series-b > .ct-bar{
+	stroke: red !important;
+}
+
+.patientFeedbackHeader{
+	font-size: 2em;
+}
+
+.userFeedback{
+	text-align: center;
+}
+
+.movementRecordedRawData{
+	color: #616161;
+}
+
+.movementStartActionDiv, .movementEndActionDiv{
+	padding: 10px;
+	background-color: #f4f4f4;
+}
+
+.movementDataDiv{
+	padding: 20px;
+	padding-top: 0px;
+	padding-bottom: 0px;
+}
+
+.movementValue{
+	font-size: 1.2em; 
+	padding: 20px;
+}
+

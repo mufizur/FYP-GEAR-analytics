@@ -1,0 +1,177 @@
+<div class = "container">
+	<div class="websiteHeader">
+		<span class = "applicationName">GEAR</span><span class = "platformname">ANALYTICS</span>
+		<span class = "logout-button-span"><a class = "button-logout" ng-click="logout()">Logout</a></span>
+	</div>
+	<table class="containerTable">
+		<td class="containerColumn" id = "sideSelectionDiv">
+			<div class="sideSelectionOverviewDiv">
+				<div class = "menuIconsDiv" 			 ng-click="selectMenu('overview')"> <img class="menuIcons" id="overviewIcon" src="img/mainIcon.png"/>     overview </div>
+				<div class = "menuIconsDiv selectedIcon" ng-click="selectMenu('patients')"> <img class="menuIcons" id="patientsIcon" src="img/patientsIcon.png"/> patients <div class="arrow-right"></div></div>
+				<div class = "menuIconsDiv" 			 ng-click="selectMenu('settings')"> <img class="menuIcons" id="settingsIcon" src="img/settingsIcon.png"/> settings </div>
+			</div>
+		</td>
+		<td class="containerColumn">
+			<div class = "patientDataContainer" ng-if=patientInfo>
+				<div class = "templateHeader">Patient Details</div>
+				<div class = "summaryHeader"> About Patient </div><br/>
+				<div class = "row" ng-if="patientInfo.firstName">
+					<div class = "small-12 medium-12 large-6 columns ProfileInformation">
+						<div class = "row">
+							<div class = "small-12 columns">
+								<div class = "patientProfileImg patientProfileInformationElements">
+									<img class = "patientProfileImgUrl" ng-src="{{patientInfo.patientImgId}}" />
+								</div>
+								<div class = "patientProfileInfo patientProfileInformationElements">
+									<span class = "patientProfileName">{{patientInfo.firstName}} {{patientInfo.lastName}}</span><br>
+									<span class = "patientProfileGender">{{patientInfo.gender}} </span><br>
+									<span class = "patientProfileAge">{{patientInfo.age}} years old</span><br>
+									<span class = "patientProfileHeight">{{patientInfo.height}}</span> cm<br>
+									<span class = "patientProfileWeight">{{patientInfo.weight}}</span> kg<br>
+								</div>
+							</div>
+							<div class = "small-12 columns">
+								
+								<br/>Recovery<br/>
+								<div class="progress round">
+									<span class="meter" style="width:{{patientInfo.ROMrecovery}}%"></span>
+									<p class = "progressBarText">{{patientInfo.ROMrecovery}}%</p>
+								</div></br>
+
+								<br/>Progress<br/>
+								<div class="progress round">
+									<span class="meter" style="width:{{patientInfo.patientPogress}}%"></span>
+									<p class = "progressBarText">{{patientInfo.patientPogress}}%</p>
+								</div></br>
+								<p class = "patientProgressInformation">Completed {{patientInfo.sessionsCompleted}} out of {{patientInfo.totalSessions}} sessions</p>
+							</div>
+						</div>
+					</div>
+					<div class = "small-12 medium-12 large-6 columns patientProfileInjury">
+						Injury<br/><br/>
+						<span class = "patientInjuryName">{{patientInfo.injuryName}}</span><br/>
+						<span class = "patientInjuryDescription">{{patientInfo.injuryDescription}}</span><br/><br/>
+						<span class = "patientAdmissionDate">{{patientInfo.registrationDate | date : 'fullDate'}}</span><br/>
+					</div>
+				</div>
+
+				<!-- session Chart -->
+				<div class = "summaryHeader"> Sessions </div><br/>
+				<span class = "verticalLabel">Recovery(%)</span><br/><br/>
+				<div class = "ct-chart ct-double-octave" id = "patient-sessions-chart"></div>
+				<span class = "horitzontalLabel">session number</span><br/><br/><br/>
+
+
+				<!-- levels Chart -->
+				<div class = "summaryHeader"> Session {{sessionId}} > Levels   </div><br/>
+				<span class = "verticalLabel">Recovery(%)</span><br/><br/>
+				<div class = "ct-chart ct-double-octave" id = "patient-levels-chart"></div>
+				<span class = "horitzontalLabel">level</span><br/><br/><br/>
+
+				<!-- Level patient feedback -->
+				<div class = "summaryHeader"> Session {{sessionId}} > Level {{levelId}} </div><br/>
+				<div class = "row userFeedback">
+					<div class  = "small-12 medium-4 large-4 columns">
+						Pain <br><br> 
+						<div class="progress round">
+							<span class="meter" style="width:{{levels[levelId-1].pain / 10 * 100}}%"></span>
+							<p class = "progressBarText">{{levels[levelId-1].pain / 10 * 100}}%</p>
+						</div></br>
+					</div>
+					<div class  = "small-12 medium-4 large-4 columns">
+						Strength <br><br>
+						<div class="progress success round">
+							<span class="meter" style="width:{{levels[levelId-1].strength / 10 * 100}}%"></span>
+							<p class = "progressBarText">{{levels[levelId-1].strength / 10 * 100}}%</p>
+						</div></br>
+					</div>
+					<div class  = "small-12 medium-4 large-4 columns">
+						ROM <br><br> 
+						<div class="progress alert round">
+							<span class="meter" style="width:{{levels[levelId-1].RangeOfMotion / 10 * 100}}%"></span>
+							<p class = "progressBarText">{{levels[levelId-1].RangeOfMotion / 10 * 100}}%</p>
+						</div></br>
+					</div>
+				</div>
+
+				<!-- actions Chart -->
+				<div class = "summaryHeader"> Session {{sessionId}} > Level {{levelId}} > Actions </div><br/>
+				<span class = "verticalLabel">Recovery(%)</span><br/><br/>
+				<div class = "ct-chart ct-double-octave" id = "patient-actions-chart"></div>
+				<span class = "horitzontalLabel">Action</span><br/><br/><br/>
+
+				<!-- movements Chart -->
+				<div class = "summaryHeader"> Session {{sessionId}} > Level {{levelId}} > Action {{actionId}} > movements </div><br/>
+				<div class = "row">
+					<div class = "movementStartActionDiv small-12 medium-6 large-6 columns">
+						<img ng-src="{{movementStart.actionImgId}}" /><br><br>
+
+						<div class = "movementDataDiv">
+							Accuracy <br>
+							<p class = "movementValue">{{movementStart.actionComplete}}%</p>
+							<br>
+
+							Expected <br>
+							<p class = "movementValue">{{movementStart.referenceValue}}</p>
+							<br>
+							
+							Recorded <br>
+							<p class = "movementValue">
+								{{movementStart.recordedValue}}<br>
+								<div class = "movementRecordedRawData">
+									Yaw ({{movementStart.yaw}}) Pitch ({{movementStart.pitch}}) Roll ({{movementStart.roll}})
+								</div><br>
+							</p><br>
+
+							Time Taken <br>
+							<p class = "movementValue">{{movementStart.actionDuration}} mins</p><br>
+						</div>
+
+					</div>
+
+					<div class = "movementEndActionDiv small-12 medium-6 large-6 columns">
+						<img ng-src="{{movementEnd.actionImgId}}" /><br><br>
+
+						<div class = "movementDataDiv">
+							Accuracy <br>
+							<p class = "movementValue">{{movementEnd.actionComplete}}%</p>
+							<br>
+
+							Expected <br>
+							<p class = "movementValue">{{movementEnd.referenceValue}}</p>
+							<br>
+
+							Recorded <br>
+							<p class = "movementValue">
+								{{movementEnd.recordedValue}}<br>
+								<div class = "movementRecordedRawData">
+									Yaw ({{movementEnd.yaw}}) Pitch ({{movementEnd.pitch}}) Roll ({{movementEnd.roll}})
+								</div><br>
+							</p><br>
+
+							Time Taken <br>
+							<p class = "movementValue">{{movementEnd.actionDuration}} mins</p><br>
+						</div>
+					</div>
+				</div>
+			</div>
+		</td>
+		
+		<td class="containerColumn" id = "patientSearchDiv">
+			<input type="text" placeholder="search" ng-model="searchText">
+
+			<div class = "patientListSearch" ng-repeat = "patient in patients | filter:searchText" ng-click="viewPatientPerformance(patient.patientId, patient.injuryId)">
+				<div class = "patientListSearchImg"><img class = "patientSearchImgUrl" ng-src="{{patient.patientImgId}}" />
+				<div class = "patientListSearchName"> {{patient.firstName}} <br> {{patient.lastName}}</div><br>
+
+				<div class="progress round">
+					<span class="meter" style="width:{{patient.ROMrecovery}}%"></span>
+					<p class = "progressBarText">{{patient.ROMrecovery}}%</p>
+				</div></br>
+			</div>
+			
+		</td>
+	</table>
+
+	<div class="footer">&copy; National University Of Singapore</div>
+</div>

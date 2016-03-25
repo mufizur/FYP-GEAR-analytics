@@ -6,6 +6,10 @@ gearApp.config(['$routeProvider', function($routeProvider){
 			templateUrl : 'templates/login.html',
 			controller  : 'LoginController'
 		})
+		.when('/dashboard', {
+			templateUrl: 'templates/dashboard.html',
+			controller: 'DashboardController'
+		})
 		.when('/overview', {
 			templateUrl : 'templates/overview.html',
 			controller  : 'OverviewController'

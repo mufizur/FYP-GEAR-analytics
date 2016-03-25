@@ -1,0 +1,32 @@
+.toolTipHtml{
+	text-align: center;
+}
+
+.toolTipHeader{
+	color: #f1c40f;
+	font-size: 0.7em;
+
+}
+
+.toolTipData{
+	font-size: 0.7em;
+}
+
+
+.barToolTipTag, .curveToolTipTag{
+	font-size: 0.8em;
+}
+
+.toolTipSessionNumber{
+	font-size: 0.8em;
+	width: 100%;
+}
+
+.toolTip{
+	text-align: center;
+}
+
+.dashboard{
+	max-width: 768px;
+	min-width: 480px;
+}

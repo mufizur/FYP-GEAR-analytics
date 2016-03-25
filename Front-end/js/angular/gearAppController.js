@@ -15,6 +15,61 @@ var GLOBAL_OBJECTS = {
 	'ACTION_ID'	 : '1'
 }
 
+gearAppControllers.controller('DashboardController', ['$scope', '$http', '$location', function($scope, $http, $location) {
+	var dataRecovery = {
+		'upperBound' : 100,
+		'results' : ['S1',  'S2'],
+		'S1'  : [65.01, 86.34, 87.89],
+		'S2'  : [92.34, 91.33, 100.00]
+	}
+
+	var dataDuration = {
+		'upperBound' : 900.00,
+		'results' : ['S1',  'S2'],
+		'S1'  : [100.45, 10.00, 46.67],
+		'S2'  : [300.45, 900.00, 100.00]
+	}
+
+	var dataFeedback = {
+		'upperBound' : 10,
+		'results' : ['S1', 'S2'], 
+		'fields'  : ['Relief', 'Strength', 'Rom'],
+		'Relief'  : {
+			'S1'  : [2,3,4],
+			'S2'  : [10,5,6]
+		},
+		'Strength' : {
+			'S1' : [5,8,9],
+			'S2' : [10,10,9]
+		},
+		'Rom' : {
+			'S1' : [9,9,9],
+			'S2' : [10,9,9]
+		}
+	}
+
+	var dataLevels = {
+		'upperBound' : 100,
+		'results' : ['L1', 'L2', 'L3', 'L4', 'L5', 'L6', 'L7', 'L8', 'L9'],
+		'dataTags': ['Start', 'End'],
+		'L1' : [10.00, 12.00],
+		'L2' : [14.00, 16.00],
+		'L3' : [18.00, 20.00],
+		'L4' : [22.00, 24.00],
+		'L5' : [26.00, 28.00],
+		'L6' : [30.00, 32.00],
+		'L7' : [40.00, 50.00],
+		'L8' : [60.00, 70.00],
+		'L9' : [20.00, 100.00]
+	}
+	var selectionClass = "dashboard";
+	gearChartMicroBinaryBar(300, 600, dataLevels, selectionClass, "Recovery", "%");
+	gearChartMesoStack(300, 600, dataFeedback, selectionClass, "Feedback");	
+	gearChartMesoBar(300, 600, dataRecovery, selectionClass, "Accuracy", "%",  hueIndex=0);	
+	gearChartMesoBar(300, 600, dataDuration, selectionClass, "Duration", "ms", hueIndex=1);
+	
+}]);
+
 gearAppControllers.controller('LoginController',   ['$scope', '$http', '$location', function($scope, $http, $location) {
 	$scope.login = function(user){
 		var username = user.username;

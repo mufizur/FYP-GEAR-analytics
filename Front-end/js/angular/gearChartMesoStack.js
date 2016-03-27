@@ -110,13 +110,18 @@ function gearChartMesoStack(svgHeight, svgWidth, dataArray, selectionClass, data
 			var pathString = "M"+(margin['left'] + (sessionWidth * resultIndex))+" "+svgHeight+" ";
 			var fieldKey = dataArray['fields'][fieldIndex];
 			var innerDataLen = dataArray[fieldKey][resultKey].length;
+			var sessionWidthOffset = sessionWidth;
+			if(totalDataLen > 1){
+				sessionWidthOffset = sessionWidth/(totalDataLen-1);
+			}
 			for(dataIndex = 0; dataIndex < innerDataLen; dataIndex++){
 				var heightDataIndex = (dataArray['fields'].length*resultIndex) + fieldIndex;
 				var coordinateX = (sessionWidth * resultIndex) + ((dataIndex+1) * (sessionWidth/4)) + margin['left'];
 				var coordinateY = svgHeight - prevHeightArr[heightDataIndex][dataIndex];
 				pathString = pathString + "L"+coordinateX+" "+coordinateY+" ";
 			}
-			pathString = pathString + "L"+(sessionWidth/(totalDataLen-1) * (resultIndex+1) + margin['left'])+" "+(svgHeight)+" ";
+
+			pathString = pathString + "L"+(sessionWidthOffset * (resultIndex+1) + margin['left'])+" "+(svgHeight)+" ";
 			if(fieldIndex != 0){
 				for(dataIndex=innerDataLen-1; dataIndex >= 0; dataIndex--){
 					var prevHeightDataIndex = (dataArray['fields'].length*resultIndex) + fieldIndex - 1;

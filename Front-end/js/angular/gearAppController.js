@@ -16,23 +16,6 @@ var GLOBAL_OBJECTS = {
 }
 
 gearAppControllers.controller('dashboardController', ['$scope', '$http', '$location', function($scope, $http, $location) {
-	var moves = {
-		'moveId'  : 1,
-		'angle'   : 45
-	}
-	gearChartMicroMoves(200, 'dashboard', moves);	
-
-	var moves = {
-		'moveId'  : 2,
-		'angle'   : 45
-	}
-	gearChartMicroMoves(200, 'dashboard', moves);
-
-	var moves = {
-		'moveId'  : 3,
-		'angle'   : 45
-	}
-	gearChartMicroMoves(200, 'dashboard', moves);
 }]);
 
 gearAppControllers.controller('LoginController',   ['$scope', '$http', '$location', function($scope, $http, $location) {
@@ -48,6 +31,7 @@ gearAppControllers.controller('OverviewController', ['$scope', '$http', '$locati
 	getDoctorBasicDetails($http, $scope, GLOBAL_OBJECTS['DOCTOR_ID']=1);
 	getAllPatients($http, $scope, GLOBAL_OBJECTS['DOCTOR_ID'], 'overview');
 	getPatientsAverageData($http, $scope, GLOBAL_OBJECTS['DOCTOR_ID']);
+	addGraphsMacro();
 	$scope.logout = function(){$location.path('login');}
 	$scope.selectMenu = function(routeOption) {
 		menuSelection(routeOption, CONSTANT_GLOBALS.OVERVIEW_ROUTE, $location);
@@ -79,6 +63,64 @@ gearAppControllers.controller('SettingsController', ['$scope', '$http', '$locati
 		menuSelection(routeOption, CONSTANT_GLOBALS.SETTINGS_ROUTE, $location);
 	};
 }]);
+
+function addGraphsMacro(){
+
+	var dataFeedback = {
+		'upperBound' : 10,
+		'results' : ['S1'], 
+		'fields'  : ['Relief', 'Strength', 'Rom'],
+		'Relief'  : {
+			'S1'  : [2,3,10]
+		},
+		'Strength' : {
+			'S1' : [5,8,10]
+		},
+		'Rom' : {
+			'S1' : [9,9,10]
+		}
+	}
+
+	var dataLevels = {
+		'upperBound' : 100,
+		'results' : ['L1', 'L2', 'L3', 'L4', 'L5', 'L6', 'L7', 'L8', 'L9'],
+		'dataTags': ['Start', 'End'],
+		'L1' : [10.00, 12.00],
+		'L2' : [14.00, 16.00],
+		'L3' : [18.00, 20.00],
+		'L4' : [22.00, 24.00],
+		'L5' : [26.00, 28.00],
+		'L6' : [30.00, 32.00],
+		'L7' : [40.00, 50.00],
+		'L8' : [60.00, 70.00],
+		'L9' : [20.00, 100.00]
+	}
+
+	var dataGender = {
+		'total' : 50,
+		'results' : ['Male', 'Female'],
+		'Male'    : 35,
+		'Female'  : 15
+	}
+
+	var ageGroup = {
+		'total' : 50,
+		'results' : ['20', '21', '22', '23', '24'],
+		'20'  : 25,
+		'21'  : 15,
+		'22'  : 7,
+		'23'  : 4,
+		'24'  : 4
+	}
+
+	var selectionClass = "dashboard";
+	gearChartMicroBinaryBar(300, 600, dataLevels, "overviewMacroObjectiveAccuracy", "Recovery", "%", hueIndex=2);
+	gearChartMicroBinaryBar(300, 600, dataLevels, "overviewMacroObjectiveTime", "Duration", "ms", hueIndex=3);
+	gearChartMesoStack(300, 600, dataFeedback, "overviewMacroGeneralSubjective", "Feedback");
+	gearChartMesoPie(300, 600, dataGender, "overviewMacroGeneralGender", "Gender")	
+	gearChartMesoPie(300, 600, ageGroup, "overviewMacroGeneralAge", "Age")	
+
+}
 
 function addGraphs(){
 	var dataRecovery = {
@@ -134,6 +176,36 @@ function addGraphs(){
 	gearChartMesoStack(300, 600, dataFeedback, "patientDataMacroFeedback", "Feedback");	
 	gearChartMesoBar(300, 600, dataRecovery, "patientDataMacroAccuracy", "Accuracy", "%",  hueIndex=0);	
 	gearChartMesoBar(300, 600, dataDuration, "patientDataMacroTime", "Duration", "ms", hueIndex=1);
+
+	var moves_1 = {'moveId'  : 1, 'angle'   : 45, 'expected' : 60, 'calibration' : 330}
+	var moves_2 = {'moveId'  : 2, 'angle'   : 45, 'expected' : 60, 'calibration' : 180}
+	var moves_3 = {'moveId'  : 3, 'angle'   : 45, 'expected' : 60, 'calibration' : 45}
+	var moves_4 = {'moveId'  : 4, 'angle'   : 45, 'expected' : 60, 'calibration' : 20}
+	var moves_5 = {'moveId'  : 5, 'angle'   : 45, 'expected' : 60, 'calibration' : 20}
+	var moves_6 = {'moveId'  : 6, 'angle'   : 45, 'expected' : 60, 'calibration' : 20}
+	var moves_7 = {'moveId'  : 7, 'angle'   : 45, 'expected' : 60, 'calibration' : 20}
+	var moves_8 = {'moveId'  : 8, 'angle'   : 45, 'expected' : 60, 'calibration' : 20}
+	var moves_9 = {'moveId'  : 9, 'angle'   : 45, 'expected' : 60, 'calibration' : 20}
+
+	gearChartMicroMoves(200, 'patientDataMicroMove_1_start', moves_1, 'Start');
+	gearChartMicroMoves(200, 'patientDataMicroMove_2_start', moves_2, 'Start');
+	gearChartMicroMoves(200, 'patientDataMicroMove_3_start', moves_3, 'Start');
+	gearChartMicroMoves(200, 'patientDataMicroMove_4_start', moves_4, 'Start');
+	gearChartMicroMoves(200, 'patientDataMicroMove_5_start', moves_5, 'Start');
+	gearChartMicroMoves(200, 'patientDataMicroMove_6_start', moves_6, 'Start');
+	gearChartMicroMoves(200, 'patientDataMicroMove_7_start', moves_7, 'Start');
+	gearChartMicroMoves(200, 'patientDataMicroMove_8_start', moves_8, 'Start');
+	gearChartMicroMoves(200, 'patientDataMicroMove_9_start', moves_9, 'Start');
+
+	gearChartMicroMoves(200, 'patientDataMicroMove_1_end', moves_1, 'End');
+	gearChartMicroMoves(200, 'patientDataMicroMove_2_end', moves_2, 'End');
+	gearChartMicroMoves(200, 'patientDataMicroMove_3_end', moves_3, 'End');
+	gearChartMicroMoves(200, 'patientDataMicroMove_4_end', moves_4, 'End');
+	gearChartMicroMoves(200, 'patientDataMicroMove_5_end', moves_5, 'End');
+	gearChartMicroMoves(200, 'patientDataMicroMove_6_end', moves_6, 'End');
+	gearChartMicroMoves(200, 'patientDataMicroMove_7_end', moves_7, 'End');
+	gearChartMicroMoves(200, 'patientDataMicroMove_8_end', moves_8, 'End');
+	gearChartMicroMoves(200, 'patientDataMicroMove_9_end', moves_9, 'End');
 }
 
 function menuSelection(routeSelected, currentRoute, $location){

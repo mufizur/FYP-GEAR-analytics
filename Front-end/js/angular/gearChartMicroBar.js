@@ -42,7 +42,7 @@ function gearChartMicroBinaryBar(svgHeight, svgWidth, dataArray, selectionClass,
 	var yScale = d3.scale.linear()
 		.domain([GEAR_CHART_MICRO_BAR_SETTINGS['DOMAIN_Y_SCALE_MIN'], upperBound])
 		.range([0, svgHeight-heightOffset]);
-	var binary_one_color = (90 * (hueIndex % 4))
+	var binary_one_color = (45 * (hueIndex % 8))
 	var binary_two_color = (binary_one_color + 180) % 360;
 	var color = [binary_one_color, binary_two_color];
 	var curvePath = ""; 

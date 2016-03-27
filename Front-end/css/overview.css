@@ -1,96 +1,114 @@
-.templateHeader{
-	font-size: 2em;
-	padding-top: 20px;
-	padding-bottom: 20px;
+.overviewSubView{
+	display: flex;
+	flex-direction: column;
+	flex-wrap: nowrap;
+	justify-content: flext-start;
+	align-item: flext-start;
+	align-content: stretch;
 }
 
-.summaryHeader{
+.overviewDataHeader{
+	background-color: #c1c1c1;
+	padding: 10px;
+	border-radius: 5px;
+}
+
+.overviewMacroDataWrapper{
+	margin: 10px;
+}
+
+.overviewOverallDataWrapper, 
+.overviewMacroGeneralWrapper, 
+.overviewMacroObjectiveWrapper{
+	display: flex;
+	flex-direction: row;
+	flex-wrap: nowrap;
+	justify-content: center;
+	align-content: center;
+	align-item: center;
+}
+
+.overviewOverallData{
+	display: flex;
+	flex-direction: row;
+	flex-wrap: nowrap;
+	justify-content: center;
+	align-content: center;
+	align-item: center;
+	width: 25%;
+	margin: 10px;
+	background-color: #e1e1e1;
+	text-align: center;
+}
+
+.overviewOverviewImgWrapper{
+	opacity: 0.7;
+}
+.overviewOverviewImgTotalWrapper	{background-color: #16a085;} /*Green*/
+.overviewOverviewImgAccuracyWrapper	{background-color: #2980b9;} /*Blue*/
+.overviewOverviewImgProgressWrapper	{background-color: #8e44ad;} /*Purpule*/
+.overviewOverviewImgGroupsWrapper	{background-color: #e67e22;} /*Orange*/
+
+.overviewOverallDataTotalValue		{color: #16a085; font-weight: bold;} /*Green*/
+.overviewOverallDataRecoveryValue	{color: #2980b9; font-weight: bold;} /*Blue*/
+.overviewOverallDataProgressValue	{color: #8e44ad; font-weight: bold;} /*Purpule*/
+.overviewOverallDataGroupsValue		{color: #e67e22; font-weight: bold;} /*Orange*/
+
+.overviewOverviewImgWrapper, .overviewOverallDataDiv{
+	width: 100%;
+}
+
+.overviewOverallDataDiv{
+	padding: 10px;
+}
+
+.overviewOverallImg{
+ 	padding: 10px;
+ 	min-width: 100px;
+ 	min-height: 100px;
+  	max-width: 100px;
+ 	max-height: 100px;
+}
+
+.overviewOverallDataValue{
+	font-size: 1.6em;
+}
+
+.overviewMacroText{
 	background-color: #e1e1e1;
 	padding: 10px;
-	margin-bottom:20px; 
+	margin: 0px;
+	margin-bottom: 10px; 
 }
 
-.overviewSummaryDataHeader{
-	color: #f1f1f1;
+.overviewMacroGeneralElementWrapper{
+	width: 33.33%;
+	margin: 5px;
 }
 
-.overviewSummaryIcon{
-	width: 60px;
-	height: 60px;
-}
-#overviewSummaryTotalPatientsDiv{
-	color: white;
-	background-color: #3498db;
+.overviewMacroObjectiveElementWrapper{
+	width: 50%;
+	margin: 5px;
 }
 
-#overviewSummaryAverageRecoveryDiv{
-	color: white;
-	background-color: #27ae60;
-}
+@media only screen and (max-width: 1300px){
+	.overviewOverallData, 
+	.overviewMacroGeneralWrapper, 
+	.overviewMacroObjectiveWrapper{
+	 	flex-direction: column;
+	}	
 
-#overviewSummaryAverageProgressDiv{
-	color: white;
-	background-color: #8e44ad;
-}
+	.overviewOverallImg{
+	 	min-width  : 50px;
+	 	min-height : 50px;
+	  	max-width  : 50px;
+	 	max-height : 50px;
+	}
 
-#overviewSummaryAverageBmiDiv{
-	color: white;
-	background-color: #f39c12;
-}
+	.overviewMacroGeneralElementWrapper,
+	.overviewMacroObjectiveElementWrapper{
+		width: 100%;
+	}
 
-#overviewSummaryTotalPatientsDiv,   #overviewSummaryAverageRecoveryDiv,
-#overviewSummaryAverageProgressDiv, #overviewSummaryAverageBmiDiv{
-	padding: 20px;
-}
 
-.overviewSummaryImgDiv{
-	float: left;
-	text-align: center;
-	margin-bottom: 10px;
-}
-
-.overviewSummaryDataDiv{
-	float: right;
-	text-align: center;
-}
-
-.overviewSummaryData{
-	font-size: 2.0em;
-}
-
-.overviewPatientTemplateDiv{
-	background-color: #ffffff;
-	padding: 10px;
-	box-shadow: 0 10px 6px -6px #777fff;
-	border: 1px solid #efefef;
-	margin-bottom: 15px; 
-}
-
-.overviewPatientName{
-	font-size: 2em;
-}
-
-.overviewProfileImgSrcDiv{
-	text-align: center;
-	background-image: linear-gradient(bottom, #ffffff 50%, #f1c40f 50%);
-	background-image: -o-linear-gradient(bottom, #ffffff 50%, #f1c40f 50%);
-	background-image: -moz-linear-gradient(bottom, #ffffff 50%, #f1c40f 50%);
-	background-image: -webkit-linear-gradient(bottom, #ffffff 50%, #f1c40f 50%);
-	background-image: -ms-linear-gradient(bottom, #ffffff 50%, #f1c40f 50%);
-}
-
-.overviewProfileImgSrc{
-	height: 100px;
-	width : 100px;
-	border-radius: 50%;
-}
-
-.overviewPatientPersonalInfo{
-	background-color: #f1c40f;
-	padding: 20px;
-}
-
-.patientProgressInformation{
-	font-size: 0.8em;
-	color: #8f8f8f;
 }

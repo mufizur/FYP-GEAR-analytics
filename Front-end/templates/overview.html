@@ -31,8 +31,92 @@
 			<div class = "topBarLogout" ng-click="logout()">Logout</div>
 		</div>
 
-		<div class = "subViewDiv">
-			Data<br>
+		<div class = "subViewDiv overviewSubView">
+			<div class = "overviewMacroDataWrapper">
+				<div class = "overviewMacroData">
+					<div class = "overviewDataHeader">Overall</div><br>
+					<div class = "overviewOverallDataWrapper">
+						
+						<div class = "overviewOverallData">
+							<div class = "overviewOverviewImgTotalWrapper overviewOverviewImgWrapper">
+								<img class="overviewOverallImg" src = "img/totalPatients.png"/>
+							</div>
+							<div class = "overviewOverallDataTotalDiv overviewOverallDataDiv">
+								<div class = "overviewOverallDataValue overviewOverallDataTotalValue">57</div>
+								<div class = "overviewOverallDataTotalDescription">Total<br>Patients</div>
+							</div>
+						</div>
+						<div class = "overviewOverallData">
+							<div class = "overviewOverviewImgAccuracyWrapper overviewOverviewImgWrapper">
+								<img class="overviewOverallImg" src = "img/averageAccuracy.png"/>
+							</div>
+							<div class = "overviewOverallDataAccuracyDiv overviewOverallDataDiv">
+								<div class = "overviewOverallDataValue overviewOverallDataRecoveryValue">81.85%</div>
+								<div class = "overviewOverallDataAccuracyDescription">Average<br>Accuracy</div>
+							</div>
+						</div>
+						<div class = "overviewOverallData">
+							<div class = "overviewOverviewImgProgressWrapper overviewOverviewImgWrapper">
+								<img class="overviewOverallImg" src = "img/averageProgress.png"/>
+							</div>
+							<div class = "overviewOverallDataRecoveryDiv overviewOverallDataDiv">
+								<div class = "overviewOverallDataValue overviewOverallDataProgressValue">5.05%</div>
+								<div class = "overviewOverallDataRecoveryDescription">Average<br>Recovery</div>
+							</div>
+						</div>
+						<div class = "overviewOverallData">
+							<div class = "overviewOverviewImgGroupsWrapper overviewOverviewImgWrapper">
+								<img class="overviewOverallImg" src = "img/totalGroups.png"/>
+							</div>
+							<div class = "overviewOverallDataGroupsDiv overviewOverallDataDiv">
+								<div class = "overviewOverallDataValue overviewOverallDataGroupsValue">3</div>
+								<div class = "overviewOverallDataGroupsDescription">Injury<br>Groups</div>
+							</div>
+						</div>
+					</div>
+					<br>
+				</div>
+				<div class = "overviewMacroData">
+					<div class = "overviewDataHeader">Summary</div><br>
+					<div class = "dataDropDown">
+						<button class = "dataDropDownButton" ng-click="showList = !showList" ng-init="showList = 0">
+							All
+						</button>
+						<div class = "dataDropDownContentWrapper" ng-if="showList == 1" ng-click="showList = 0">
+							<div class = "dataDropDownContent" ng-click="showList = 0">All</div>
+							<div class = "dataDropDownContent" ng-click="showList = 0">Friends</div>
+							<div class = "dataDropDownContent" ng-click="showList = 0">Strangers</div>
+							<div class = "dataDropDownContent" ng-click="showList = 0">Hybrid</div>
+						</div>
+					</div>
+					<div class = "overviewMacroGeneralWrapper">
+						<div class = "overviewMacroGeneralElementWrapper">
+							<div class = "overviewMacroText">Gender Breakdown</div>
+							<div class = "overviewMacroGeneralGender"></div>
+						</div>
+						<div class = "overviewMacroGeneralElementWrapper">
+							<div class = "overviewMacroText">Age breakdown</div>
+							<div class = "overviewMacroGeneralAge"></div>
+						</div>
+						<div class = "overviewMacroGeneralElementWrapper">
+							<div class = "overviewMacroText">Overall User feedback</div>
+							<div class = "overviewMacroGeneralSubjective"></div>
+						</div>
+					</div>
+					<div class = "overviewMacroObjectiveWrapper">
+						<div class = "overviewMacroObjectiveElementWrapper">
+							<div class = "overviewMacroText">Objective Measurement : Accuracy over moves</div>
+							<div class = "overviewMacroObjectiveAccuracy"></div>
+						</div>
+						<div class = "overviewMacroObjectiveElementWrapper">
+							<div class = "overviewMacroText">Objective Measurement : Duration over moves</div>
+							<div class = "overviewMacroObjectiveTime"></div>
+						</div>
+					</div>
+				</div>
+
+			</div>
 		</div>
+
 	</div>
 </div>

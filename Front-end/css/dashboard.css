@@ -54,8 +54,9 @@
 }
 
 .topBarLogout:hover{
-	background-color: #a1a1a1;
-	color: #4f4f4f;
+	background-color: #f39c12;
+	color: white;
+	border: 0px;
 	transition: background-color 300ms ease-out;
 }
 
@@ -157,119 +158,53 @@
 	font-size: 1.0em;
 }
 
-/*.websiteHeader{
-	background-color: #2f2f2f;
-	color:white;
-	height: 45px;
+.dataDropDown{
+	text-align: center;
+	margin-bottom: 10px;
+}
+.dataDropDownButton{
+	width: 50%;
+	max-width: 250px;
+	padding: 10px;
+	color: blue;
+	border: 1px solid blue;
+	background-color: transparent;
+	text-align: center;
+	border-radius: 20px;
+	margin: 0 auto;
+	cursor: pointer;
 }
 
-.applicationName{
-	font-size: 1.5em;
-	margin-left: 10px;
-}
-.platformname{
-	color:#e74c3c;
-	padding-left: 5px; 
-	font-size: 1.5em;
-}
-
-.logout-button-span{
-	float: right;
-	background-color: #2980b9; 
+.dataDropDownButton:hover{
+	background-color: blue;
 	color: white;
-	vertical-align: top;
-	padding: 10px;
-	padding-bottom: 5px;
-	padding-top: 5px;
-	margin-right: 20px;
-	margin-top: 5px;
+	transition: background-color 300ms ease-out;
 }
 
-.logout-button-span:hover{
-	background-color: green;
-}
-
-.button-logout, .button-logout:hover{
-	color: white;
-}
-
-.menuIcons{
-	padding: 10px;
-	width : 50px;
-	height: 50px;	
-}
-
-.menuIconsDiv:hover{
-	background-color: rgba(255,255,255,0.4);
-}
-
-.arrow-right{
-	width : 0; 
-	height: 0; 
-	border-top   : 10px solid transparent;
-	border-bottom: 10px solid transparent; 
-	border-right : 10px solid white; 
-	display: inline-block;
-	vertical-align: middle;
-	float: right;
-	margin-top: 15px;
-}
-
-.selectedIcon{
-	background-color: #e74c3c;
-}
-
-.container{
-	height: inherit;
-	width : inherit;
-}
-.containerTable{
-	height: inherit;
-	width : inherit;
-	border-spacing: 0px;
-}
-
-.containerColumn{
-	vertical-align: top;
-}
-
-.sideSelectionOverviewDiv{
-	padding-top: 25%;
-}
-
-#sideSelectionDiv{
-	background:rgba(0,0,0, 0.6);
-	color  :white;
-	width  :150px;
-	padding:0px;
-	margin :0px;
-}
-
-.progressBarText{
-	font-size: 0.8em;
-	text-align: left;
-	padding-left: 5px;
-}
-
-.verticalLabel{
-	padding: 10px;
-	background-color: #efefef;
-}
-
-.horitzontalLabel{
-	padding: 10px;
-	background-color: #efefef;
-	float:right;
-}
-
-.ct-series-a .ct-point {
-  stroke: #f1c40f !important;
-  stroke-width: 20px;
-}
-
-.toolTip{
-	padding: 10px;
+.dataDropDownContentWrapper{
 	position: relative;
-	background-color: yellow;
-	width: 100px;
-}*/
+	display: block;
+	width: 50%;
+	max-width: 250px;
+	margin: 0 auto;
+	margin-top: 10px;
+	box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+	max-height: 150px;
+	overflow-y:auto;
+}
+
+.dataDropDownContent{
+	text-align: center;
+	width: 100%;
+	margin: 0 auto;
+	cursor: pointer;
+	padding: 10px;
+	background-color: white;
+	display: block;
+}
+
+.dataDropDownContent:hover{
+	background-color: #dfdfdf;
+	color: black;
+	transition: background-color 300ms ease-out;
+}

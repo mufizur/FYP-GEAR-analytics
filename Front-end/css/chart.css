@@ -25,6 +25,14 @@
 	font-size: 20px;
 }
 
+.textMicroDataText{
+	font-size: 12px;
+	fill: #4f4f4f;
+}
+
+.textPieData{
+	font-size: 1.2em;
+}
 /*
 .dashboard{
 	max-width: 768px;

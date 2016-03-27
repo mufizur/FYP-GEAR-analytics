@@ -99,26 +99,98 @@
 					</div>
 
 					<div class = "patientDataHeader">Session</div><br>
-					<div class = "patientDataMescoDropDown">
-						<button class = "patientDataMescoDropDownButton" ng-click="showList = !showList" ng-init="showList = 0">
+					<div class = "dataDropDown">
+						<button class = "dataDropDownButton" ng-click="showList = !showList" ng-init="showList = 0">
 							Session 1
 						</button>
-						<div class = "patientDataMescoDropDownContentWrapper" ng-if="showList == 1" ng-click="showList = 0">
-							<div class = "patientDataMescoDropDownContent" ng-click="showList = 0">Session 1</div>
-							<div class = "patientDataMescoDropDownContent" ng-click="showList = 0">Session 2</div>
-							<div class = "patientDataMescoDropDownContent" ng-click="showList = 0">Session 3</div>
-							<div class = "patientDataMescoDropDownContent" ng-click="showList = 0">Session 1</div>
+						<div class = "dataDropDownContentWrapper" ng-if="showList == 1" ng-click="showList = 0">
+							<div class = "dataDropDownContent" ng-click="showList = 0">Session 1</div>
+							<div class = "dataDropDownContent" ng-click="showList = 0">Session 2</div>
+							<div class = "dataDropDownContent" ng-click="showList = 0">Session 3</div>
+							<div class = "dataDropDownContent" ng-click="showList = 0">Session 1</div>
 						</div>
 					</div>
-
 					<div class = "patientDataMesoWrapper">
 						<div class = "patientDataMesoAccuracyWrapper">
-							<div class = "patientDataMesoAccuracyText patientDataText">Objective Measurement : Accuracy over sessions</div>
+							<div class = "patientDataMesoAccuracyText patientDataText">Objective Measurement : Accuracy over session 1</div>
 							<div class = "patientDataMesoAccuracy"></div>
 						</div>
 						<div class = "patientDataMesoTimeWrapper">
-							<div class = "patientDataMesoTimeText patientDataText">Objective Measurement : Time taken over sessions</div>
+							<div class = "patientDataMesoTimeText patientDataText">Objective Measurement : Time taken over session 1</div>
 							<div class = "patientDataMesoTime"></div>
+						</div>
+					</div>
+
+					<div class = "patientDataMicroWrapper">
+						<div class = "patientDataMicroMovesText patientDataText"> Moves in session 1</div>
+						<div class = "patientDataMicroMovesLevelOneWrapper">
+							<div class = "patientDataMicroMove_1">
+								<div class = "moveHeader">Move 1</div>
+								<div class = "patientDataMicroMovewrapper">
+									<div class = "patientDataMicroMove_1_start"></div>
+									<div class = "patientDataMicroMove_1_end">  </div>
+								</div>
+							</div>
+							<div class = "patientDataMicroMove_2">
+								<div class = "moveHeader">Move 2</div>
+								<div class = "patientDataMicroMovewrapper">
+									<div class = "patientDataMicroMove_2_start"></div>
+									<div class = "patientDataMicroMove_2_end">  </div>
+								</div>
+							</div>
+							<div class = "patientDataMicroMove_3">
+								<div class = "moveHeader">Move 3</div>
+								<div class = "patientDataMicroMovewrapper">
+									<div class = "patientDataMicroMove_3_start"></div>
+									<div class = "patientDataMicroMove_3_end">  </div>
+								</div>
+							</div>
+						</div>
+						<div class = "patientDataMicroMovesLevelTwoWrapper">
+							<div class = "patientDataMicroMove_4">
+								<div class = "moveHeader">Move 4</div>
+								<div class = "patientDataMicroMovewrapper">
+									<div class = "patientDataMicroMove_4_start"></div>
+									<div class = "patientDataMicroMove_4_end">  </div>
+								</div>
+							</div>
+							<div class = "patientDataMicroMove_5">
+								<div class = "moveHeader">Move 5</div>
+								<div class = "patientDataMicroMovewrapper">
+									<div class = "patientDataMicroMove_5_start"></div>
+									<div class = "patientDataMicroMove_5_end">  </div>
+								</div>
+							</div>
+							<div class = "patientDataMicroMove_6">
+								<div class = "moveHeader">Move 6</div>
+								<div class = "patientDataMicroMovewrapper">
+									<div class = "patientDataMicroMove_6_start"></div>
+									<div class = "patientDataMicroMove_6_end">  </div>
+								</div>
+							</div>
+						</div>
+						<div class = "patientDataMicroMovesLevelThreeWrapper">
+							<div class = "patientDataMicroMove_7">
+								<div class = "moveHeader">Move 7</div>
+								<div class = "patientDataMicroMovewrapper">
+									<div class = "patientDataMicroMove_7_start"></div>
+									<div class = "patientDataMicroMove_7_end">  </div>
+								</div>
+							</div>
+							<div class = "patientDataMicroMove_8">
+								<div class = "moveHeader">Move 8</div>
+								<div class = "patientDataMicroMovewrapper">
+									<div class = "patientDataMicroMove_8_start"></div>
+									<div class = "patientDataMicroMove_8_end">  </div>
+								</div>
+							</div>
+							<div class = "patientDataMicroMove_9">
+								<div class = "moveHeader">Move 9</div>
+								<div class = "patientDataMicroMovewrapper">
+									<div class = "patientDataMicroMove_9_start"></div>
+									<div class = "patientDataMicroMove_9_end">  </div>
+								</div>
+							</div>
 						</div>
 					</div>
 				</div>
@@ -157,11 +229,6 @@
 								</div>
 							</div>
 						</div>
-
-						<!-- <div class="progress round patientsListProgress">
-							<span class="meter" style="width:{{patient.ROMrecovery}}%"></span>
-							<p class = "patientsListProgressValue">{{patient.ROMrecovery}}%</p>
-						</div> -->
 					</div>
 				</div>	
 			</div>

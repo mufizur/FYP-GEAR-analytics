@@ -2,14 +2,31 @@ GEAR_CHART_MICRO_MOVES_SETTINGS = {
 	'SVG_BACKGROUND'	 : '#e1e1e1',
 	'SVG_MARGIN'		 : '0px',
 	'TOOLTIP_WIDTH'		 : 150,
+	'GREEN_COLOR'		 : '22,160,133',
+	'YELLOW_COLOR'		 : '230,126,34',
+	'RED_COLOR'			 : '192,57,43'
 }
 
-
-function gearChartMicroMoves(svgSquare, selectionClass, moves){
+function gearChartMicroMoves(svgSquare, selectionClass, moves, moveType){
 	var svgWidth  = svgSquare;
 	var svgHeight = svgSquare;
 	var moveId = moves['moveId'];
 	var moveAngle = moves['angle'];
+	var moveCalibration = moves['calibration'];
+	var moveExpected = moves['expected'];
+	var accuracy = 100 - ((Math.abs(moveCalibration - moveAngle) / 360) * 100)
+	var angleColor = GEAR_CHART_MICRO_MOVES_SETTINGS['GREEN_COLOR'];
+
+	if(accuracy < 40){
+		angleColor = GEAR_CHART_MICRO_MOVES_SETTINGS['RED_COLOR']; //Poor
+
+	} else if(accuracy >= 40 && accuracy < 80){
+		angleColor = GEAR_CHART_MICRO_MOVES_SETTINGS['YELLOW_COLOR']; //Fair 
+
+	} else if(accuracy >= 80){
+		angleColor = GEAR_CHART_MICRO_MOVES_SETTINGS['GREEN_COLOR']; //Good
+	}
+
 
 	if (moveAngle < 0){
 		moveAngle = moveAngle % 360;
@@ -34,7 +51,7 @@ function gearChartMicroMoves(svgSquare, selectionClass, moves){
 		.attr("viewBox", "0 0 "+svgWidth+" "+svgHeight)
 		.attr("preserveAspectRation", "xMidYMid meet")
 		.style({
-			"background" : GEAR_CHART_MICRO_MOVES_SETTINGS['SVG_BACKGROUND'],
+			"background" : 'rgba('+angleColor+', 0.1)',
 			"margin"     : GEAR_CHART_MICRO_MOVES_SETTINGS['SVG_MARGIN']
 		});
 
@@ -90,87 +107,33 @@ function gearChartMicroMoves(svgSquare, selectionClass, moves){
 
 		moveAngle = moveAngle * -1;
 		var arm = dashboardSvg.append('rect')
-								.attr('class', 'arm_'+moveId+' '+'arm_movement')
-								.attr('x', svgSquare/2 - armWidth/2)
-							 	.attr('y', svgSquare/2)
-							 	.attr('width', armWidth)
-							 	.attr('height', armHeight)
-							 	.attr('transform', 'rotate('+moveAngle+' '+(svgSquare/2)+' '+(svgSquare/2)+')')
-							 	.style({
-									'fill': '#00000',
-    								'fill-opacity' : 0.3
-								})
-								.on('mouseover', function(d){
-									d3.select(this).style('fill-opacity', 0.5);
-									var toolTipHeader = "<div class = 'toolTipHeader'>Move "+(moveId)+"</div>";
-									var toolTipValue  = "<div class = 'toolTipData'>ROM : "+(moveAngle * -1)+"°</div>";
-									var toolTipHtml   = "<div class = 'toolTipHtml'>"+toolTipHeader+toolTipValue+"</div>";
-									toolTip.html(toolTipHtml)
-										.style({
-											'left': ($(this).position().left - toolTipWidth/2)+'px',
-											'top' : ($(this).position().top)+'px',
-											'opacity' : 1,
-											'display' : 'block'
-										})
-								})
-								.on('mouseout', function(d){
-									d3.select(this).style('fill-opacity', 0.3);
-									toolTip.style('display', 'none');
-								});
-
-
-		var markerVertical = dashboardSvg.append('path')
-							.attr('d', 'M'+(svgSquare/2)+' 0 L'+(svgSquare/2)+' '+svgSquare)
-							.attr('stroke-dasharray', '2 2')
+					.attr('class', 'arm_'+moveId+' '+'arm_movement')
+					.attr('x', svgSquare/2 - armWidth/2)
+				 	.attr('y', svgSquare/2)
+				 	.attr('width', armWidth)
+				 	.attr('height', armHeight)
+				 	.attr('transform', 'rotate('+moveAngle+' '+(svgSquare/2)+' '+(svgSquare/2)+')')
+				 	.style({
+						'fill': '#00000',
+						'fill-opacity' : 0.3
+					})
+					.on('mouseover', function(d){
+						d3.select(this).style('fill-opacity', 0.5);
+						var toolTipHeader = "<div class = 'toolTipHeader'>Move "+(moveId)+"</div>";
+						var toolTipValue  = "<div class = 'toolTipData'>ROM : "+(moveAngle * -1)+"°</div>";
+						var toolTipHtml   = "<div class = 'toolTipHtml'>"+toolTipHeader+toolTipValue+"</div>";
+						toolTip.html(toolTipHtml)
 							.style({
-								'stroke': '#a1a1a1',
-								'stroke-width' : '2px',
-								'opacity' : 0.4
-							});
-
-		var markerHorizontal = dashboardSvg.append('path')
-							.attr('d', 'M0 '+(svgSquare/2)+' L'+(svgSquare)+' '+(svgSquare/2))
-							.attr('stroke-dasharray', '2 2')
-							.style({
-								'stroke': '#a1a1a1',
-								'stroke-width' : '2px',
-								'opacity' : 0.4
-							});
-
-		var textBottom = dashboardSvg.append('text')
-						.classed('textMicroData', true)
-						.attr('x', svgWidth/2)
-						.attr('y', svgHeight)
-						.attr('width', svgWidth)
-						.attr('text-anchor', 'middle')
-						.text('0°')
-
-		var textTop = dashboardSvg.append('text')
-						.classed('textMicroData', true)
-						.attr('x', svgWidth/2)
-						.attr('y', 10)
-						.attr('width', svgWidth)
-						.attr('text-anchor', 'middle')
-						.text('180°')
-
-		var textLeft = dashboardSvg.append('text')
-						.classed('textMicroData', true)
-						.attr('x', 0)
-						.attr('y', svgHeight/2)
-						.attr('width', svgWidth)
-						.text('270°')
-		
-		var textRight = dashboardSvg.append('text')
-						.classed('textMicroData', true)
-						.attr('x', svgWidth-20)
-						.attr('y', svgHeight/2)
-						.text('90°')
-
-		var textResult = dashboardSvg.append('text')
-				.classed('textMicroDataResult', true)
-				.attr('x', svgWidth*0.75)
-				.attr('y', svgWidth*0.25)
-				.text((moveAngle*-1)+'°')
+								'left': ($(this).position().left - toolTipWidth/2)+'px',
+								'top' : ($(this).position().top)+'px',
+								'opacity' : 1,
+								'display' : 'block'
+							})
+					})
+					.on('mouseout', function(d){
+						d3.select(this).style('fill-opacity', 0.3);
+						toolTip.style('display', 'none');
+					});
 	
 	} else if (moveId == 2 || moveId == 9){
 		var bodyHeight = svgSquare*0.15
@@ -251,61 +214,6 @@ function gearChartMicroMoves(svgSquare, selectionClass, moves){
 									d3.select(this).style('fill-opacity', 0.3);
 									toolTip.style('display', 'none');
 								});
-
-
-		var markerVertical = dashboardSvg.append('path')
-							.attr('d', 'M'+(svgSquare/2)+' 0 L'+(svgSquare/2)+' '+svgSquare)
-							.attr('stroke-dasharray', '2 2')
-							.style({
-								'stroke': '#a1a1a1',
-								'stroke-width' : '2px',
-								'opacity' : 0.4
-							});
-
-		var markerHorizontal = dashboardSvg.append('path')
-							.attr('d', 'M0 '+(svgSquare/2)+' L'+(svgSquare)+' '+(svgSquare/2))
-							.attr('stroke-dasharray', '2 2')
-							.style({
-								'stroke': '#a1a1a1',
-								'stroke-width' : '2px',
-								'opacity' : 0.4
-							});
-
-		var textBottom = dashboardSvg.append('text')
-						.classed('textMicroData', true)
-						.attr('x', svgWidth/2)
-						.attr('y', svgHeight)
-						.attr('width', svgWidth)
-						.attr('text-anchor', 'middle')
-						.text('0°')
-
-		var textTop = dashboardSvg.append('text')
-						.classed('textMicroData', true)
-						.attr('x', svgWidth/2)
-						.attr('y', 10)
-						.attr('width', svgWidth)
-						.attr('text-anchor', 'middle')
-						.text('180°')
-
-		var textLeft = dashboardSvg.append('text')
-						.classed('textMicroData', true)
-						.attr('x', 0)
-						.attr('y', svgHeight/2)
-						.attr('width', svgWidth)
-						.text('270°')
-		
-		var textRight = dashboardSvg.append('text')
-						.classed('textMicroData', true)
-						.attr('x', svgWidth-20)
-						.attr('y', svgHeight/2)
-						.text('90°')
-
-		var textResult = dashboardSvg.append('text')
-				.classed('textMicroDataResult', true)
-				.attr('x', svgWidth*0.75)
-				.attr('y', svgWidth*0.25)
-				.text((moveAngle*-1)+'°')
-
 	
 	} else if (moveId == 3 || moveId == 4 || moveId == 8){
 		moveAngle = moveAngle * -1;
@@ -392,58 +300,84 @@ function gearChartMicroMoves(svgSquare, selectionClass, moves){
 							'fill': '#00000',
     						'fill-opacity' : 0.1
 						})
-		var markerVertical = dashboardSvg.append('path')
-							.attr('d', 'M'+(svgSquare/2)+' 0 L'+(svgSquare/2)+' '+svgSquare)
-							.attr('stroke-dasharray', '2 2')
-							.style({
-								'stroke': '#a1a1a1',
-								'stroke-width' : '2px',
-								'opacity' : 0.4
-							});
-
-		var markerHorizontal = dashboardSvg.append('path')
-							.attr('d', 'M0 '+(svgSquare/2)+' L'+(svgSquare)+' '+(svgSquare/2))
-							.attr('stroke-dasharray', '2 2')
-							.style({
-								'stroke': '#a1a1a1',
-								'stroke-width' : '2px',
-								'opacity' : 0.4
-							});
-
-		var textBottom = dashboardSvg.append('text')
-						.classed('textMicroData', true)
-						.attr('x', svgWidth/2)
-						.attr('y', svgHeight)
-						.attr('width', svgWidth)
-						.attr('text-anchor', 'middle')
-						.text('0°')
-
-		var textTop = dashboardSvg.append('text')
-						.classed('textMicroData', true)
-						.attr('x', svgWidth/2)
-						.attr('y', 10)
-						.attr('width', svgWidth)
-						.attr('text-anchor', 'middle')
-						.text('180°')
-
-		var textLeft = dashboardSvg.append('text')
-						.classed('textMicroData', true)
-						.attr('x', 0)
-						.attr('y', svgHeight/2)
-						.attr('width', svgWidth)
-						.text('270°')
-		
-		var textRight = dashboardSvg.append('text')
-						.classed('textMicroData', true)
-						.attr('x', svgWidth-20)
-						.attr('y', svgHeight/2)
-						.text('90°')
-
-		var textResult = dashboardSvg.append('text')
-				.classed('textMicroDataResult', true)
-				.attr('x', svgWidth*0.75)
-				.attr('y', svgWidth*0.25)
-				.text((moveAngle*-1)+'°')
-
 	}
+
+	var markerVertical = dashboardSvg.append('path')
+						.attr('d', 'M'+(svgSquare/2)+' 0 L'+(svgSquare/2)+' '+svgSquare)
+						.attr('stroke-dasharray', '2 2')
+						.style({
+							'stroke': '#a1a1a1',
+							'stroke-width' : '2px',
+							'opacity' : 0.4
+						});
+
+	var markerHorizontal = dashboardSvg.append('path')
+						.attr('d', 'M0 '+(svgSquare/2)+' L'+(svgSquare)+' '+(svgSquare/2))
+						.attr('stroke-dasharray', '2 2')
+						.style({
+							'stroke': '#a1a1a1',
+							'stroke-width' : '2px',
+							'opacity' : 0.4
+						});
+
+	var textBottom = dashboardSvg.append('text')
+					.classed('textMicroData', true)
+					.attr('x', svgWidth/2)
+					.attr('y', svgHeight)
+					.attr('width', svgWidth)
+					.attr('text-anchor', 'middle')
+					.text('0°')
+
+	var textTop = dashboardSvg.append('text')
+					.classed('textMicroData', true)
+					.attr('x', svgWidth/2)
+					.attr('y', 10)
+					.attr('width', svgWidth)
+					.attr('text-anchor', 'middle')
+					.text('180°')
+
+	var textLeft = dashboardSvg.append('text')
+					.classed('textMicroData', true)
+					.attr('x', 0)
+					.attr('y', svgHeight/2)
+					.attr('width', svgWidth)
+					.text('270°')
+	
+	var textRight = dashboardSvg.append('text')
+					.classed('textMicroData', true)
+					.attr('x', svgWidth-20)
+					.attr('y', svgHeight/2)
+					.text('90°')
+
+	var textResult = dashboardSvg.append('text')
+			.classed('textMicroDataResult', true)
+			.attr('x', 10)
+			.attr('y', svgSquare - 60)
+			.text((moveAngle*-1)+'°')
+			.style('fill', 'rgb('+angleColor+')')
+
+	var textResult = dashboardSvg.append('text')
+			.classed('textMicroDataCalibration', true)
+			.attr('x', 10)
+			.attr('y', svgSquare - 40)
+			.text('Ref : '+moveCalibration+'°')
+
+	var textResult = dashboardSvg.append('text')
+			.classed('textMicroExpected', true)
+			.attr('x', 10)
+			.attr('y', svgSquare - 20)
+			.text('Ideal : '+moveExpected+'°')
+
+	var textResult = dashboardSvg.append('text')
+			.classed('textMicroDataResult', true)
+			.attr('x', 10)
+			.attr('y', 20)
+			.text(parseInt(accuracy)+'%')
+			.style('fill', 'rgb('+angleColor+')')
+
+	var textResult = dashboardSvg.append('text')
+			.classed('textMicroDataText', true)
+			.attr('x', svgSquare-30)
+			.attr('y', svgSquare-10)
+			.text(moveType)
 }

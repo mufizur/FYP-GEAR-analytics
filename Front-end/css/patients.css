@@ -1,5 +1,4 @@
 .patientsSubView{
-	background: red;
 	display: flex;
 	flex-direction: row;
 	flex-wrap: nowrap;
@@ -7,7 +6,6 @@
 	align-item: flext-start;
 	align-content: stretch;
 }
-
 
 .patientDataContainer{	
 	width: calc(100% - 150px);
@@ -117,14 +115,31 @@
 	border-radius: 5px;
 }
 
-.patientDataGeneralWrapper, .patientDataMacroWrapper, .patientDataMesoWrapper{
+.moveHeader{
+	font-size: 1.5em;
+	padding: 10px;
+	text-align: center;
+}
+
+.patientDataGeneralWrapper, .patientDataMacroWrapper, .patientDataMesoWrapper,
+.patientDataMicroMovesLevelOneWrapper, .patientDataMicroMovesLevelTwoWrapper, .patientDataMicroMovesLevelThreeWrapper,
+.patientDataMicroMovewrapper{
 	display: flex;
 	flex-direction: row;
 	flex-wrap: nowrap;
 }
 
+.patientDataMicroMove_1, .patientDataMicroMove_2, .patientDataMicroMove_3,
+.patientDataMicroMove_4, .patientDataMicroMove_5, .patientDataMicroMove_6,
+.patientDataMicroMove_7, .patientDataMicroMove_8, .patientDataMicroMove_9{
+	background-color: #d8d8d8;
+}
+
 .patientDataGeneral, .patientInjuryDetails, .patientDataMacroStats,
-.patientDataMacroAccuracyWrapper, .patientDataMacroTimeWrapper, .patientDataMacroFeedbackWrapper{
+.patientDataMacroAccuracyWrapper, .patientDataMacroTimeWrapper, .patientDataMacroFeedbackWrapper,
+.patientDataMicroMove_1, .patientDataMicroMove_2, .patientDataMicroMove_3,
+.patientDataMicroMove_4, .patientDataMicroMove_5, .patientDataMicroMove_6,
+.patientDataMicroMove_7, .patientDataMicroMove_8, .patientDataMicroMove_9{
 	width: 33.33%;
 	margin: 10px;
 	justify-content: center;
@@ -140,7 +155,18 @@
 	align-item: center;
 }
 
-
+.patientDataMicroMove_1_start, .patientDataMicroMove_2_start, .patientDataMicroMove_3_start,
+.patientDataMicroMove_4_start, .patientDataMicroMove_5_start, .patientDataMicroMove_6_start,
+.patientDataMicroMove_7_start, .patientDataMicroMove_8_start, .patientDataMicroMove_9_start,
+.patientDataMicroMove_1_end, .patientDataMicroMove_2_end, .patientDataMicroMove_3_end,
+.patientDataMicroMove_4_end, .patientDataMicroMove_5_end, .patientDataMicroMove_6_end,
+.patientDataMicroMove_7_end, .patientDataMicroMove_8_end, .patientDataMicroMove_9_end{
+	width: 50%;
+	margin: 5px;
+	justify-content: center;
+	align-content: center;
+	align-item: center;
+}
 
 .patientDataProfile{
 	margin: 10px 0px;
@@ -209,13 +235,6 @@
 	margin: 0 auto;
 }
 
-/*
-.patientDataMescoDropDown
-.patientDataMescoDropDownButton
-.patientDataMescoDropDownContentWrapper
-.patientDataMescoDropDownContent
-*/
-
 .patientDataMescoDropDown{
 	text-align: center;
 	margin-bottom: 10px;
@@ -268,12 +287,16 @@
 }
 
 @media only screen and (max-width: 1300px){
-	.patientDataGeneralWrapper, .patientDataMacroWrapper, .patientDataMesoWrapper{
+	.patientDataGeneralWrapper, .patientDataMacroWrapper, .patientDataMesoWrapper,
+	.patientDataMicroMovesLevelOneWrapper, .patientDataMicroMovesLevelTwoWrapper, .patientDataMicroMovesLevelThreeWrapper{
 		flex-direction: column;
 	}
 
 	.patientInjuryDetails, .patientDataGeneral, .patientDataMacroStats,
-	.patientDataMacroAccuracyWrapper, .patientDataMacroTimeWrapper, .patientDataMacroFeedbackWrapper{
+	.patientDataMacroAccuracyWrapper, .patientDataMacroTimeWrapper, .patientDataMacroFeedbackWrapper,
+	.patientDataMicroMove_1, .patientDataMicroMove_2, .patientDataMicroMove_3,
+	.patientDataMicroMove_4, .patientDataMicroMove_5, .patientDataMicroMove_6,
+	.patientDataMicroMove_7, .patientDataMicroMove_8, .patientDataMicroMove_9{
 		width: calc(100% - 20px);
 	}
 
@@ -281,114 +304,3 @@
 		width: calc(100% - 20px);
 	}
 }
-
-
-/*#patientSearchDiv{
-	background-color:rgba(0,0,0,0.8);
-	width :150px; !important
-}
-
-.patientListSearch{
-	padding: 10px;
-	background-color: #f1f1f1;
-	border-top: 1px solid #a1a1a1;
-	text-align: center;
-}
-
-.patientListSearch:hover{
-	background-color: #ffffff;
-}
-
-.patientListSearch:active{
-	background-color: rgba(255,255,255,1.0);
-}
-
-.patientSearchImgUrl{
-	width: 50px;
-	height: 50px;
-	border-radius: 25px;
-	-webkit-border-radius: 25px;
-	-moz-border-radius: 25px;
-}
-
-.patientListSearchSelected{
-	background-color: green;
-}
-
-.patientProfileInformationElements{
-	position: relative;
-	display: inline-block;
-}
-
-.patientProfileImgUrl{
-	height: 100px;
-	width: 100px;
-	border-radius: 50px;
-	-webkit-border-radius: 50px;
-	-moz-border-radius: 50px;
-}
-
-.patientProfileInfo{
-	margin-left: 10px;
-	vertical-align: middle;
-}
-
-.patientProfileName{
-	font-size: 2em;
-}
-
-.patientInjuryName{
-	font-size: 1.5em;
-}
-
-.patientProfileInjury{
-	background-color: #efefef;
-	padding: 20px;
-	margin-top: 20px;
-	margin-bottom: 20px;
-}
-.patientAdmissionDate{
-	text-align: right;
-}
-
-.ct-bar{
-	stroke : #f1c40f !important;
-	stroke-width:20px !important;
-}
-
-.ct-series-a > .ct-bar{
-	stroke: green !important;
-}
-
-.ct-series-b > .ct-bar{
-	stroke: red !important;
-}
-
-.patientFeedbackHeader{
-	font-size: 2em;
-}
-
-.userFeedback{
-	text-align: center;
-}
-
-.movementRecordedRawData{
-	color: #616161;
-}
-
-.movementStartActionDiv, .movementEndActionDiv{
-	padding: 10px;
-	background-color: #f4f4f4;
-}
-
-.movementDataDiv{
-	padding: 20px;
-	padding-top: 0px;
-	padding-bottom: 0px;
-}
-
-.movementValue{
-	font-size: 1.2em; 
-	padding: 20px;
-}*/
-

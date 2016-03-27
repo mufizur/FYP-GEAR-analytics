@@ -4,25 +4,30 @@ gearApp.config(['$routeProvider', function($routeProvider){
 	$routeProvider
 		.when('/login', {
 			templateUrl : 'templates/login.html',
-			controller  : 'LoginController'
+			controller  : 'LoginController',
+			cache : true
 		})
 		.when('/dashboard', {
 			templateUrl : 'templates/dashboard.html',
-			controller  : 'dashboardController'
+			controller  : 'dashboardController',
+			cache : true
 		})
 		.when('/overview', {
 			templateUrl : 'templates/overview.html',
-			controller  : 'OverviewController'
+			controller  : 'OverviewController',
+			cache : true
 		})
 		.when('/patients', {
 			templateUrl : 'templates/patients.html',
-			controller  : 'PatientsController'
+			controller  : 'PatientsController',
+			cache : true
 		})
 		.when('/settings', {
 			templateUrl : 'templates/settings.html',
-			controller  : 'SettingsController'			
+			controller  : 'SettingsController'	,
+			cache : true		
 		})
 		.otherwise({
-			redirectTo: '/dashboard'
+			redirectTo: '/login'
 		});
 }]);

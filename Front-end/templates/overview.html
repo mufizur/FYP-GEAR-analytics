@@ -1,104 +1,38 @@
-<div class = "container">
-	<div class="websiteHeader">
-		<span class = "applicationName">GEAR</span><span class = "platformname">ANALYTICS</span>
-		<span class = "logout-button-span"><a class = "button-logout" ng-click="logout()">Logout</a></span>
+<div class = "dashboard">
+	<div class = "sideBar">
+		<p class = "appName">
+			<span class = "appNameMain">GEAR</span><br>
+			<span class = "appNameSub">Analytics</span>
+		</p>
+		<div class = "profileDiv">
+			<img class = "profileImg" ng-src="{{proifleImg}}" alt="profile Img">
+			<p class = "profileName">
+				Dr. {{profileName}}
+			</p>
+			<button class = "profileSettingsButton" ng-click="selectMenu('settings')">SETTINGS</button>
+		</div>
+		<div class = "menuOptions">
+			<div class = "optionDiv optionActive" ng-click="selectMenu('overview')">
+				<img class="menuIcons" id="overviewIcon" src="img/mainIcon.png"/>
+				<p class = "optionTitle">Overview</p>
+			</div>
+			<div class = "optionDiv" ng-click="selectMenu('patients')">
+				<img class="menuIcons" id="patientsIcon" src="img/patientsIcon.png"/>
+				<p class = "optionTitle">Patients</p>
+			</div>
+		</div>
 	</div>
-	<table class="containerTable">
-		<td class="containerColumn" id = "sideSelectionDiv">
-			<div class="sideSelectionOverviewDiv">
-				<div class = "menuIconsDiv selectedIcon" ng-click="selectMenu('overview')"> <img class="menuIcons" id="overviewIcon" src="img/mainIcon.png"/>     overview <div class="arrow-right"></div></div>
-				<div class = "menuIconsDiv" 			 ng-click="selectMenu('patients')"> <img class="menuIcons" id="patientsIcon" src="img/patientsIcon.png"/> patients </div>
-				<div class = "menuIconsDiv" 			 ng-click="selectMenu('settings')"> <img class="menuIcons" id="settingsIcon" src="img/settingsIcon.png"/> settings </div>
+
+	<div class = "mainContainer">
+		<div class = "topBar">
+			<div class = "topBarTitle">
+				OVERVIEW
 			</div>
-		</td>
-		<td class="containerColumn container" id = "patientsOverviewDiv">
-			<div class = "templateHeader">Overview</div>
-			<div class = "summaryHeader"> Summary </div>
+			<div class = "topBarLogout" ng-click="logout()">Logout</div>
+		</div>
 
-			<div class = "row">
-				<div class = "small-12 medium-3 large-3 columns">
-					<div class = "overviewSummaryDiv" id = "overviewSummaryTotalPatientsDiv">
-						<div class = "row">
-							<div class = "small-12 large-6 columns overviewSummaryImgDiv"><img class="overviewSummaryIcon" id="overviewTotalPatientsIcon" src = "img/summaryTotalPatientsIcon.png"/></div>
-							<div class = "small-12 large-6 columns overviewSummaryDataDiv">
-								<span class = "overviewSummaryData">{{totalPatients}}</span></br>
-								<span class = "overviewSummaryDataHeader">Total </br> Patients</span>
-							</div>
-						</div>
-					</div>
-				</div>
-				<div class = "small-12 medium-3 large-3 columns">
-					<div class = "overviewSummaryDiv" id = "overviewSummaryAverageRecoveryDiv">
-						<div class = "row">
-							<div class = "small-12 large-6 columns overviewSummaryImgDiv"><img class="overviewSummaryIcon" id="overviewTotalPatientsIcon" src = "img/summaryAverageRecoveryIcon.png"/></div>
-							<div class = "small-12 large-6 columns overviewSummaryDataDiv">
-								<span class = "overviewSummaryData">{{averageRecovery}}</span>%</br>
-								<span class = "overviewSummaryDataHeader">Average </br> Recovery</span>
-							</div>
-						</div>
-					</div>
-				</div>
-				<div class = "small-12 medium-3 large-3 columns">
-					<div class = "overviewSummaryDiv" id = "overviewSummaryAverageProgressDiv">
-						<div class = "row">
-							<div class = "small-12 large-6 columns overviewSummaryImgDiv"><img class="overviewSummaryIcon" id="overviewTotalPatientsIcon" src = "img/summaryAverageProgressIcon.png"/></div>
-							<div class = "small-12 large-6 columns overviewSummaryDataDiv">
-								<span class = "overviewSummaryData">{{averageProgress}}</span>%</br>
-								<span class = "overviewSummaryDataHeader">Average </br> Progress</span>
-							</div>
-						</div>
-					</div>
-				</div>
-				<div class = "small-12 medium-3 large-3 columns">
-					<div class = "overviewSummaryDiv" id = "overviewSummaryAverageBmiDiv">
-						<div class = "row">
-							<div class = "small-12 large-6 columns overviewSummaryImgDiv"><img class="overviewSummaryIcon" id="overviewTotalPatientsIcon" src = "img/summaryAverageBMIIcon.png"/></div>
-							<div class = "small-12 large-6 columns overviewSummaryDataDiv">
-								<span class = "overviewSummaryData">{{averageBMI}}</span>%</br>
-								<span class = "overviewSummaryDataHeader">Average </br> BMI</span>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-			</br>
-
-			<div class = "summaryHeader"> Overall  </div>
-			<span class = "verticalLabel">Recovery(%)</span><br/><br/>
-			<div class = "ct-chart ct-double-octave" id = "overview-overall-chart"></div>
-			<span class = "horitzontalLabel">Progress(%)</span><br/><br/><br/>
-			
-			<div class = "summaryHeader"> Patients </div>
-			<div class = "overviewAllPatients row">
-				<div class = "overviewPatientInformation small-12 medium-4 large-3 columns" ng-repeat = "patient in patients">
-					<div class = "overviewPatientTemplateDiv">
-						<div class = "overviewPatientPersonalInfo">
-							<span class = "overviewPatientName">{{patient.firstName}} </br> {{patient.lastName}}</span> </br>
-							{{patient.height}} cm</br>
-							{{patient.weight}} kg</br>
-						</div>
-						<div class = "overviewProfileImgSrcDiv">
-							<img class = "overviewProfileImgSrc" ng-src = "{{patient.patientImgId}}" /></br>
-						</div>
-						</br>
-						
-						Patient Recovery </br>
-						<div class="progress secondary  round">
-							<span class="meter" style="width:{{patient.ROMrecovery}}%"></span>
-							<p class = "progressBarText">{{patient.ROMrecovery}}%</p>
-						</div></br></br>
-
-						Patient Progress </br>
-						<div class="progress secondary round">
-							<span class="meter" style="width:{{patient.patientPogress}}%"></span>
-							<p class = "progressBarText">{{patient.patientPogress}}%</p>
-						</div>
-						<p class = "patientProgressInformation">Completed {{patient.sessionsCompleted}} out of {{patient.totalSessions}}</p>
-					</div>
-				</div>
-			</div>
-		</td>
-	</table>
-
-	<div class="footer">&copy; National University Of Singapore</div>
+		<div class = "subViewDiv">
+			Data<br>
+		</div>
+	</div>
 </div>

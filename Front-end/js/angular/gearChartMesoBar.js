@@ -199,8 +199,8 @@ function gearChartMesoBar(svgHeight, svgWidth, dataArray, selectionClass, dataTa
 					var widthLength 	= ($("."+selectionClass).width() / (2*totalDataLen));
 					barToolTip.html(toolTipHtml)
 						.style({
-							'left': (widthOffset + widthLength - toolTipWidth/2) + 'px',
-							'top' : ($(".svg_"+dataTag).offset().top  + heightOffset/2)+'px',
+							'left': ($(".svg_"+dataTag).offset().left + (widthOffset + widthLength - toolTipWidth/2)) + 'px',
+							'top' : ($(".svg_"+dataTag).offset().top  + heightOffset/4)+'px',
 							'display' : 'block',
 							'opacity' : 1
 						})

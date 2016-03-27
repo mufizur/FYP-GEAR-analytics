@@ -1,4 +1,163 @@
-.websiteHeader{
+.dashboard{
+	height: 100%;
+	width: 100%;
+	background-color: #e1e1e1;
+	display: flex;
+	flex-direction: row;
+	flex-wrap: nowrap;
+	justify-content: flext-start;
+	align-item: flext-start;
+	align-content: stretch;
+}
+
+.sideBar{
+	background-color: #4f4f4f;
+	width: 150px;
+	text-align: center;
+}
+
+.mainContainer{
+	background-color: green;
+	width: 100%;
+	height: 100%;
+}
+
+.topBar{
+	background-color: #ffffff;
+	border-bottom: 2px solid #afafaf;
+	width: 100%;
+	height: 50px;
+	display: flex;
+	flex-direction: row;
+	flex-wrap: nowrap;
+	justify-content: space-between;
+	align-item: center;
+	align-content: center;
+}
+
+.topBarTitle{
+	padding : 10px 20px; 
+	font-size : 1.2em;
+}
+
+.topBarLogout{
+	font-size: 1em;
+	cursor: pointer;
+	width: 80px;
+	text-align: center;
+	padding-top: 6px;
+	margin: 5px;
+	background-color: transparent;
+	color: #a1a1a1;
+	border-radius: 20px;
+	border: 1px solid #a1a1a1;
+}
+
+.topBarLogout:hover{
+	background-color: #a1a1a1;
+	color: #4f4f4f;
+	transition: background-color 300ms ease-out;
+}
+
+.subViewDiv{
+	overflow-y: auto;
+	background-color: white;
+	width: 100%;
+	height: calc(100% - 50px);
+	background-color: #efefef;
+	font-weight: 100;
+}
+
+.appName{
+	line-height: 17px;
+	background-color: #2980b9;
+	padding: 5px 5px;
+	padding-top: 7px;
+	padding-bottom: 3px;
+	border-bottom: 2px solid #8f8f8f;
+}
+
+.appNameMain{
+	text-align: center;
+	color: white;
+	font-size: 1.5em;
+}
+
+.appNameSub{
+	text-align: center;
+	color: #e1e1e1;
+	font-size: 0.8em;
+}
+
+.profileImg{
+	height: 100px;
+	width: 100px;
+	border-radius: 50%;
+}
+
+.profileName{
+	color: #ffffff;
+	font-size: 0.8em;
+	padding: 5px;
+	margin: 5px;
+}
+
+.profileDiv{
+	border-bottom: 2px solid #8f8f8f;
+}
+
+.profileSettingsButton{
+	background-color: transparent;
+	color: #f39c12;
+	border-radius: 20px;
+	border: 1px solid #f39c12;
+	width: 100px;
+	padding: 10px 10px;
+	text-align: center;
+	font-size: 0.8em;
+}
+
+.profileSettingsButton:hover{
+	background-color: #f39c12;
+	color: white;
+}
+
+.menuOptions{
+	margin-top: 40px;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-content: center;
+}
+
+.optionDiv{
+	background-color: transparent;
+	padding-top: 10px;
+}
+
+.optionDiv:hover{
+	cursor: pointer;
+	background-color: rgba(0,0,0,0.2);
+	transition: background-color 300ms ease-out;
+}
+}
+
+.menuIcons{
+	width: 30px;
+	height: 30px;
+}
+
+.optionActive{
+	background-color: rgba(0,0,0,0.4);
+}
+
+.optionTitle{
+	color: white;
+	margin: 10px;
+	font-size: 1.0em;
+}
+
+/*.websiteHeader{
 	background-color: #2f2f2f;
 	color:white;
 	height: 45px;
@@ -113,4 +272,4 @@
 	position: relative;
 	background-color: yellow;
 	width: 100px;
-}
+}*/

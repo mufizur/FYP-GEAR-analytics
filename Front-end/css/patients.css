@@ -1,4 +1,289 @@
-#patientSearchDiv{
+.patientsSubView{
+	background: red;
+	display: flex;
+	flex-direction: row;
+	flex-wrap: nowrap;
+	justify-content: flext-start;
+	align-item: flext-start;
+	align-content: stretch;
+}
+
+
+.patientDataContainer{	
+	width: calc(100% - 150px);
+	overflow-y:auto;
+}
+
+.patients{
+	background-color: #e1e1e1;
+	width: 150px;
+	overflow-y:auto;
+}
+
+.patientResultCount{
+	background-color: transparent;
+	text-align: center;
+	color: #8f8f8f;
+}
+
+.patientsList{
+	padding: 15px 5px;
+	width: 100%;
+	display: flex;
+	flex-direction: row;
+	flex-wrap: nowrap;
+	justify-content: flext-start;
+	align-item: flext-start;
+	align-content: stretch;
+}
+
+.patientsList:hover{
+	background-color: rgba(255,255,255,0.8);
+	cursor: pointer;
+	transition: background-color 300ms ease-out;
+}
+
+.patientsListImgDiv{
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	text-align: left;
+}
+.patientsListImg{
+	height: 50px;
+	width: 50px;
+	border-radius: 50%;
+}
+.patientsListDetail{
+	font-size: 0.8em;
+	width: calc(100% - 60px);
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	text-align: left;
+	padding-left: 5px; 
+}
+.patientListGroup, .patientListRecovery{
+	font-size: 0.9em;
+}
+
+.patientListRecovery{
+	display: flex;
+	flex-direction: column;
+}
+
+.patientListRecoveryValue{
+	font-weight: bold;
+}
+
+.high 	{color: #16a085; /*GREEN*/}
+.medium {color: #e67e22; /*ORANGE*/}
+.low	{color: #c0392b; /*RED*/}
+
+.patientRecoveryRangeText{
+	text-align: center;
+	font-size: 0.6em;
+	font-weight: lighter;
+	margin-top:5px;
+}
+
+.patientProgress{
+	background-color: transparent !important;
+	margin: 0px !important;
+	border: 0px !important;
+	border-radius: 0px !important; 
+}
+
+.patientProgressDefault{
+	background-color: #e1e1e1 !important;
+}
+
+.progressMeter{
+	border-radius: 0px !important; 
+	background-color: #3498db !important;
+}
+
+.progressBarTextDefault{
+	color: #3498db !important; /*BLUE*/
+	font-weight: bold;
+}
+.highBG		{background-color: #16a085 !important; /*GREEN*/}
+.mediumBG 	{background-color: #e67e22 !important; /*ORANGE*/}
+.lowBG		{background-color: #c0392b !important; /*RED*/}
+
+.patientDataHeader{
+	background-color: #c1c1c1;
+	padding: 10px;
+	border-radius: 5px;
+}
+
+.patientDataGeneralWrapper, .patientDataMacroWrapper, .patientDataMesoWrapper{
+	display: flex;
+	flex-direction: row;
+	flex-wrap: nowrap;
+}
+
+.patientDataGeneral, .patientInjuryDetails, .patientDataMacroStats,
+.patientDataMacroAccuracyWrapper, .patientDataMacroTimeWrapper, .patientDataMacroFeedbackWrapper{
+	width: 33.33%;
+	margin: 10px;
+	justify-content: center;
+	align-content: center;
+	align-item: center;
+}
+
+.patientDataMesoAccuracyWrapper, .patientDataMesoTimeWrapper{
+	width: 50%;
+	margin: 10px;
+	justify-content: center;
+	align-content: center;
+	align-item: center;
+}
+
+
+
+.patientDataProfile{
+	margin: 10px 0px;
+	display: flex;
+	flex-direction: row;
+	flex-wrap: nowrap;
+}
+
+.patientData{
+	margin: 10px;
+}
+
+.patientProfileImgDiv{
+	width: 50%;
+	text-align: right;
+}
+
+.patientProfileInfo{
+	width: 50%;
+	font-size: 0.8em;
+	margin: 0px 20px;
+}
+
+.patientProfileImg{
+	height: 125px;
+	width: 125px;
+	border-radius: 50%;
+}
+
+.patientProfileName{
+	font-size: 2.0em;
+}
+
+.patientInjuryDetails{
+	background-color: #e1e1e1;
+	padding: 10px;
+}
+
+.patientInjuryDetailsTag{
+	font-size: 1.2em;
+	margin: 10px 0px;
+}
+
+.patientInjuryName{
+	font-weight: bold;
+}
+
+.patientAdmissionDate{
+	text-align: right;
+	color: #8f8f8f;
+}
+
+.patientDataText{
+	background-color: #e1e1e1;
+	padding: 10px;
+	margin: 0px;
+	margin-bottom: 10px; 
+}
+
+.patientDataMacroAccuracy, .patientDataMacroTime, .patientDataMacroFeedback{
+	text-align: center;
+	
+}
+
+.patientDataMacroWrapper{
+	margin: 0 auto;
+}
+
+/*
+.patientDataMescoDropDown
+.patientDataMescoDropDownButton
+.patientDataMescoDropDownContentWrapper
+.patientDataMescoDropDownContent
+*/
+
+.patientDataMescoDropDown{
+	text-align: center;
+	margin-bottom: 10px;
+}
+.patientDataMescoDropDownButton{
+	width: 50%;
+	max-width: 250px;
+	padding: 10px;
+	color: blue;
+	border: 1px solid blue;
+	background-color: transparent;
+	text-align: center;
+	border-radius: 20px;
+	margin: 0 auto;
+	cursor: pointer;
+}
+
+.patientDataMescoDropDownButton:hover{
+	background-color: blue;
+	color: white;
+	transition: background-color 300ms ease-out;
+}
+
+.patientDataMescoDropDownContentWrapper{
+	position: relative;
+	display: block;
+	width: 50%;
+	max-width: 250px;
+	margin: 0 auto;
+	margin-top: 10px;
+	box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+	max-height: 150px;
+	overflow-y:auto;
+}
+
+.patientDataMescoDropDownContent{
+	text-align: center;
+	width: 100%;
+	margin: 0 auto;
+	cursor: pointer;
+	padding: 10px;
+	background-color: white;
+	display: block;
+}
+
+.patientDataMescoDropDownContent:hover{
+	background-color: #dfdfdf;
+	color: black;
+	transition: background-color 300ms ease-out;
+}
+
+@media only screen and (max-width: 1300px){
+	.patientDataGeneralWrapper, .patientDataMacroWrapper, .patientDataMesoWrapper{
+		flex-direction: column;
+	}
+
+	.patientInjuryDetails, .patientDataGeneral, .patientDataMacroStats,
+	.patientDataMacroAccuracyWrapper, .patientDataMacroTimeWrapper, .patientDataMacroFeedbackWrapper{
+		width: calc(100% - 20px);
+	}
+
+	.patientDataMesoAccuracyWrapper, .patientDataMesoTimeWrapper{
+		width: calc(100% - 20px);
+	}
+}
+
+
+/*#patientSearchDiv{
 	background-color:rgba(0,0,0,0.8);
 	width :150px; !important
 }
@@ -105,5 +390,5 @@
 .movementValue{
 	font-size: 1.2em; 
 	padding: 20px;
-}
+}*/
 

@@ -13,7 +13,7 @@ GEAR_CHART_MICRO_BAR_SETTINGS = {
 	'MARGIN'			 : {'top':0, 'right':10, 'bottom':10, 'left':20}
 }
 
-function gearChartMicroBinaryBar(svgHeight, svgWidth, dataArray, selectionClass, dataTag, dataUnits){
+function gearChartMicroBinaryBar(svgHeight, svgWidth, dataArray, selectionClass, dataTag, dataUnits, hueIndex){
 	var margin = GEAR_CHART_MICRO_BAR_SETTINGS['MARGIN']
 	var width = svgWidth;
 	var height = svgHeight;
@@ -42,7 +42,9 @@ function gearChartMicroBinaryBar(svgHeight, svgWidth, dataArray, selectionClass,
 	var yScale = d3.scale.linear()
 		.domain([GEAR_CHART_MICRO_BAR_SETTINGS['DOMAIN_Y_SCALE_MIN'], upperBound])
 		.range([0, svgHeight-heightOffset]);
-	var color = [GEAR_CHART_MICRO_BAR_SETTINGS['BINARY_ONE_HUE'],GEAR_CHART_MICRO_BAR_SETTINGS['BINARY_TWO_HUE']];
+	var binary_one_color = (90 * (hueIndex % 4))
+	var binary_two_color = (binary_one_color + 180) % 360;
+	var color = [binary_one_color, binary_two_color];
 	var curvePath = ""; 
 	var toolTipWidth   = GEAR_CHART_MICRO_BAR_SETTINGS['TOOLTIP_WIDTH']
 
@@ -151,7 +153,7 @@ function gearChartMicroBinaryBar(svgHeight, svgWidth, dataArray, selectionClass,
 						toolTip.html(toolTipHtml)
 							.style({
 								'left': ($(this).position().left - toolTipWidth/2)+'px',
-								'top' : ($(this).position().top - GEAR_CHART_MICRO_BAR_SETTINGS['TOOLTIP_OFFSET'])+'px',
+								'top' : ($(this).position().top - GEAR_CHART_MICRO_BAR_SETTINGS['TOOLTIP_OFFSET']*1.5)+'px',
 								'opacity' : 1,
 								'background' : 'hsl('+color[dataTagIndex]+', 10%, 25%)',
 								'display' : 'block'
@@ -207,7 +209,7 @@ function gearChartMicroBinaryBar(svgHeight, svgWidth, dataArray, selectionClass,
 					toolTip.html(toolTipHtml)
 						.style({
 							'left': ($(this).position().left - toolTipWidth/2)+'px',
-							'top' : ($(this).position().top - GEAR_CHART_MICRO_BAR_SETTINGS['TOOLTIP_OFFSET'])+'px',
+							'top' : ($(this).position().top - GEAR_CHART_MICRO_BAR_SETTINGS['TOOLTIP_OFFSET']*1.5)+'px',
 							'opacity' : 1,
 							'background' : '#4f4f4f',
 							'display' : 'block'

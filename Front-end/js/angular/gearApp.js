@@ -7,8 +7,8 @@ gearApp.config(['$routeProvider', function($routeProvider){
 			controller  : 'LoginController'
 		})
 		.when('/dashboard', {
-			templateUrl: 'templates/dashboard.html',
-			controller: 'DashboardController'
+			templateUrl : 'templates/dashboard.html',
+			controller  : 'dashboardController'
 		})
 		.when('/overview', {
 			templateUrl : 'templates/overview.html',
@@ -23,6 +23,6 @@ gearApp.config(['$routeProvider', function($routeProvider){
 			controller  : 'SettingsController'			
 		})
 		.otherwise({
-			redirectTo: '/login'
+			redirectTo: '/dashboard'
 		});
 }]);

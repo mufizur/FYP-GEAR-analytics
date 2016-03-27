@@ -1,0 +1,75 @@
+<div class = "container">
+	<div class="websiteHeader">
+		<span class = "applicationName">GEAR</span><span class = "platformname">ANALYTICS</span>
+		<span class = "logout-button-span"><a class = "button-logout" ng-click="logout()">Logout</a></span>
+	</div>
+	<table class="containerTable">
+		<td class="containerColumn" id = "sideSelectionDiv">
+			<div class="sideSelectionOverviewDiv">
+				<div class = "menuIconsDiv selectedIcon" ng-click="selectMenu('overview')"> <img class="menuIcons" id="overviewIcon" src="img/mainIcon.png"/>     overview <div class="arrow-right"></div></div>
+				<div class = "menuIconsDiv" 			 ng-click="selectMenu('patients')"> <img class="menuIcons" id="patientsIcon" src="img/patientsIcon.png"/> patients </div>
+				<div class = "menuIconsDiv" 			 ng-click="selectMenu('settings')"> <img class="menuIcons" id="settingsIcon" src="img/settingsIcon.png"/> settings </div>
+			</div>
+		</td>
+		<td class="containerColumn container" id = "patientsOverviewDiv">
+			<div class = "templateHeader">Overview</div>
+			<div class = "summaryHeader"> Summary </div>
+
+			<div class = "row">
+				<div class = "small-12 medium-3 large-3 columns">
+					<div class = "overviewSummaryDiv" id = "overviewSummaryTotalPatientsDiv">
+						<div class = "row">
+							<div class = "small-12 large-6 columns overviewSummaryImgDiv"><img class="overviewSummaryIcon" id="overviewTotalPatientsIcon" src = "img/summaryTotalPatientsIcon.png"/></div>
+							<div class = "small-12 large-6 columns overviewSummaryDataDiv">
+								<span class = "overviewSummaryData">{{totalPatients}}</span></br>
+								<span class = "overviewSummaryDataHeader">Total </br> Patients</span>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class = "small-12 medium-3 large-3 columns">
+					<div class = "overviewSummaryDiv" id = "overviewSummaryAverageRecoveryDiv">
+						<div class = "row">
+							<div class = "small-12 large-6 columns overviewSummaryImgDiv"><img class="overviewSummaryIcon" id="overviewTotalPatientsIcon" src = "img/summaryAverageRecoveryIcon.png"/></div>
+							<div class = "small-12 large-6 columns overviewSummaryDataDiv">
+								<span class = "overviewSummaryData">{{averageRecovery}}</span>%</br>
+								<span class = "overviewSummaryDataHeader">Average </br> Recovery</span>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class = "small-12 medium-3 large-3 columns">
+					<div class = "overviewSummaryDiv" id = "overviewSummaryAverageProgressDiv">
+						<div class = "row">
+							<div class = "small-12 large-6 columns overviewSummaryImgDiv"><img class="overviewSummaryIcon" id="overviewTotalPatientsIcon" src = "img/summaryAverageProgressIcon.png"/></div>
+							<div class = "small-12 large-6 columns overviewSummaryDataDiv">
+								<span class = "overviewSummaryData">{{averageProgress}}</span>%</br>
+								<span class = "overviewSummaryDataHeader">Average </br> Progress</span>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class = "small-12 medium-3 large-3 columns">
+					<div class = "overviewSummaryDiv" id = "overviewSummaryAverageBmiDiv">
+						<div class = "row">
+							<div class = "small-12 large-6 columns overviewSummaryImgDiv"><img class="overviewSummaryIcon" id="overviewTotalPatientsIcon" src = "img/summaryAverageBMIIcon.png"/></div>
+							<div class = "small-12 large-6 columns overviewSummaryDataDiv">
+								<span class = "overviewSummaryData">{{averageBMI}}</span>%</br>
+								<span class = "overviewSummaryDataHeader">Average </br> BMI</span>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			</br>
+
+			<div class = "summaryHeader"> Overall  </div>
+			<span class = "verticalLabel">Recovery(%)</span><br/><br/>
+			<div class = "ct-chart ct-double-octave" id = "overview-overall-chart"></div>
+			<span class = "horitzontalLabel">Progress(%)</span><br/><br/><br/>
+			
+		</td>
+	</table>
+
+	<div class="footer">&copy; National University Of Singapore</div>
+</div>

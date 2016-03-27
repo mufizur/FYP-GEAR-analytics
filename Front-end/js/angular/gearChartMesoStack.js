@@ -158,10 +158,12 @@ function gearChartMesoStack(svgHeight, svgWidth, dataArray, selectionClass, data
 						var toolTipHeader = "<div class = 'toolTipHeader'>Session "+resultId+"</div>";
 						var toolTipValue  = "<div class = 'toolTipData'>Avg "+fieldKey+" : "+dataAverage+"</div>";
 						var toolTipHtml   = "<div class = 'toolTipHtml'>"+toolTipHeader+toolTipValue+"</div>";
+						var widthOffset   = ($("."+selectionClass).width() / totalDataLen) * (resultId-1);
+						var widthLength   = ($("."+selectionClass).width() / (2*totalDataLen));
 						toolTip.html(toolTipHtml)
 							.style({
-								'left': ($(this).position().left + (sessionWidth/2) - toolTipWidth/2)+'px',
-								'top' : ($(this).position().bottom)+'px',
+								'left': ($(".svg_"+dataTag).offset().left + (widthOffset + widthLength - toolTipWidth/2)) + 'px',
+								'top' : ($(".svg_"+dataTag).offset().top  + $(".svg_"+dataTag).height())+'px',
 								'opacity' : 1,
 								'background' : 'hsl('+(hueDifference * fieldIndex)+', 10%, 25%)',
 								'display' : 'block'
@@ -218,6 +220,8 @@ function gearChartMesoStack(svgHeight, svgWidth, dataArray, selectionClass, data
 						var dataArr    = dataArray[fieldKey][resultKey];
 						var dataTotal = 0;
 						var dataAverage = 0;
+						var widthOffset   = ($("."+selectionClass).width() / totalDataLen) * (resultId-1);
+						var widthLength   = ($("."+selectionClass).width() / (2*totalDataLen));
 						for(dataIndex=0; dataIndex<dataArr.length; dataIndex++){
 							dataTotal = dataTotal + dataArr[dataIndex];
 						}
@@ -228,8 +232,8 @@ function gearChartMesoStack(svgHeight, svgWidth, dataArray, selectionClass, data
 						var toolTipHtml   = "<div class = 'toolTipHtml'>"+toolTipHeader+toolTipValue+"</div>";
 						barToolTip.html(toolTipHtml)
 							.style({
-								'left': ($('.curveLine_session'+(resultId-1)+'_field'+fieldIndex).position().left + (sessionWidth/2) - toolTipWidth/2)+'px',
-								'top' : ($(this).parent().position().top + heightOffset/2)+'px',
+								'left': ($(".svg_"+dataTag).offset().left + (widthOffset + widthLength - toolTipWidth/2)) + 'px',
+								'top' : ($(".svg_"+dataTag).offset().top  + heightOffset/4)+'px',
 								'opacity' : 1,
 								'background' : 'hsl('+(hueDifference * fieldIndex)+', 10%, 25%)',
 								'display' : 'block'
@@ -240,8 +244,8 @@ function gearChartMesoStack(svgHeight, svgWidth, dataArray, selectionClass, data
 						var toolTipHtml   = "<div class = 'toolTipHtml'>"+toolTipHeader+toolTipValue+"</div>";
 						toolTip.html(toolTipHtml)
 							.style({
-								'left': ($('.curveLine_session'+(resultId-1)+'_field'+fieldIndex).position().left + (sessionWidth/2) - toolTipWidth/2)+'px',
-								'top' : ($('.curveLine_session'+(resultId-1)+'_field'+fieldIndex).position().bottom)+'px',
+								'left': ($(".svg_"+dataTag).offset().left + (widthOffset + widthLength - toolTipWidth/2)) + 'px',
+								'top' : ($(".svg_"+dataTag).offset().top  + $(".svg_"+dataTag).height())+'px',
 								'opacity' : 0.6,
 								'background' : 'hsl('+(hueDifference * fieldIndex)+', 10%, 25%)',
 								'display' : 'block'

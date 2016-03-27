@@ -19,15 +19,66 @@ router.get('/users', function(req, res, next) {
 
 router.route('/authenticate/doctors/:email/:hashpassword')
 	.get(function(req, res){
-		var doctorId = "-1";
+		var doctorJson	   = {};
 		var selectTable    = "doctors";
 		var selectParams   = "DoctorId";
 		var filterPassword = "hashpassword = '" + req.params.hashpassword + "'";
 		var filterEmail    = "email = '" + req.params.email + "'";
 		var sqlQuery = 'SELECT ' + selectParams + ' FROM ' + selectTable + ' WHERE ' + filterPassword + ' AND ' + filterEmail;
 		databaseConnection.query(sqlQuery, function(err, result){
-			doctorId = result[0]['DoctorId'];
-			res.jsonp({"doctorId" : doctorId});
+			if (typeof result[0] !== 'undefinied' && result[0]){
+				doctorJson = {
+					"doctorId" : result[0]['DoctorId']
+				}
+			}
+			res.jsonp(doctorJson);
+		});
+	});
+
+router.route('/doctors/basic/:doctorId')
+	.get(function(req, res){
+		var doctorJson	   = {};
+		var selectTable    = "doctors";
+		var selectParams   = "DoctorId, FirstName, LastName, doctorImgId";
+		var filterId 	   = "DoctorId = '" + req.params.doctorId + "'";
+		var sqlQuery = 'SELECT ' + selectParams + ' FROM ' + selectTable + ' WHERE ' + filterId;
+		databaseConnection.query(sqlQuery, function(err, result){
+			if (typeof result[0] !== 'undefinied' && result[0]){
+				doctorJson = {
+					"doctorId" 		: result[0]['DoctorId'],
+					"firstName" 	: result[0]['FirstName'],
+					"lastName"  	: result[0]['LastName'],
+					"imgId" 		: result[0]['doctorImgId']
+				}
+			}
+			res.jsonp(doctorJson);
+		});
+	});
+
+router.route('/doctors/:doctorId')
+	.get(function(req, res){
+		var doctorJson	   = {};
+		var selectTable    = "doctors";
+		var selectParams   = "DoctorId, FirstName, LastName, Qualification, Institution, Department, Speciality, OfficeTelephone, OfficeFax, doctorImgId";
+		var filterId 	   = "DoctorId = '" + req.params.doctorId + "'";
+		var sqlQuery = 'SELECT ' + selectParams + ' FROM ' + selectTable + ' WHERE ' + filterId;
+		databaseConnection.query(sqlQuery, function(err, result){
+			console.log(result);
+			if (typeof result[0] !== 'undefinied' && result[0]){
+				doctorJson = {
+					"doctorId" 		: result[0]['DoctorId'],
+					"firstName" 	: result[0]['FirstName'],
+					"lastName"  	: result[0]['LastName'],
+					"qualification" : result[0]['Qualification'],
+					"institution" 	: result[0]['Institution'],
+					"department" 	: result[0]['Department'],
+					"speciality" 	: result[0]['Speciality'],
+					"telephone" 	: result[0]['OfficeTelephone'],
+					"fax" 			: result[0]['OfficeFax'],
+					"imgId" 		: result[0]['doctorImgId']
+				}
+			}
+			res.jsonp(doctorJson);
 		});
 	});
 
@@ -52,6 +103,18 @@ router.route('/doctors/:doctorId/patients')
 					patientInjuryDescription = result[patientIndex]['injuryDescription'];
 				}
 
+				var patientRecoveryRange = ""
+				var patientRecovery = parseInt(result[patientIndex]['ROMrecovery']);
+				if (patientRecovery <= 40){
+					patientRecoveryRange = "POOR"
+				
+				} else if (patientRecovery > 40 && patientRecovery < 80){
+					patientRecoveryRange = "FAIR"
+				
+				} else if (patientRecovery >= 80){
+					patientRecoveryRange = "GOOD"
+				}
+
 				patient = {
 					'patientId'	 		: result[patientIndex]['PatientId'],
 					'injuryId'			: result[patientIndex]['InjuryId'],
@@ -66,9 +129,10 @@ router.route('/doctors/:doctorId/patients')
 					'patientImgId'		: result[patientIndex]['patientImgId'],
 					'totalSessions'		: result[patientIndex]['totalSessions'],
 					'sessionsCompleted'	: result[patientIndex]['sessionsCompleted'],
-					'ROMrecovery'		: result[patientIndex]['ROMrecovery'],
 					'height'			: result[patientIndex]['height'],
 					'weight'			: result[patientIndex]['weight'],
+					'ROMrecovery'		: patientRecovery,
+					'recoveryRange'		: patientRecoveryRange,
 					'patientPogress'    : ((result[patientIndex]['sessionsCompleted'] / result[patientIndex]['totalSessions']) * 100).toFixed(2)
 				}
 				patients.push(patient)

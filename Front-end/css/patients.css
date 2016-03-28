@@ -191,8 +191,8 @@
 }
 
 .patientProfileImg{
-	height: 125px;
-	width: 125px;
+	height: 100px;
+	width: 100px;
 	border-radius: 50%;
 }
 
@@ -286,7 +286,107 @@
 	transition: background-color 300ms ease-out;
 }
 
-@media only screen and (max-width: 1300px){
+.patientsFeedbackButtonDiv{
+	position: fixed;
+	bottom: 0px;
+	right: 170px;
+	width: 200px;
+	border: 0px;
+	background-color: #ffffff;
+	color: #f39c12;
+	border: 1px solid #f39c12;
+	font-weight: bold;
+	padding: 10px 20px;
+	text-align: center;
+	opacity: 0.5
+}
+
+.patientsFeedbackDiv{
+	position: fixed;
+	bottom: 0px;
+	right: 170px;
+	width: calc(100% - 170px - 160px);
+	max-width: 500px;
+	background-color: #ffffff;
+	border: 1px solid #cfcfcf;
+}
+
+.patientsFeedbackTop{
+	display: flex;
+	flex-direction: row;
+	justify-content: flex-end;
+	background-color: #f4f4f4;
+	text-align: center;
+}
+
+.patientsFeedbackTopButton{
+	color: #f39c12;
+	background-color: white;
+	width: 40px;
+	padding: 0px 10px;
+	font-size: 1.5em;
+}
+
+.patientsFeedbackButtonDiv:hover, .patientsFeedbackTopButton:hover{
+	cursor: pointer;
+	opacity: 1.0;
+	background-color: #f39c12;
+	color: white;
+	transition: background-color 300ms ease-out;
+}
+
+.patientsFeedbackList{
+	height: 300px;
+	overflow-y: auto;
+	border-bottom: 1px solid #e1e1e1;
+}
+
+.patientFeedbackMsgWrapper{
+	padding: 10px;
+	margin: 10px;
+	background-color: #efefef;
+	font-size: 0.8em;
+}
+
+.patientFeedbackMsgTime{
+	text-align: right;
+	font-weight: bold;
+}
+
+.patientFeedbackInput{
+	margin: 10px;
+}
+
+.patientFeedbackInputBox{
+	resize: none;
+	height: 100px;
+}
+
+.patientFeedbackPostBtn{
+	padding: 5px 10px;
+	color: #f39c12;
+	border: 1px solid #f39c12;
+	border-radius: 20px;
+	width: 80px;
+	text-align: center;
+	cursor: pointer;
+}
+
+.patientFeedbackPostBtn:hover{
+	background-color: #f39c12;
+	color: #ffffff;
+	transition: background-color 300ms ease-out;
+}
+
+.patientFeedbackPostBtnWrapper{
+	margin: 10px;
+	display: flex;
+	flex-direction: row;
+	justify-content: flex-end;
+}
+
+
+@media only screen and (max-width: 1020px){
 	.patientDataGeneralWrapper, .patientDataMacroWrapper, .patientDataMesoWrapper,
 	.patientDataMicroMovesLevelOneWrapper, .patientDataMicroMovesLevelTwoWrapper, .patientDataMicroMovesLevelThreeWrapper{
 		flex-direction: column;

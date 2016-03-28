@@ -77,7 +77,7 @@ function gearChartMicroMoves(svgSquare, selectionClass, moves, moveType){
 		var bodyNose = dashboardSvg.append('path')
 							.attr('d', bodyNosePath)
 							.style({
-								'fill' : '#bdc3c7'
+								'fill' : '#e95b4c'
 							})
 
 		var bodyHead = dashboardSvg.append('circle')
@@ -226,7 +226,6 @@ function gearChartMicroMoves(svgSquare, selectionClass, moves, moveType){
 		torsoPath = torsoPath + "L"+(microScale * 1.8)+' '+(microScale * 2.0)+' ';
 		torsoPath = torsoPath + "L"+(microScale * 1.2)+' '+(microScale * 2.0)+' ';
 		torsoPath = torsoPath + "L"+(microScale * 1.0)+' '+(microScale * 1.0)+' ';
-		console.log(torsoPath);
 
 		var torso = dashboardSvg.append('path')
 							.attr('d', torsoPath)

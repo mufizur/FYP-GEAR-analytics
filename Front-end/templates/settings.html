@@ -1,21 +1,45 @@
-<div class = "container">
-	<div class="websiteHeader">
-		<span class = "applicationName">GEAR</span><span class = "platformname">ANALYTICS</span>
-		<span class = "logout-button-span"><a class = "button-logout" ng-click="logout()">Logout</a></span>
-	</div>
-	<table class="containerTable">
-		<td class="containerColumn" id = "sideSelectionDiv">
-			<div class="sideSelectionOverviewDiv">
-				<div class = "menuIconsDiv" 			 ng-click="selectMenu('overview')"> <img class="menuIcons" id="overviewIcon" src="img/mainIcon.png"/>     overview </div>
-				<div class = "menuIconsDiv" 			 ng-click="selectMenu('patients')"> <img class="menuIcons" id="patientsIcon" src="img/patientsIcon.png"/> patients </div>
-				<div class = "menuIconsDiv selectedIcon" ng-click="selectMenu('settings')"> <img class="menuIcons" id="settingsIcon" src="img/settingsIcon.png"/> settings <div class="arrow-right"></div></div>
+<div class = "dashboard">
+	<div class = "sideBar">
+		<p class = "appName">
+			<span class = "appNameMain">GEAR</span><br>
+			<span class = "appNameSub">Analytics</span>
+		</p>
+		<div class = "profileDiv">
+			<img class = "profileImg" ng-src="{{proifleImg}}" alt="profile Img">
+			<p class = "profileName">
+				Dr. {{profileName}}
+			</p>
+			<button class = "profileSettingsButton" ng-click="selectMenu('settings')">SETTINGS</button>
+		</div>
+		<div class = "menuOptions">
+			<div class = "optionDiv" ng-click="selectMenu('overview')">
+				<img class="menuIcons" id="overviewIcon" src="img/mainIcon.png"/>
+				<p class = "optionTitle">Overview</p>
 			</div>
-		</td>
-		<td class="containerColumn" id = "patientsOverviewDiv">
-			<div class = "templateHeader">Settings</div>
-			<div class = "summaryHeader"> Profile </div>
-		</td>
-	</table>
+			<div class = "optionDiv" ng-click="selectMenu('patients')">
+				<img class="menuIcons" id="patientsIcon" src="img/patientsIcon.png"/>
+				<p class = "optionTitle">Patients</p>
+			</div>
+		</div>
+	</div>
 
-	<div class="footer">&copy; National University Of Singapore</div>
+	<div class = "mainContainer">
+		<div class = "topBar">
+			<div class = "topBarTitle">
+				OVERVIEW
+			</div>
+			<div class = "topBarLogout" ng-click="logout()">Logout</div>
+		</div>
+
+		<div class = "subViewDiv settingsSubView">
+			<div class = "settingsWrapper">
+				<div class = "profileSettingsWrapper">
+				</div>
+
+				<div class = "patientsSettingsWrapper">
+				</div>
+			</div>
+		</div>
+
+	</div>
 </div>

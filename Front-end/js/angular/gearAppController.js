@@ -39,6 +39,7 @@ gearAppControllers.controller('OverviewController', ['$scope', '$http', '$locati
 }]);
 
 gearAppControllers.controller('PatientsController', ['$scope', '$http', '$location', function($scope, $http, $location) {
+	$scope.showFeedback = 0;
 	getDoctorBasicDetails($http, $scope, GLOBAL_OBJECTS['DOCTOR_ID']=1);
 	getAllPatients($http, $scope, GLOBAL_OBJECTS['DOCTOR_ID'], 'patients');
 	$scope.logout = function(){$location.path('login');}
@@ -58,6 +59,8 @@ gearAppControllers.controller('PatientsController', ['$scope', '$http', '$locati
 }]);
 
 gearAppControllers.controller('SettingsController', ['$scope', '$http', '$location', function($scope, $http, $location) {
+	getDoctorFullDetails($http, $scope, GLOBAL_OBJECTS['DOCTOR_ID']=1);
+	getAllPatients($http, $scope, GLOBAL_OBJECTS['DOCTOR_ID'], 'patients');
 	$scope.logout = function(){$location.path('login');}
 	$scope.selectMenu = function(routeOption) {
 		menuSelection(routeOption, CONSTANT_GLOBALS.SETTINGS_ROUTE, $location);
@@ -237,6 +240,23 @@ function getDoctorBasicDetails($http, $scope, doctorId){
 		.success(function(data){
 		 	$scope.profileName = data['firstName'] + ' ' + data['lastName'];
 		 	$scope.proifleImg  = data['imgId'];
+		})
+		.error(function(data){
+		 	console.log("Error in loading doctor's data");
+		})
+		.finally(function(){
+			console.log("doctor's data loaded");
+		})
+}
+
+function getDoctorFullDetails($http, $scope, doctorId){
+	var doctorUrl = 'http://localhost:3000/api/doctors/'+doctorId+"?callback=JSON_CALLBACK";
+	$http.jsonp(doctorUrl)
+		.success(function(data){
+		 	$scope.profileName = data['firstName'] + ' ' + data['lastName'];
+		 	$scope.proifleImg  = data['imgId'];
+		 	$scope.profileDetails = data;
+		 	console.log(data);
 		})
 		.error(function(data){
 		 	console.log("Error in loading doctor's data");

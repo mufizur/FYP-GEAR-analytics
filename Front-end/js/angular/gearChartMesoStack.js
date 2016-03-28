@@ -130,7 +130,6 @@ function gearChartMesoStack(svgHeight, svgWidth, dataArray, selectionClass, data
 					pathString = pathString + "L"+coordinateX+" "+coordinateY+" ";
 				}
 			}
-			console.log(pathString);
 			var curveLineClassName = 'curveLine_session'+resultIndex+'_field'+fieldIndex
 			var dashboardCurveLine = dashboardSvg.selectAll(curveLineClassName)
 				.data([pathString])
@@ -179,7 +178,6 @@ function gearChartMesoStack(svgHeight, svgWidth, dataArray, selectionClass, data
 						toolTip.style('display', 'none');
 					});
 			hueOffset = hueOffset + hueDifference;
-			console.log(hueOffset)
 		}
 		hueOffset = 0;
 	}

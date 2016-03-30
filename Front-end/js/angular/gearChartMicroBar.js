@@ -245,4 +245,16 @@ function gearChartMicroBinaryBar(svgHeight, svgWidth, dataArray, selectionClass,
 		.selectAll('line')
 			.style('stroke', '#a1a1a1');
 
+	var textWidthOffset = 20;
+	for(dataIndex=0; dataIndex<dataArray['dataTags'].length; dataIndex++){
+		var dataValue = dataArray['dataTags'][dataIndex];
+		var textResult = dashboardSvg.append('text')
+				.classed('textBinaryData_'+dataValue+'_'+dataTag, true)
+				.attr('x', textWidthOffset)
+				.attr('y', 30)
+				.text(dataValue + ' Move')
+				.style('fill', 'hsl('+(color[dataIndex])+', 50%, 50%)')
+		textWidthOffset = textWidthOffset + 100;
+	}
+
 }

@@ -17,6 +17,61 @@ router.get('/users', function(req, res, next) {
   res.send('respond with a resource');
 });*/
 
+router.route('/update')
+	.get(function(req, res){
+		var sqlQuery = 'SELECT A.recordId, A.patientId, A.sessionId, A.YAW, A.PITCH, A.ROLL, A.StartDateTime, A.EndDateTime, B.refPlane, B.refROM, B.scaleRange FROM recordActions as A, gameactions as B where A.ActionId = B.ActionId and A.ActionType = B.ActionType';
+		databaseConnection.query(sqlQuery, function(err, result){
+			for(index=0; index<result.length; index++){
+				var recordId = result[index]['recordId'];
+				var start = result[index]['StartDateTime'];
+				var end   = 1;
+				if((index < result.length-1) && (result[index+1]['patientId'] == result[index]['patientId']) && (result[index+1]['sessionId'] == result[index]['sessionId'])){
+					end = result[index+1]['StartDateTime'];
+				}
+				
+				var refPlane = result[index]['refPlane'];
+				var alphaAngle = 0;
+				var betaAngle  = 0;
+				var refAngle   = result[index]['refROM'];
+				var accuracy   = 0;  
+				var angleDiffernce = 0;
+				var scaleRange = result[index]['scaleRange'];
+
+				var timeDifference = Math.abs(end-start);
+				if(timeDifference <= 0){
+					timeDifference = 100;
+				}
+				if (refPlane == 'P'){
+					alphaAngle = parseFloat(result[index]['PITCH']);
+
+				} else if (refPlane == 'Y'){
+					alphaAngle = parseFloat(result[index]['YAW']);
+				}
+
+				betaAngle = 90 + alphaAngle;
+				if (betaAngle > 180){
+					betaAngle = (360 - betaAngle) * -1;
+				}
+
+				angleDiffernce = Math.abs(refAngle - betaAngle)
+				accuracy = 100 - (angleDiffernce/scaleRange * 100);
+				if(accuracy > 100){
+					accuracy = 100;
+				}
+
+				if(accuracy < 0){
+					accuracy = accuracy * -1;
+				}
+
+				var angle = betaAngle.toFixed(2)
+
+				var updateQuery = "UPDATE recordActions SET timeTaken = '"+timeDifference+"', moveAngle = '"+angle+"', refPlane = '"+refPlane+"', accuracy = '"+accuracy+"' where recordId = '"+recordId+"'";
+				databaseConnection.query(updateQuery);
+			}
+			res.jsonp('done');
+		})
+	});
+
 router.route('/authenticate/doctors/:email/:hashpassword')
 	.get(function(req, res){
 		var doctorJson	   = {};
@@ -63,7 +118,6 @@ router.route('/doctors/:doctorId')
 		var filterId 	   = "DoctorId = '" + req.params.doctorId + "'";
 		var sqlQuery = 'SELECT ' + selectParams + ' FROM ' + selectTable + ' WHERE ' + filterId;
 		databaseConnection.query(sqlQuery, function(err, result){
-			console.log(result);
 			if (typeof result[0] !== 'undefinied' && result[0]){
 				doctorJson = {
 					"doctorId" 		: result[0]['DoctorId'],
@@ -91,7 +145,8 @@ router.route('/doctors/:doctorId/patients')
 		var selectPatientDetials = "C.FirstName, C.LastName, C.Email, C.age, C.gender, C.registrationDate, C.patientImgId, C.totalSessions, C.sessionsCompleted, C.ROMrecovery, C.height, C.weight" 
 		var filterDoctor  = "C.DoctorId = " + req.params.doctorId;
 		var joinCondition = "A.InjuryId = B.InjuryId and C.PatientId = A.PatientId";
-		var sqlQuery = 'SELECT ' + selectPatientInjury + ' , ' + selectPatientDetials + ' FROM ' + selectTable + ' WHERE ' + filterDoctor + ' AND ' + joinCondition;
+		var orderCondition = "C.FirstName  ASC"
+		var sqlQuery = 'SELECT ' + selectPatientInjury + ' , ' + selectPatientDetials + ' FROM ' + selectTable + ' WHERE ' + filterDoctor + ' AND ' + joinCondition + ' ORDER BY ' + orderCondition;
 		
 		databaseConnection.query(sqlQuery, function(err, result){
 			

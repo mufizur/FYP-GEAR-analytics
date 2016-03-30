@@ -74,10 +74,6 @@
 	font-weight: bold;
 }
 
-.high 	{color: #16a085; /*GREEN*/}
-.medium {color: #e67e22; /*ORANGE*/}
-.low	{color: #c0392b; /*RED*/}
-
 .patientRecoveryRangeText{
 	text-align: center;
 	font-size: 0.6em;
@@ -105,9 +101,6 @@
 	color: #3498db !important; /*BLUE*/
 	font-weight: bold;
 }
-.highBG		{background-color: #16a085 !important; /*GREEN*/}
-.mediumBG 	{background-color: #e67e22 !important; /*ORANGE*/}
-.lowBG		{background-color: #c0392b !important; /*RED*/}
 
 .patientDataHeader{
 	background-color: #c1c1c1;

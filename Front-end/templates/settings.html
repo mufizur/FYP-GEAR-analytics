@@ -26,7 +26,7 @@
 	<div class = "mainContainer">
 		<div class = "topBar">
 			<div class = "topBarTitle">
-				OVERVIEW
+				SETTINGS
 			</div>
 			<div class = "topBarLogout" ng-click="logout()">Logout</div>
 		</div>
@@ -34,10 +34,118 @@
 		<div class = "subViewDiv settingsSubView">
 			<div class = "settingsWrapper">
 				<div class = "profileSettingsWrapper">
+					<div class = "settingsDataHeader">Edit Profile</div><br>
+					<div class = "profileSettings">
+						<div class = "profileSettingsDivWrapper profileSettingsImgWrapper">
+							<img class = "profileSettingsImg" ng-src="{{profileDetails.imgId}}" alt="Img">
+							<br>
+							<div class = "profileSettingsParticularElement">
+								Image Url
+								<input type="text" class = "profileSettingsParticularValue" value = "{{profileDetails.imgId}}"/>
+							</div>
+						</div>
+						<div class = "profileSettingsDivWrapper">
+							<div class = "profileSettingsParticularElement">
+								First Name 
+								<input type="text" class = "profileSettingsParticularValue" value = "{{profileDetails.firstName}}"/>
+							</div>
+							<div class = "profileSettingsParticularElement">
+								Last Name 
+								<input type="text" class = "profileSettingsParticularValue" value = "{{profileDetails.lastName}}"/>
+							</div>
+							<div class = "profileSettingsParticularElement">
+								Telephone
+								<input type="text" class = "profileSettingsParticularValue" value = "{{profileDetails.telephone}}"/>
+							</div>
+							<div class = "profileSettingsParticularElement">
+								Fax
+								<input type="text" class = "profileSettingsParticularValue" value = "{{profileDetails.fax}}"/>
+							</div>
+						</div>
+						<div class = "profileSettingsDivWrapper">
+							<div class = "profileSettingsParticularElement">
+								Institution 
+								<input type="text" class = "profileSettingsParticularValue" value = "{{profileDetails.institution}}"/>
+							</div>
+							<div class = "profileSettingsParticularElement">
+								Speciality 
+								<input type="text" class = "profileSettingsParticularValue" value = "{{profileDetails.speciality}}"/>
+							</div>
+							<div class = "profileSettingsParticularElement">
+								Department
+								<input type="text" class = "profileSettingsParticularValue" value = "{{profileDetails.department}}"/>
+							</div>
+							<div class = "profileSettingsParticularElement">
+								Qualification
+								<input type="text" class = "profileSettingsParticularValue" value = "{{profileDetails.qualification}}"/>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class = "profileSettingsSaveBtnWrapper">
+					<div class = "profileSettingsSaveBtn">
+						Update
+					</div>
 				</div>
 
 				<div class = "patientsSettingsWrapper">
+					<div class = "settingsDataHeader">Edit Patient's sessions</div><br>
+					<div class = "settingsPatients">
+						<input type="text" placeholder="search" ng-model="searchText">
+						<div class = "settingsPatientResultCount"> total results : {{filteredPatients.length}} </div>
+						<div class = "settingsPatientsWrapper row">
+							<div class = "settingsPatientList large-4 columns" ng-repeat = "patient in filteredPatients = (patients | filter:searchText)">
+								<div class = "settingsPatientsListWrapper">
+									<div class = "settingsPListImgDiv">
+										<img class = "settingsPatientsListImg" ng-src="{{patient.patientImgId}}" />
+										<div class = "patientListName">{{patient.firstName}} {{patient.lastName}}</div>
+										<div class = "patientListGroup">{{patient.injuryName}}</div>
+									</div>
+									<div class = "settingsPatientsListDetail"> 
+										<span class = "settingListDetialHeader">Recovery</span><br>
+										<div class = "patientRecovery">
+											<div class = "progress round patientProgress">
+												<span class="meter progressMeter" 
+													  style="width:{{patient.ROMrecovery}}%"
+													  ng-class = "{'highBG'    : patient.ROMrecovery >= 80, 
+															 		'lowBG'    : patient.ROMrecovery <= 40,
+															 		'mediumBG' : patient.ROMrecovery > 40 && patient.ROMrecovery < 80}">
+												</span>
+											</div>
+											<div class = "patientListRecoveryValue" 
+												ng-class = "{'high'   : patient.ROMrecovery >= 80, 
+															 'low'    : patient.ROMrecovery <= 40,
+															 'medium' : patient.ROMrecovery > 40 && patient.ROMrecovery < 80}">
+													{{patient.ROMrecovery}}% <span class = "settingsPatientRecoveryTag">({{patient.recoveryRange}})</span>
+											</div>
+										</div>
+									</div><br>
+
+									<div class = "settingsPatientProgressInformation"> 
+										<span class = "settingListDetialHeader">Progress</span><br>
+										Completed <span class = "settingsProgressValue">{{patient.sessionsCompleted}} </span> sessions
+									</div><br>
+
+									<div class = "settingsPatientsTotalSessionsWrapper">
+										<div class = "settingTotalSessions">
+											<div class = "settingListDetialHeader">Total Sessions</div>
+											<input type="text" class = "profileSettingsParticularValue" value = "{{patient.totalSessions}}"/>
+										</div>
+
+										<div class = "profileSettingsSaveBtnWrapper">
+											<div class = "profileSettingsSaveBtn">
+												Update
+											</div>
+										</div>
+									</div>
+
+								</div>
+							</div>
+						</div>	
+
+					</div>	
 				</div>
+
 			</div>
 		</div>
 

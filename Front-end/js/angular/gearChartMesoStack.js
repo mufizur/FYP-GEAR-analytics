@@ -297,4 +297,16 @@ function gearChartMesoStack(svgHeight, svgWidth, dataArray, selectionClass, data
 			.style('stroke', '#a1a1a1')
 		.selectAll('line')
 			.style('stroke', '#a1a1a1');
+
+	var textWidthOffset = 40;
+	for(fieldIndex=0; fieldIndex<dataArray['fields'].length; fieldIndex++){
+		var fieldKey = dataArray['fields'][fieldIndex];
+		var textResult = dashboardSvg.append('text')
+				.classed('textStackData_'+fieldKey, true)
+				.attr('x', textWidthOffset)
+				.attr('y', 30)
+				.text(fieldKey)
+				.style('fill', 'hsl('+(hueDifference * fieldIndex)+', 50%, 50%)')
+		textWidthOffset = textWidthOffset + 100;
+	}
 }

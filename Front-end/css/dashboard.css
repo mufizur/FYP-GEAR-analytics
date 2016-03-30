@@ -208,3 +208,11 @@
 	color: black;
 	transition: background-color 300ms ease-out;
 }
+
+
+.high 		{color: #16a085; /*GREEN*/}
+.medium 	{color: #e67e22; /*ORANGE*/}
+.low		{color: #c0392b; /*RED*/}
+.highBG		{background-color: #16a085 !important; /*GREEN*/}
+.mediumBG 	{background-color: #e67e22 !important; /*ORANGE*/}
+.lowBG		{background-color: #c0392b !important; /*RED*/}

@@ -1,6 +1,7 @@
 var express = require('express');
 var mysql   = require('mysql');
 var router  = express.Router();
+var bCrypt  = require('bcrypt-nodejs');
 
 
 var databaseConnection = mysql.createConnection({
@@ -19,7 +20,7 @@ router.get('/users', function(req, res, next) {
 
 router.route('/update')
 	.get(function(req, res){
-		var selectQuery = "SELECT PatientId, AVG(sessionAccuracy) as Accuracy FROM `recordsessions` group by PatientId";
+		/*var selectQuery = "SELECT PatientId, AVG(sessionAccuracy) as Accuracy FROM `recordsessions` group by PatientId";
 		databaseConnection.query(selectQuery, function(err, result){
 			for(index=0; index<result.length; index++){
 				var patientId = result[index]['PatientId'];
@@ -27,17 +28,21 @@ router.route('/update')
 				var updateQuery = "UPDATE patients SET ROMrecovery = '"+accuracy+"' where patientId = "+patientId;
 				databaseConnection.query(updateQuery);
 			}
-		});
+		});*/
+		var password = "password";
+		var hashpassword = bCrypt.hashSync(password, bCrypt.genSaltSync(10), null);
+		res.jsonp(hashpassword);
 	});	
 
 
 //Doctor Data
 router.route('/authenticate/doctors/:email/:hashpassword')
 	.get(function(req, res){
+		var hashpassword   = bCrypt.hashSync(req.params.hashpassword, bCrypt.genSaltSync(10), null);
 		var doctorJson	   = {};
 		var selectTable    = "doctors";
 		var selectParams   = "DoctorId";
-		var filterPassword = "hashpassword = '" + req.params.hashpassword + "'";
+		var filterPassword = "hashpassword = '" + hashpassword + "'";
 		var filterEmail    = "email = '" + req.params.email + "'";
 		var sqlQuery = 'SELECT ' + selectParams + ' FROM ' + selectTable + ' WHERE ' + filterPassword + ' AND ' + filterEmail;
 		databaseConnection.query(sqlQuery, function(err, result){

@@ -55,14 +55,14 @@
 							<div class="progress round patientProgress patientProgressDefault">
 								<span class="meter progressMeter" 
 									  style="width:{{patientInfo.ROMrecovery}}%"
-									  ng-class = "{'highBG'    : patientInfo.ROMrecovery >= 80, 
-											 		'lowBG'    : patientInfo.ROMrecovery <= 40,
-											 		'mediumBG' : patientInfo.ROMrecovery > 40 && patientInfo.ROMrecovery < 80}">
+									  ng-class = "{'highBG'    : patientInfo.ROMrecovery >= 70, 
+											 		'lowBG'    : patientInfo.ROMrecovery <= 60,
+											 		'mediumBG' : patientInfo.ROMrecovery > 60 && patientInfo.ROMrecovery < 70}">
 								</span>
 								<div class = "patientListRecoveryValue" 
-									ng-class = "{'high'   : patientInfo.ROMrecovery >= 80, 
-												 'low'    : patientInfo.ROMrecovery <= 40,
-												 'medium' : patientInfo.ROMrecovery > 40 && patientInfo.ROMrecovery < 80}">
+									ng-class = "{'high'   : patientInfo.ROMrecovery >= 70, 
+												 'low'    : patientInfo.ROMrecovery <= 60,
+												 'medium' : patientInfo.ROMrecovery > 60 && patientInfo.ROMrecovery < 70}">
 										{{patientInfo.ROMrecovery}}%
 								</div>
 							</div><br><br>
@@ -100,14 +100,11 @@
 
 					<div class = "patientDataHeader">Session</div><br>
 					<div class = "dataDropDown">
-						<button class = "dataDropDownButton" ng-click="showList = !showList" ng-init="showList = 0">
-							Session 1
+						<button class = "dataDropDownButton" ng-click="showSessionsList = !showSessionsList">
+							Session {{currSession}}
 						</button>
-						<div class = "dataDropDownContentWrapper" ng-if="showList == 1" ng-click="showList = 0">
-							<div class = "dataDropDownContent" ng-click="showList = 0">Session 1</div>
-							<div class = "dataDropDownContent" ng-click="showList = 0">Session 2</div>
-							<div class = "dataDropDownContent" ng-click="showList = 0">Session 3</div>
-							<div class = "dataDropDownContent" ng-click="showList = 0">Session 1</div>
+						<div class = "dataDropDownContentWrapper" ng-if="showSessionsList == 1">
+							<div class = "dataDropDownContent" ng-repeat="sessionIndex in dataSessions" ng-click="updateSessionData(sessionIndex)">Session {{sessionIndex}}</div>
 						</div>
 					</div>
 					<div class = "patientDataMesoWrapper">
@@ -125,71 +122,80 @@
 						<div class = "patientDataMicroMovesText patientDataText"> Moves in session 1</div>
 						<div class = "patientDataMicroMovesLevelOneWrapper">
 							<div class = "patientDataMicroMove_1">
-								<div class = "moveHeader">Move 1</div>
+								<div class = "moveHeader">{{microMoves.start.L1.moveName}}</div>
 								<div class = "patientDataMicroMovewrapper">
 									<div class = "patientDataMicroMove_1_start"></div>
 									<div class = "patientDataMicroMove_1_end">  </div>
 								</div>
+								<div class = "movePlane">{{microMoves.start.L1.planeName}}</div>
 							</div>
 							<div class = "patientDataMicroMove_2">
-								<div class = "moveHeader">Move 2</div>
+								<div class = "moveHeader">{{microMoves.start.L2.moveName}}</div>
 								<div class = "patientDataMicroMovewrapper">
 									<div class = "patientDataMicroMove_2_start"></div>
 									<div class = "patientDataMicroMove_2_end">  </div>
 								</div>
+								<div class = "movePlane">{{microMoves.start.L2.planeName}}</div>
 							</div>
 							<div class = "patientDataMicroMove_3">
-								<div class = "moveHeader">Move 3</div>
+								<div class = "moveHeader">{{microMoves.start.L3.moveName}}</div>
 								<div class = "patientDataMicroMovewrapper">
 									<div class = "patientDataMicroMove_3_start"></div>
 									<div class = "patientDataMicroMove_3_end">  </div>
 								</div>
+								<div class = "movePlane">{{microMoves.start.L3.planeName}}</div>
 							</div>
 						</div>
 						<div class = "patientDataMicroMovesLevelTwoWrapper">
 							<div class = "patientDataMicroMove_4">
-								<div class = "moveHeader">Move 4</div>
+								<div class = "moveHeader">{{microMoves.start.L4.moveName}}</div>
 								<div class = "patientDataMicroMovewrapper">
 									<div class = "patientDataMicroMove_4_start"></div>
 									<div class = "patientDataMicroMove_4_end">  </div>
 								</div>
+								<div class = "movePlane">{{microMoves.start.L4.planeName}}</div>
 							</div>
 							<div class = "patientDataMicroMove_5">
-								<div class = "moveHeader">Move 5</div>
+								<div class = "moveHeader">{{microMoves.start.L5.moveName}}</div>
 								<div class = "patientDataMicroMovewrapper">
 									<div class = "patientDataMicroMove_5_start"></div>
 									<div class = "patientDataMicroMove_5_end">  </div>
 								</div>
+								<div class = "movePlane">{{microMoves.start.L5.planeName}}</div>
 							</div>
 							<div class = "patientDataMicroMove_6">
-								<div class = "moveHeader">Move 6</div>
+								<div class = "moveHeader">{{microMoves.start.L6.moveName}}</div>
 								<div class = "patientDataMicroMovewrapper">
 									<div class = "patientDataMicroMove_6_start"></div>
 									<div class = "patientDataMicroMove_6_end">  </div>
 								</div>
+								<div class = "movePlane">{{microMoves.start.L6.planeName}}</div>
 							</div>
 						</div>
 						<div class = "patientDataMicroMovesLevelThreeWrapper">
 							<div class = "patientDataMicroMove_7">
-								<div class = "moveHeader">Move 7</div>
+								<div class = "moveHeader">{{microMoves.start.L7.moveName}}</div>
 								<div class = "patientDataMicroMovewrapper">
 									<div class = "patientDataMicroMove_7_start"></div>
 									<div class = "patientDataMicroMove_7_end">  </div>
 								</div>
+								<div class = "movePlane">{{microMoves.start.L7.planeName}}</div>
 							</div>
 							<div class = "patientDataMicroMove_8">
-								<div class = "moveHeader">Move 8</div>
+								<div class = "moveHeader">{{microMoves.start.L8.moveName}}</div>
 								<div class = "patientDataMicroMovewrapper">
 									<div class = "patientDataMicroMove_8_start"></div>
 									<div class = "patientDataMicroMove_8_end">  </div>
 								</div>
+								<div class = "movePlane">{{microMoves.start.L8.planeName}}</div>
 							</div>
 							<div class = "patientDataMicroMove_9">
-								<div class = "moveHeader">Move 9</div>
+								<div class = "moveHeader">{{microMoves.start.L9.moveName}}</div>
 								<div class = "patientDataMicroMovewrapper">
 									<div class = "patientDataMicroMove_9_start"></div>
 									<div class = "patientDataMicroMove_9_end">  </div>
 								</div>
+								<div class = "movePlane">{{microMoves.start.L9.planeName}}</div>
 							</div>
 						</div>
 					</div>
@@ -205,9 +211,9 @@
 						<div class = "patientsListImgDiv">
 							<img class = "patientsListImg" ng-src="{{patient.patientImgId}}" />
 							<div class = "patientListRecoveryRange">
-								<div class = "patientRecoveryRangeText high" ng-if="patient.ROMrecovery >= 80">{{patient.recoveryRange}}</div>
-								<div class = "patientRecoveryRangeText low" ng-if="patient.ROMrecovery <= 40">{{patient.recoveryRange}}</div>
-								<div class = "patientRecoveryRangeText medium" ng-if="patient.ROMrecovery > 40 && patient.ROMrecovery < 80">{{patient.recoveryRange}}</div>
+								<div class = "patientRecoveryRangeText high" ng-if="patient.ROMrecovery >= 70">{{patient.recoveryRange}}</div>
+								<div class = "patientRecoveryRangeText low" ng-if="patient.ROMrecovery <= 60">{{patient.recoveryRange}}</div>
+								<div class = "patientRecoveryRangeText medium" ng-if="patient.ROMrecovery > 60 && patient.ROMrecovery < 70">{{patient.recoveryRange}}</div>
 							</div>
 						</div>
 						<div class = "patientsListDetail"> 
@@ -217,15 +223,15 @@
 								<div class = "progress round patientProgress">
 									<span class="meter progressMeter" 
 										  style="width:{{patient.ROMrecovery}}%"
-										  ng-class = "{'highBG'    : patient.ROMrecovery >= 80, 
-												 		'lowBG'    : patient.ROMrecovery <= 40,
-												 		'mediumBG' : patient.ROMrecovery > 40 && patient.ROMrecovery < 80}">
+										  ng-class = "{'highBG'    : patient.ROMrecovery >= 70, 
+												 		'lowBG'    : patient.ROMrecovery <= 60,
+												 		'mediumBG' : patient.ROMrecovery > 60 && patient.ROMrecovery < 70}">
 									</span>
 								</div>
 								<div class = "patientListRecoveryValue" 
-									ng-class = "{'high'   : patient.ROMrecovery >= 80, 
-												 'low'    : patient.ROMrecovery <= 40,
-												 'medium' : patient.ROMrecovery > 40 && patient.ROMrecovery < 80}">
+									ng-class = "{'high'   : patient.ROMrecovery >= 70, 
+												 'low'    : patient.ROMrecovery <= 60,
+												 'medium' : patient.ROMrecovery > 60 && patient.ROMrecovery < 70}">
 										{{patient.ROMrecovery}}%
 								</div>
 							</div>
@@ -234,7 +240,7 @@
 				</div>	
 			</div>
 
-			<div class = "patientsFeedbackButtonDiv" ng-show="patientInfo" ng-click="showFeedback = 1" ng-show="showFeedback == 0">
+			<div class = "patientsFeedbackButtonDiv" ng-click = "showDoctorFeedback()" ng-show="showFeedback == 0 && patientInfo">
 				Feedback
 			</div>
 
@@ -243,54 +249,19 @@
 					<div class = "patientsFeedbackTopButton" ng-click="showFeedback = 0">_</div>
 				</div>
 				<div class = "patientsFeedbackList">
-					<div class = "patientFeedbackMsgWrapper">
+					<div class = "patientFeedbackMsgWrapper" ng-repeat="prevfeedback in feedbacks">
 						<div class = "patientFeedbackMsg">
-							Good job! Keep this going and you will do well. 
-							Please take note of your posture when exercising as well to ensure that you gain the most out of this exercise.
-							All the best and best regards.
+							{{prevfeedback.message}}
 						</div>
 						<div class = "patientFeedbackMsgTime">
-							24th Mar 2016
-						</div>
-					</div>
-
-					<div class = "patientFeedbackMsgWrapper">
-						<div class = "patientFeedbackMsg">
-							Good job! Keep this going and you will do well. 
-							Please take note of your posture when exercising as well to ensure that you gain the most out of this exercise.
-							All the best and best regards.
-						</div>
-						<div class = "patientFeedbackMsgTime">
-							24th Mar 2016
-						</div>
-					</div>
-
-					<div class = "patientFeedbackMsgWrapper">
-						<div class = "patientFeedbackMsg">
-							Good job! Keep this going and you will do well. 
-							Please take note of your posture when exercising as well to ensure that you gain the most out of this exercise.
-							All the best and best regards.
-						</div>
-						<div class = "patientFeedbackMsgTime">
-							24th Mar 2016
-						</div>
-					</div>
-
-					<div class = "patientFeedbackMsgWrapper">
-						<div class = "patientFeedbackMsg">
-							Good job! Keep this going and you will do well. 
-							Please take note of your posture when exercising as well to ensure that you gain the most out of this exercise.
-							All the best and best regards.
-						</div>
-						<div class = "patientFeedbackMsgTime">
-							24th Mar 2016
+							{{prevfeedback.date}}
 						</div>
 					</div>
 				</div>
 				<div class = "patientFeedbackInput">
-					<textarea class = "patientFeedbackInputBox" placeholder="Feedback"></textarea>
+					<textarea class = "patientFeedbackInputBox" placeholder="Feedback" ng-model="feedback"></textarea>
 				</div>
-				<div class = "patientFeedbackPostBtnWrapper">
+				<div class = "patientFeedbackPostBtnWrapper" ng-click="postDoctorFeedback(feedback)">
 					<div class = "patientFeedbackPostBtn">
 						Post
 					</div>

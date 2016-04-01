@@ -19,59 +19,19 @@ router.get('/users', function(req, res, next) {
 
 router.route('/update')
 	.get(function(req, res){
-		var sqlQuery = 'SELECT A.recordId, A.patientId, A.sessionId, A.YAW, A.PITCH, A.ROLL, A.StartDateTime, A.EndDateTime, B.refPlane, B.refROM, B.scaleRange FROM recordActions as A, gameactions as B where A.ActionId = B.ActionId and A.ActionType = B.ActionType';
-		databaseConnection.query(sqlQuery, function(err, result){
+		var selectQuery = "SELECT PatientId, AVG(sessionAccuracy) as Accuracy FROM `recordsessions` group by PatientId";
+		databaseConnection.query(selectQuery, function(err, result){
 			for(index=0; index<result.length; index++){
-				var recordId = result[index]['recordId'];
-				var start = result[index]['StartDateTime'];
-				var end   = 1;
-				if((index < result.length-1) && (result[index+1]['patientId'] == result[index]['patientId']) && (result[index+1]['sessionId'] == result[index]['sessionId'])){
-					end = result[index+1]['StartDateTime'];
-				}
-				
-				var refPlane = result[index]['refPlane'];
-				var alphaAngle = 0;
-				var betaAngle  = 0;
-				var refAngle   = result[index]['refROM'];
-				var accuracy   = 0;  
-				var angleDiffernce = 0;
-				var scaleRange = result[index]['scaleRange'];
-
-				var timeDifference = Math.abs(end-start);
-				if(timeDifference <= 0){
-					timeDifference = 100;
-				}
-				if (refPlane == 'P'){
-					alphaAngle = parseFloat(result[index]['PITCH']);
-
-				} else if (refPlane == 'Y'){
-					alphaAngle = parseFloat(result[index]['YAW']);
-				}
-
-				betaAngle = 90 + alphaAngle;
-				if (betaAngle > 180){
-					betaAngle = (360 - betaAngle) * -1;
-				}
-
-				angleDiffernce = Math.abs(refAngle - betaAngle)
-				accuracy = 100 - (angleDiffernce/scaleRange * 100);
-				if(accuracy > 100){
-					accuracy = 100;
-				}
-
-				if(accuracy < 0){
-					accuracy = accuracy * -1;
-				}
-
-				var angle = betaAngle.toFixed(2)
-
-				var updateQuery = "UPDATE recordActions SET timeTaken = '"+timeDifference+"', moveAngle = '"+angle+"', refPlane = '"+refPlane+"', accuracy = '"+accuracy+"' where recordId = '"+recordId+"'";
+				var patientId = result[index]['PatientId'];
+				var accuracy  = parseInt(result[index]['Accuracy']);
+				var updateQuery = "UPDATE patients SET ROMrecovery = '"+accuracy+"' where patientId = "+patientId;
 				databaseConnection.query(updateQuery);
 			}
-			res.jsonp('done');
-		})
-	});
+		});
+	});	
 
+
+//Doctor Data
 router.route('/authenticate/doctors/:email/:hashpassword')
 	.get(function(req, res){
 		var doctorJson	   = {};
@@ -136,87 +96,49 @@ router.route('/doctors/:doctorId')
 		});
 	});
 
+
+//Patient Data
 router.route('/doctors/:doctorId/patients')
 	.get(function(req, res){
 		
 		var patients = [];
-		var selectTable  = "patientinjruy as A, injuries as B, patients as C"
-		var selectPatientInjury  = "A.PatientId, A.InjuryId, A.patientInjuryDescription, B.injuryName, B.injuryDescription";
-		var selectPatientDetials = "C.FirstName, C.LastName, C.Email, C.age, C.gender, C.registrationDate, C.patientImgId, C.totalSessions, C.sessionsCompleted, C.ROMrecovery, C.height, C.weight" 
-		var filterDoctor  = "C.DoctorId = " + req.params.doctorId;
-		var joinCondition = "A.InjuryId = B.InjuryId and C.PatientId = A.PatientId";
-		var orderCondition = "C.FirstName  ASC"
-		var sqlQuery = 'SELECT ' + selectPatientInjury + ' , ' + selectPatientDetials + ' FROM ' + selectTable + ' WHERE ' + filterDoctor + ' AND ' + joinCondition + ' ORDER BY ' + orderCondition;
+		var selectTable  = "patientinjruy as A, injuries as B, patients as C";
+		var selectPatientInjury  = "A.PatientId, A.InjuryId, B.injuryName";
+		var selectPatientDetials = "C.FirstName, C.LastName, C.patientImgId, C.ROMrecovery, C.totalSessions, C.sessionsCompleted";
+		var joinCondition = "A.InjuryId  = B.InjuryId and C.PatientId = A.PatientId";
+		var orderCondition = "C.FirstName"
+		var sqlQuery = 'SELECT ' + selectPatientInjury + ' , ' + selectPatientDetials + ' FROM ' + selectTable + ' WHERE ' + joinCondition + ' ORDER BY '+orderCondition;
 		
 		databaseConnection.query(sqlQuery, function(err, result){
 			
 			for(patientIndex = 0; patientIndex < result.length; patientIndex++){
-				var patientInjuryDescription = "";
-				if (result[patientIndex]['patientInjuryDescription'] != ''){
-					patientInjuryDescription = result[patientIndex]['patientInjuryDescription'];
-				} else {
-					patientInjuryDescription = result[patientIndex]['injuryDescription'];
-				}
-
 				var patientRecoveryRange = ""
 				var patientRecovery = parseInt(result[patientIndex]['ROMrecovery']);
-				if (patientRecovery <= 40){
+				if (patientRecovery <= 60){
 					patientRecoveryRange = "POOR"
 				
-				} else if (patientRecovery > 40 && patientRecovery < 80){
+				} else if (patientRecovery > 60 && patientRecovery < 70){
 					patientRecoveryRange = "FAIR"
 				
-				} else if (patientRecovery >= 80){
+				} else if (patientRecovery >= 70){
 					patientRecoveryRange = "GOOD"
 				}
 
 				patient = {
 					'patientId'	 		: result[patientIndex]['PatientId'],
 					'injuryId'			: result[patientIndex]['InjuryId'],
-					'injuryDescription' : patientInjuryDescription,
-					'injuryName'		: result[patientIndex]['injuryName'],
 					'firstName' 		: result[patientIndex]['FirstName'],
 					'lastName'   		: result[patientIndex]['LastName'],
-					'email'		 		: result[patientIndex]['Email'],
-					'age'				: result[patientIndex]['age'],
-					'gender'			: result[patientIndex]['gender'],
-					'registrationDate'	: result[patientIndex]['registrationDate'],
+					'injuryName'		: result[patientIndex]['injuryName'],
 					'patientImgId'		: result[patientIndex]['patientImgId'],
 					'totalSessions'		: result[patientIndex]['totalSessions'],
 					'sessionsCompleted'	: result[patientIndex]['sessionsCompleted'],
-					'height'			: result[patientIndex]['height'],
-					'weight'			: result[patientIndex]['weight'],
 					'ROMrecovery'		: patientRecovery,
-					'recoveryRange'		: patientRecoveryRange,
-					'patientPogress'    : ((result[patientIndex]['sessionsCompleted'] / result[patientIndex]['totalSessions']) * 100).toFixed(2)
+					'recoveryRange'		: patientRecoveryRange
 				}
 				patients.push(patient)
 			}
 			res.jsonp({"patients" : patients});
-		});
-	});
-
-router.route('/doctors/:doctorId/patients/averageData')
-	.get(function(req, res){
-		
-		var averageData = {
-			'totalPatients'   : '',
-			'averageProgress' : '',
-			'averageRecovery' : '',
-			'averageBMI'	  : ''
-		};
-
-		var selectTable  = "patients"
-		var selectParams = "COUNT(*) as totalPatients, AVG(sessionsCompleted) / AVG(totalSessions) as AVGProgress, AVG(ROMrecovery) as AVGRecovery, AVG(weight) as AVGWeight, AVG(height) as AVGHeight";
-		var filterDoctor = "DoctorId = " + req.params.doctorId;
-		var sqlQuery = 'SELECT ' + selectParams + ' FROM ' + selectTable + ' WHERE ' + filterDoctor;
-		
-		databaseConnection.query(sqlQuery, function(err, result){
-			averageData['totalPatients'] 	= (result[0]['totalPatients']).toFixed(2);
-			averageData['averageProgress'] 	= (result[0]['AVGProgress'] * 100).toFixed(2);
-			averageData['averageRecovery'] 	= (result[0]['AVGRecovery']).toFixed(2);
-			averageData['averageBMI'] 		= (result[0]['AVGWeight'] / ((result[0]['AVGHeight'] / 100.0) * (result[0]['AVGHeight'] / 100.0))).toFixed(2);
-			res.jsonp({"averageData" : averageData});
 		});
 	});
 
@@ -265,121 +187,548 @@ router.route('/patients/:patientId/injury/:injuryId/sessions')
 	.get(function(req, res){
 		var sessions      = [];
 		var selectTable   = "recordsessions";
-		var selectParams  = "sessionId, sessionAccuracy, sessionComplete, StartDateTime, EndDateTime";
+		var selectParams  = "sessionId";
 		var filterPatient = "PatientId = " + req.params.patientId;
 		var filterInjury  = "InjuryId  = " + req.params.injuryId;
 		var sqlQuery      = 'SELECT ' + selectParams + ' FROM ' + selectTable + ' WHERE ' + filterPatient + ' AND ' + filterInjury;
 		
 		databaseConnection.query(sqlQuery, function(err, result){
-			for(sessionIndex = 0; sessionIndex < result.length; sessionIndex++){
-				var duration = (result[sessionIndex]['EndDateTime'] - result[sessionIndex]['StartDateTime']) / (60 * 1000);
-				session = {
-					'sessionId' : result[sessionIndex]['sessionId'], 
-					'sessionAccuracy' : result[sessionIndex]['sessionAccuracy'],
-					'sessionComplete' : result[sessionIndex]['sessionComplete'], 
-					'sessionDuration' : duration
-				}
-				sessions.push(session)
+			for(sessionIndex = result.length-1; sessionIndex >= 0 ; sessionIndex--){
+				sessions.push(result[sessionIndex]['sessionId'])
 			}
 			res.jsonp({"sessions":sessions});
 		});
 	});
 
-router.route('/patients/:patientId/injury/:injuryId/sessions/:sessionId/levels')
+router.route('/patients/:patientId/injury/:injuryId/macro/accuracy')
 	.get(function(req, res){
-		var levels      = [];
-		var selectTable   = "recordlevels";
-		var selectParams  = "levelId, levelAccuracy, levelComplete, StartDateTime, EndDateTime, pain, strength, RangeOfMotion";
-		var filterPatient = "PatientId = " + req.params.patientId;
-		var filterInjury  = "InjuryId  = " + req.params.injuryId;
-		var filterSession = "sessionId = " + req.params.sessionId;
-		var sqlQuery      = 'SELECT ' + selectParams + ' FROM ' + selectTable + ' WHERE ' + filterPatient + ' AND ' + filterInjury + ' AND ' + filterSession;
-		
-		databaseConnection.query(sqlQuery, function(err, result){
-			for(levelIndex = 0; levelIndex < result.length; levelIndex++){
-				var duration = (result[levelIndex]['EndDateTime'] - result[levelIndex]['StartDateTime']) / (60 * 1000);
-				level = {
-					'levelId'       : result[levelIndex]['levelId'], 
-					'levelAccuracy' : result[levelIndex]['levelAccuracy'],
-					'levelComplete' : result[levelIndex]['levelComplete'], 
-					'levelDuration' : duration,
-					'pain'			: result[levelIndex]['pain'],
-					'strength'		: result[levelIndex]['strength'],
-					'RangeOfMotion'	: result[levelIndex]['RangeOfMotion']
+		var accuacyUpperBound = 100.00;
+		var macroAccuracy = {
+			'upperBound' : accuacyUpperBound,
+			'results' : []
+		}
+
+		var sessionFilter = "PatientId = '"+req.params.patientId+"' and InjuryId = '"+req.params.injuryId+"'"
+		var sessionTable  = "recordlevels"
+		var sessionSelection = "sessionId, levelId, levelAccuracy"
+		var sessionOrder  = "sessionId ASC"
+		var selectQuery = "SELECT "+sessionSelection+" FROM "+sessionTable+" where "+sessionFilter+" order by "+sessionOrder;
+		databaseConnection.query(selectQuery, function(err, result){
+			var currKey = "";
+			var currData = [];
+
+			for(index=0; index<result.length; index++){
+				currKey = result[index]['sessionId'];
+				var prevKey = currKey;
+				var accuracy = result[index]['levelAccuracy'];
+				
+				if(index != 0){
+					prevKey = result[index-1]['sessionId'];
+				} else if(index == 0) {
+					macroAccuracy['results'].push('S'+currKey) //Adding First Key 
 				}
-				levels.push(level)
+
+				if(prevKey != currKey){
+					macroAccuracy['results'].push('S'+currKey); //Adding Subsquent Key
+					macroAccuracy['S'+prevKey] = currData;		//Adding Recent Data
+					currData = [];
+				}
+
+				currData.push(accuracy);
+				if(index == result.length-1){
+					macroAccuracy['S'+currKey] = currData;		//Adding Final Data
+				}
 			}
-			res.jsonp({"levels":levels});
+
+			res.jsonp(macroAccuracy);
 		});
 	});
 
-router.route('/patients/:patientId/injury/:injuryId/sessions/:sessionId/levels/:levelId/actions')
+router.route('/patients/:patientId/injury/:injuryId/macro/duration')
 	.get(function(req, res){
-		var actions       = [];
-		var selectTable   = "recordactions";
-		var selectParams  = "actionId, actionType, referenceValue, recordedValue, yaw, pitch, roll, actionComplete, StartDateTime, EndDateTime";
-		var filterPatient = "PatientId = " + req.params.patientId;
-		var filterInjury  = "InjuryId  = " + req.params.injuryId;
-		var filterSession = "sessionId = " + req.params.sessionId;
-		var filterLevel   = "levelId   = " + req.params.levelId;
-		var sqlQuery      = 'SELECT ' + selectParams + ' FROM ' + selectTable + ' WHERE ' + filterPatient + ' AND ' + filterInjury + ' AND ' + filterSession + ' AND ' + filterLevel;
-		
-		databaseConnection.query(sqlQuery, function(err, result){
-			for(actionIndex = 0; actionIndex < result.length; actionIndex++){
-				var duration = (result[actionIndex]['EndDateTime'] - result[actionIndex]['StartDateTime']) / (60 * 1000);
-				action = {
-					'actionId'       : result[actionIndex]['actionId'], 
-					'actionType' 	 : result[actionIndex]['actionType'],
-					'referenceValue' : result[actionIndex]['referenceValue'], 
-					'recordedValue'  : result[actionIndex]['recordedValue'],
-					'yaw'			 : result[actionIndex]['yaw'],
-					'pitch'		 	 : result[actionIndex]['pitch'],
-					'roll'	 		 : result[actionIndex]['roll'],
-					'actionComplete' : result[actionIndex]['actionComplete'],
-					'actionDuration' : duration
+		var macroDuration = {
+			'upperBound' : 0,
+			'results' : []
+		}
+
+		var sessionFilter = "PatientId = '"+req.params.patientId+"' and InjuryId = '"+req.params.injuryId+"'"
+		var sessionTable  = "recordlevels"
+		var sessionSelection = "sessionId, levelId, timeTaken"
+		var sessionOrder  = "sessionId ASC"
+		var selectQuery = "SELECT "+sessionSelection+" FROM "+sessionTable+" where "+sessionFilter+" order by "+sessionOrder;
+		databaseConnection.query(selectQuery, function(err, result){
+			var currKey = "";
+			var currData = [];
+			var timeUpperBound = 0.0;
+
+			for(index=0; index<result.length; index++){
+				currKey = result[index]['sessionId'];
+				var prevKey = currKey;
+				var timeTaken = result[index]['timeTaken'];
+				if(timeTaken > parseFloat(timeUpperBound)){
+					timeUpperBound = timeTaken;
 				}
-				actions.push(action)
+				
+				if(index != 0){
+					prevKey = result[index-1]['sessionId'];
+				} else if(index == 0) {
+					macroDuration['results'].push('S'+currKey) //Adding First Key 
+				}
+
+				if(prevKey != currKey){
+					macroDuration['results'].push('S'+currKey); //Adding Subsquent Key
+					macroDuration['S'+prevKey] = currData;		//Adding Recent Data
+					currData = [];
+				}
+
+				currData.push(timeTaken);
+				if(index == result.length-1){
+					macroDuration['S'+currKey] = currData;		//Adding Final Data
+				}
 			}
-			res.jsonp({"actions":actions});
+
+			macroDuration['upperBound'] = timeUpperBound;
+			res.jsonp(macroDuration);
+		});
+	});
+
+router.route('/patients/:patientId/injury/:injuryId/macro/feedback')
+	.get(function(req, res){
+
+		var userFeedback = {
+			'upperBound' : 10,
+			'results' 	 : [],
+			'fields'  	 : ['Relief', 'Strength', 'Rom'],
+			'Relief'  	 : {},
+			'Strength' 	 : {},
+			'Rom' 		 : {}
+		}
+
+		var sessionFilter = "PatientId = '"+req.params.patientId+"' and InjuryId = '"+req.params.injuryId+"'"
+		var sessionTable  = "recordlevels"
+		var sessionSelection = "sessionId, levelId, pain, strength, RangeOfMotion"
+		var sessionOrder  = "sessionId ASC"
+		var selectQuery = "SELECT "+sessionSelection+" FROM "+sessionTable+" where "+sessionFilter+" order by "+sessionOrder;
+		databaseConnection.query(selectQuery, function(err, result){
+			var currKey = "";
+			var currDataRelief = [];
+			var currDataStrength = [];
+			var currDataRom = [];
+
+			for(index=0; index<result.length; index++){
+				currKey = result[index]['sessionId'];
+				var prevKey  = currKey;
+				var relief   = 10 - result[index]['pain'];
+				var rom      = result[index]['RangeOfMotion'];
+				var strength = result[index]['strength'];  
+				
+				if(index != 0){
+					prevKey = result[index-1]['sessionId'];
+				} else if(index == 0) {
+					userFeedback['results'].push('S'+currKey) //Adding First Key 
+				}
+
+				if(prevKey != currKey){
+					userFeedback['results'].push('S'+currKey); //Adding Subsquent Key
+					userFeedback['Relief']['S'+prevKey] = currDataRelief; //Adding Recent Data
+					userFeedback['Strength']['S'+prevKey] = currDataStrength;
+					userFeedback['Rom']['S'+prevKey] = currDataRom;
+					currDataRelief = [];
+					currDataStrength = [];
+					currDataRom = [];
+				}
+
+				currDataRelief.push(relief);
+				currDataStrength.push(strength);
+				currDataRom.push(rom);
+
+				if(index == result.length-1){
+					userFeedback['Relief']['S'+currKey] = currDataRelief; //Adding Final Data
+					userFeedback['Strength']['S'+currKey] = currDataStrength;
+					userFeedback['Rom']['S'+currKey] = currDataRom;
+				}
+			}
+
+			res.jsonp(userFeedback);
+		});
+	});
+
+router.route('/patients/:patientId/injury/:injuryId/session/:sessionId/meso/accuracy')
+	.get(function(req, res){
+		var totalMoves = 9;
+		var mesoAccuracy = {
+			'upperBound' : 100,
+			'results' : [],
+			'dataTags': ['Start', 'End']
+		}
+
+		var queryFilter = "PatientId = '"+req.params.patientId+"' and InjuryId = '"+req.params.injuryId+"' and sessionId = '"+req.params.sessionId+"'"
+		var queryTable  = "recordActions"
+		var querySelection = "ActionId, ActionType, Accuracy"
+		var queryOrder  = "ActionId, ActionType ASC"
+		var selectQuery = "SELECT "+querySelection+" FROM "+queryTable+" where "+queryFilter+" order by "+queryOrder;
+		databaseConnection.query(selectQuery, function(err, result){
+			var data = [];
+			for(moveIndex=0; moveIndex < totalMoves; moveIndex++){
+				startValue = result[moveIndex*2 + 0]['Accuracy'];
+				endValue   = result[moveIndex*2 + 1]['Accuracy'];
+				moveKey    = 'L'+(moveIndex+1);
+				mesoAccuracy['results'].push(moveKey);
+				mesoAccuracy[moveKey] = [startValue, endValue];
+			}
+
+			res.jsonp(mesoAccuracy);
+		});
+	});
+
+router.route('/patients/:patientId/injury/:injuryId/session/:sessionId/meso/duration')
+	.get(function(req, res){
+		var totalMoves = 9;
+		var upperBound = 0;
+		var mesoDuration = {
+			'upperBound' : 100,
+			'results' : [],
+			'dataTags': ['Start', 'End']
+		}
+
+		var queryFilter = "PatientId = '"+req.params.patientId+"' and InjuryId = '"+req.params.injuryId+"' and sessionId = '"+req.params.sessionId+"'"
+		var queryTable  = "recordActions"
+		var querySelection = "ActionId, ActionType, timeTaken"
+		var queryOrder  = "ActionId, ActionType ASC"
+		var selectQuery = "SELECT "+querySelection+" FROM "+queryTable+" where "+queryFilter+" order by "+queryOrder;
+		databaseConnection.query(selectQuery, function(err, result){
+			var data = [];
+			for(moveIndex=0; moveIndex < totalMoves; moveIndex++){
+				startValue = result[moveIndex*2 + 0]['timeTaken'];
+				endValue   = result[moveIndex*2 + 1]['timeTaken'];
+				moveKey    = 'L'+(moveIndex+1);
+				mesoDuration['results'].push(moveKey);
+				mesoDuration[moveKey] = [startValue, endValue];
+
+				if(parseFloat(startValue) > parseFloat(endValue)){
+					if(upperBound < parseFloat(startValue))	{upperBound = parseFloat(startValue);}
+				
+				} else if(parseFloat(endValue) > parseFloat(startValue)){
+					if(upperBound < parseFloat(endValue))	{upperBound = parseFloat(endValue);}
+				}
+			}
+
+			mesoDuration['upperBound'] = upperBound.toFixed(2);
+			res.jsonp(mesoDuration);
+		});
+	});
+
+router.route('/patients/:patientId/injury/:injuryId/session/:sessionId/micro/moves')
+	.get(function(req, res){
+		totalMoves = 9;
+		var moves = {
+			'results'   : [],
+			'dataTags'  : ['start', 'end'],
+			'start'		: {},
+			'end'		: {} 
+		};
+
+		var queryFilter = "A.PatientId = '"+req.params.patientId+"' and A.InjuryId = '"+req.params.injuryId+"' and A.sessionId = '"+req.params.sessionId+"'"
+		var queryTable  = "recordActions as A, gameactions B"
+		var querySelection = "A.moveAngle, A.refPlane, B.refROM, B.planeName, B.moveName, A.Accuracy"
+		var queryJoin 	= "A.ActionType = B.ActionType and A.ActionId = B.ActionId"
+		var queryOrder  = "A.ActionId, A.ActionType ASC"
+		var selectQuery = "SELECT "+querySelection+" FROM "+queryTable+" where "+queryFilter+" and "+queryJoin+" order by "+queryOrder;
+		console.log(selectQuery);
+
+		databaseConnection.query(selectQuery, function(err, result){
+			for(moveIndex=0; moveIndex < totalMoves; moveIndex++){
+				var moveKey = 'L'+(moveIndex+1);
+				for(moveTypeIndex = 0; moveTypeIndex < moves['dataTags'].length; moveTypeIndex++){
+					moveTypeKey = moves['dataTags'][moveTypeIndex];
+					moves[moveTypeKey][moveKey] = {
+						'moveId'    : (moveIndex+1),
+						'angle'     : result[moveIndex*2 + moveTypeIndex]['moveAngle'],
+						'expected'  : result[moveIndex*2 + moveTypeIndex]['refROM'],
+						'accuracy'  : result[moveIndex*2 + moveTypeIndex]['Accuracy'],
+						'refPlane'  : result[moveIndex*2 + moveTypeIndex]['refPlane'],
+						'planeName' : result[moveIndex*2 + moveTypeIndex]['planeName'],
+						'moveName'	: result[moveIndex*2 + moveTypeIndex]['moveName']
+					}
+				}
+				moves['results'].push(moveKey);
+			}
+			res.jsonp(moves);
 		});
 	});
 
 
-router.route('/patients/:patientId/injury/:injuryId/sessions/:sessionId/levels/:levelId/actions/:actionId')
+//Overview Data
+router.route('/doctors/:doctorId/overview/macro')
 	.get(function(req, res){
 
-		var actions       = [];
-		var selectTable   = "recordactions as A, gameactions as B";
-		var selectParams  = "A.actionId, A.actionType, A.referenceValue, A.recordedValue, A.yaw, A.pitch, A.roll, A.actionComplete, A.StartDateTime, A.EndDateTime, B.ActionImgId";
-		var filterPatient = "A.PatientId = " + req.params.patientId;
-		var filterInjury  = "A.InjuryId  = " + req.params.injuryId;
-		var filterSession = "A.sessionId = " + req.params.sessionId;
-		var filterLevel   = "A.levelId   = " + req.params.levelId;
-		var filterActions = "A.actionId  = " + req.params.actionId;
-		var joinCondition = "A.actionId = B.actionId AND A.actionType = B.actionType"
-		var sqlQuery      = 'SELECT ' + selectParams + ' FROM ' + selectTable + ' WHERE ' + filterPatient + ' AND ' + filterInjury + ' AND ' + filterSession + ' AND ' + filterLevel + ' AND ' + filterActions + ' AND ' + joinCondition;
-		
+		var queryFieldsPatients = "COUNT(*) as totalPatients";
+		var queryFieldAccuracy  = "AVG(A.ROMrecovery) as avgRecovery";
+		var queryFieldProgress  = "(SUM(sessionsCompleted) / SUM(totalSessions)) * 100 as avgProgress";
+		var queryFieldGroups    = "COUNT(DISTINCT(B.InjuryId)) as totalGroups"
+		var queryTable  = "patients as A, patientinjruy as B "
+		var queryFilter = "A.DoctorId = '"+req.params.doctorId+"' and A.PatientId = B.patientId"
+		var queryFields = queryFieldsPatients+", "+queryFieldAccuracy+", "+queryFieldProgress+", "+queryFieldGroups
+		var sqlQuery = "SELECT "+queryFields+" FROM "+queryTable+" WHERE "+queryFilter;
+		console.log(sqlQuery);
+
 		databaseConnection.query(sqlQuery, function(err, result){
-			for(actionIndex = 0; actionIndex < result.length; actionIndex++){
-				var duration = (result[actionIndex]['EndDateTime'] - result[actionIndex]['StartDateTime']) / (60 * 1000);
-				action = {
-					'actionId'       : result[actionIndex]['actionId'], 
-					'actionType' 	 : result[actionIndex]['actionType'],
-					'actionImgId'	 : result[actionIndex]['ActionImgId'],
-					'referenceValue' : result[actionIndex]['referenceValue'], 
-					'recordedValue'  : result[actionIndex]['recordedValue'],
-					'yaw'			 : result[actionIndex]['yaw'],
-					'pitch'		 	 : result[actionIndex]['pitch'],
-					'roll'	 		 : result[actionIndex]['roll'],
-					'actionComplete' : result[actionIndex]['actionComplete'],
-					'actionDuration' : duration
-				}
-				actions.push(action)
+			var overview = {
+				'totalPatients' : result[0]['totalPatients'],
+				'totalGroups' 	: result[0]['totalGroups'], 
+				'avgAccuracy' 	: result[0]['avgRecovery'].toFixed(2),
+				'avgProgress'	: result[0]['avgProgress'].toFixed(2)
 			}
-			res.jsonp({"movement":actions});
+			res.jsonp(overview);
+		});
+	});
+
+router.route('/overview/groups')
+	.get(function(req, res){
+		var sqlQuery = "SELECT * FROM injuries";
+		var groups   = []
+		databaseConnection.query(sqlQuery, function(err, result){
+			for(index=0; index<result.length; index++){
+				var group = {
+					'injuryId' : result[index]['InjuryId'], 
+					'injuryName' : result[index]['injuryName'],
+					'injuryDescription' : result[index]['InjuryDescription']
+				}
+				groups.push(group)
+			}
+			res.jsonp(groups);
+		});
+	});
+
+router.route('/overview/groups/:groupId/gender')
+	.get(function(req, res){
+		var overviewGender = {'results' : []}
+		var total = 0;
+
+		var queryFields   = "A.gender, count(*) as total";
+		var queryTables   = "patients as A, patientinjruy as B";
+		var queryJoin     = "A.PatientId = B.patientId";
+		var queryGroup    = "A.gender"
+		var queryFilter   = "";
+		if(parseInt(req.params.groupId) > 0){
+			queryFilter = "and B.InjuryId = "+ req.params.groupId;
+		}
+		var sqlQuery = "SELECT "+queryFields+" FROM "+queryTables+" where "+queryJoin+" "+queryFilter+" group by "+queryGroup;
+		console.log(sqlQuery);
+		databaseConnection.query(sqlQuery, function(err, result){
+			for(index=0; index<result.length; index++){
+				key = result[index]['gender'];
+				keyValue = result[index]['total'];
+				overviewGender.results.push(key);
+				overviewGender[key] = keyValue;
+				total = total + keyValue;
+			}
+
+			overviewGender['total'] = total;
+			res.jsonp(overviewGender);
+		});
+	});
+
+router.route('/overview/groups/:groupId/age')
+	.get(function(req, res){
+
+		var maxAgeGroups = 5;
+		var ageGroup = {
+			'total' : 0,
+			'results' : []
+		}
+
+		var querySelect = "A.age, count(*) as total"
+		var queryTable  = "patients as A, patientinjruy as B";
+		var queryJoin   = "A.PatientId = B.patientId";
+		var queryGroup  = "A.age"
+		var queryFilter = "";
+
+		if(parseInt(req.params.groupId) > 0){
+			queryFilter = "and B.InjuryId = "+ req.params.groupId;
+		}
+		var sqlQuery = "SELECT "+querySelect+" FROM "+queryTable+" WHERE "+queryJoin+" "+queryFilter+" group by "+queryGroup;
+		console.log(sqlQuery);
+
+		databaseConnection.query(sqlQuery, function(err, result){
+			var minAge = result[0]['age'];
+			var maxAge = result[result.length-1]['age'];
+			var ageDifference = maxAge - minAge;
+			var ageOffset = parseInt(ageDifference / maxAgeGroups);
+			
+			var maxAgeOffset = 0;
+			var currUpperLimit = parseInt(minAge) + ageOffset;
+			var ageTotal  = 0;
+			var overallTotal = 0;
+			for(index=0; index<result.length; index++){
+				ageTotal = ageTotal + result[index]['total'];
+				overallTotal = overallTotal + result[index]['total'];
+
+				var currAge = result[index]['age']
+				if(currAge >= currUpperLimit || index == result.length-1){
+					var ageKey = (currUpperLimit - ageOffset)+' - '+(currUpperLimit);
+					ageGroup['results'].push(ageKey);
+					ageGroup[ageKey] = ageTotal;
+					ageTotal = 0;
+					currUpperLimit = currUpperLimit + ageOffset + 1;
+				}
+				
+			}
+			ageGroup['total'] = overallTotal;
+			res.jsonp(ageGroup);
+		});
+	});
+
+router.route('/overview/groups/:groupId/feedback')
+	.get(function(req, res){
+
+		var overallFeedback = {
+			'upperBound' : 10,
+			'results'  : ['Overall'], 
+			'fields'   : ['Relief', 'Strength', 'Rom'],
+			'Relief'   : {},
+			'Strength' : {},
+			'Rom' : {}
+		}
+		
+		var querySelection = "levelId, AVG(pain) as pain, AVG(strength) as strength, AVG(RangeOfMotion) as ROM";
+		var queryFilter    = "";
+		if(parseInt(req.params.groupId) > 0){
+			queryFilter    = "where InjuryId = '"+req.params.groupId+"'";
+		}
+		var queryTable     = "recordlevels"
+		var queryGroup 	   = "levelId"
+		var queryOrder     = "levelId ASC"
+		var sqlQuery = "SELECT "+querySelection+" FROM "+queryTable+" "+queryFilter + "group by "+queryGroup + " ORDER BY "+queryOrder;
+		console.log(sqlQuery);
+		databaseConnection.query(sqlQuery, function(err, result){
+			var levelResultRelief = [];
+			var levelResultStrength = [];
+			var levelResultROM = [];
+			for(index=0; index<result.length; index++){
+				levelResultRelief.push((10 -result[index]['pain']).toFixed(2));
+				levelResultStrength.push((result[index]['strength']).toFixed(2));
+				levelResultROM.push((result[index]['ROM']).toFixed(2));
+			} 
+
+			overallFeedback['Relief']['Overall'] = levelResultRelief;
+			overallFeedback['Strength']['Overall'] = levelResultStrength;
+			overallFeedback['Rom']['Overall'] = levelResultROM;
+			res.jsonp(overallFeedback);
 		});
 	});
 
 
+router.route('/overview/groups/:groupId/accuracy')
+	.get(function(req, res){
+		var totalMoves = 9;
+		var overviewLevels = {
+			'upperBound' : 100,
+			'results' : [],
+			'dataTags': ['Start', 'End']
+		}
+
+		var querySelect = "AVG(Accuracy) as Accuracy, ActionId, ActionType";
+		var queryTable  = "recordActions";
+		var queryGroup  = "ActionId, ActionType"
+		var queryFilter = "";
+		if(parseInt(req.params.groupId) > 0){
+			queryFilter = "where InjuryId = "+req.params.groupId;
+		}
+		var sqlQuery    = "SELECT "+querySelect+" FROM "+queryTable+" "+queryFilter+" group by "+queryGroup;
+		databaseConnection.query(sqlQuery, function(err, result){
+			for(index=0; index<totalMoves; index++){
+				startVal = (result[2*index+0]['Accuracy']).toFixed(2);
+				endVal   = (result[2*index+1]['Accuracy']).toFixed(2);
+				moveKey  = 'L'+(index+1);
+				overviewLevels['results'].push(moveKey);
+				overviewLevels[moveKey] = [startVal, endVal]
+			}
+
+			res.jsonp(overviewLevels);
+		});
+	});
+
+router.route('/overview/groups/:groupId/duration')
+	.get(function(req, res){
+		var totalMoves = 9;
+		var upperBoundTime = 0;
+		var overviewLevels = {
+			'upperBound' : 0,
+			'results' : [],
+			'dataTags': ['Start', 'End']
+		}
+
+		var querySelect = "AVG(timeTaken) as timeTaken, ActionId, ActionType";
+		var queryTable  = "recordActions";
+		var queryGroup  = "ActionId, ActionType"
+		var queryFilter = "";
+		if(parseInt(req.params.groupId) > 0){
+			queryFilter = "where InjuryId = "+req.params.groupId;
+		}
+		var sqlQuery    = "SELECT "+querySelect+" FROM "+queryTable+" "+queryFilter+" group by "+queryGroup;
+		databaseConnection.query(sqlQuery, function(err, result){
+			for(index=0; index<totalMoves; index++){
+				startVal = (result[2*index+0]['timeTaken']).toFixed(2);
+				endVal   = (result[2*index+1]['timeTaken']).toFixed(2);
+
+				if(startVal > endVal && startVal > upperBoundTime){
+					upperBoundTime = startVal;
+				
+				} else if(endVal > startVal && endVal > upperBoundTime){
+					upperBoundTime = endVal;
+				} 
+
+				moveKey  = 'L'+(index+1);
+				overviewLevels['results'].push(moveKey);
+				overviewLevels[moveKey] = [startVal, endVal]
+			}
+
+			overviewLevels['upperBound'] = upperBoundTime
+			res.jsonp(overviewLevels);
+		});
+	});
+
+
+//Doctor Feedback
+
+router.route('/doctors/:doctorId/patients/:patientId/injury/:injuryId/post/feedback')
+	.get(function(req, res){
+		var feedback = req.query.doctorFeedback
+		var sender   = 'doctor';
+		var date     =  new Date().toISOString().slice(0, 19).replace('T', ' ');
+		var insertValues = "'"+req.params.doctorId+"', '"+req.params.patientId+"', '"+req.params.injuryId+"', '"+date+"', '"+feedback+"', 'doctor'";
+		var insertTable  = "doctorPatientFeedback"
+		var insertQuery  = "INSERT into "+insertTable+" VALUES("+insertValues+")";
+		console.log(insertQuery);
+		databaseConnection.query(insertQuery, function(insertQuery, result){
+			res.jsonp("Added")
+		});
+	});
+
+router.route('/doctors/:doctorId/patients/:patientId/injury/:injuryId/get/feedbacks')
+	.get(function(req, res){
+		var feedbacks   = [];
+		var querySelect = "dateRecord, message";
+		var queryTable  = "doctorPatientFeedback";
+		var queryFilter = "doctorId = '"+req.params.doctorId+"' and patientId = '"+req.params.patientId+"' and injuryId = '"+req.params.injuryId+"'";
+		var queryOrder  = "dateRecord ASC"
+		var sqlQuery = "SELECT "+querySelect+" FROM "+queryTable+" WHERE "+queryFilter+" ORDER BY "+queryOrder;
+		console.log(sqlQuery);
+		databaseConnection.query(sqlQuery, function(insertQuery, result){
+			if (result){
+				for(index=0; index<result.length; index++){
+					var dateArr  = String(result[index]['dateRecord']).split(" ")
+					var date     = dateArr[0]+", "+dateArr[1]+" "+dateArr[2]+" "+dateArr[3] 
+					var feedback = {
+						'date' 	  : date, 
+						'message' : result[index]['message']
+					}
+					feedbacks.push(feedback);
+				}
+			}
+			res.jsonp(feedbacks)
+		});
+	});
 
 module.exports = router;

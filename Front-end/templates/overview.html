@@ -42,7 +42,7 @@
 								<img class="overviewOverallImg" src = "img/totalPatients.png"/>
 							</div>
 							<div class = "overviewOverallDataTotalDiv overviewOverallDataDiv">
-								<div class = "overviewOverallDataValue overviewOverallDataTotalValue">57</div>
+								<div class = "overviewOverallDataValue overviewOverallDataTotalValue">{{totalPatients}}</div>
 								<div class = "overviewOverallDataTotalDescription">Total<br>Patients</div>
 							</div>
 						</div>
@@ -51,7 +51,7 @@
 								<img class="overviewOverallImg" src = "img/averageAccuracy.png"/>
 							</div>
 							<div class = "overviewOverallDataAccuracyDiv overviewOverallDataDiv">
-								<div class = "overviewOverallDataValue overviewOverallDataRecoveryValue">81.85%</div>
+								<div class = "overviewOverallDataValue overviewOverallDataRecoveryValue">{{avgAccuracy}}%</div>
 								<div class = "overviewOverallDataAccuracyDescription">Average<br>Accuracy</div>
 							</div>
 						</div>
@@ -60,7 +60,7 @@
 								<img class="overviewOverallImg" src = "img/averageProgress.png"/>
 							</div>
 							<div class = "overviewOverallDataRecoveryDiv overviewOverallDataDiv">
-								<div class = "overviewOverallDataValue overviewOverallDataProgressValue">5.05%</div>
+								<div class = "overviewOverallDataValue overviewOverallDataProgressValue">{{avgProgress}}%</div>
 								<div class = "overviewOverallDataRecoveryDescription">Average<br>Progress</div>
 							</div>
 						</div>
@@ -69,7 +69,7 @@
 								<img class="overviewOverallImg" src = "img/totalGroups.png"/>
 							</div>
 							<div class = "overviewOverallDataGroupsDiv overviewOverallDataDiv">
-								<div class = "overviewOverallDataValue overviewOverallDataGroupsValue">3</div>
+								<div class = "overviewOverallDataValue overviewOverallDataGroupsValue">{{totalGroups}}</div>
 								<div class = "overviewOverallDataGroupsDescription">Injury<br>Groups</div>
 							</div>
 						</div>
@@ -79,14 +79,11 @@
 				<div class = "overviewMacroData">
 					<div class = "overviewDataHeader">Summary</div><br>
 					<div class = "dataDropDown">
-						<button class = "dataDropDownButton" ng-click="showList = !showList" ng-init="showList = 0">
-							All
+						<button class = "dataDropDownButton" ng-click="showGroups = !showGroups">
+							{{groupName}}
 						</button>
-						<div class = "dataDropDownContentWrapper" ng-if="showList == 1" ng-click="showList = 0">
-							<div class = "dataDropDownContent" ng-click="showList = 0">All</div>
-							<div class = "dataDropDownContent" ng-click="showList = 0">Fracture</div>
-							<div class = "dataDropDownContent" ng-click="showList = 0">Dislocation</div>
-							<div class = "dataDropDownContent" ng-click="showList = 0">Rotator Tear</div>
+						<div class = "dataDropDownContentWrapper" ng-if="showGroups == 1">
+							<div class = "dataDropDownContent" ng-repeat = "group in groups" ng-click="viewGroupData(group.injuryId, group.injuryName)">{{group.injuryName}}</div>
 						</div>
 					</div>
 					<div class = "overviewMacroGeneralWrapper">

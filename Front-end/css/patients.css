@@ -61,7 +61,11 @@
 	text-align: left;
 	padding-left: 5px; 
 }
-.patientListGroup, .patientListRecovery{
+.patientListRecovery{
+	font-size: 1em;
+}
+
+.patientListGroup{
 	font-size: 0.9em;
 }
 
@@ -108,10 +112,14 @@
 	border-radius: 5px;
 }
 
-.moveHeader{
-	font-size: 1.5em;
+.moveHeader, .movePlane{
+	font-size: 1.0em;
 	padding: 10px;
 	text-align: center;
+}
+
+.movePlane{
+	color: #4f4f4f;
 }
 
 .patientDataGeneralWrapper, .patientDataMacroWrapper, .patientDataMesoWrapper,

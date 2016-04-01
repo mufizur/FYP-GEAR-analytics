@@ -73,7 +73,7 @@ function gearChartMesoBar(svgHeight, svgWidth, dataArray, selectionClass, dataTa
 		var averageData = 0;
 		var curveCoordinates = [];
 		for(dataIndex=0; dataIndex<data.length; dataIndex++){
-			sumData = sumData + data[dataIndex];
+			sumData = sumData + parseFloat(data[dataIndex]);
 			coordinateX = sessionOffset + margin['left'] + ((dataIndex+1) * (sessionWidth/4));
 			coordinateY = svgHeight - yScale(data[dataIndex]);
 			var coordinate = {
@@ -82,7 +82,7 @@ function gearChartMesoBar(svgHeight, svgWidth, dataArray, selectionClass, dataTa
 			}
 			curveCoordinates.push(coordinate)
 		}
-		averageData = parseInt(sumData / data.length);
+		averageData = parseFloat(sumData / data.length).toFixed(2);
 		averageDataArr.push(averageData);
 
 		var dashboardLineAvg = dashboardSvg.selectAll(lineAvgClassName)

@@ -81,10 +81,10 @@ function gearChartMicroBinaryBar(svgHeight, svgWidth, dataArray, selectionClass,
 		var averageValue = 0; 
 		var sumValue = 0;
 		for(binaryIndex=0; binaryIndex<data.length; binaryIndex++){
-			sumValue = sumValue + data[binaryIndex];
+			sumValue = sumValue + parseFloat(data[binaryIndex]);
 		} 
 
-		averageValue = sumValue / data.length;
+		averageValue = (sumValue / data.length).toFixed(2);
 		if (dataIndex == 0){
 			curvePath = 'M'+margin['left']+' '+svgHeight+' ';
 		}
@@ -179,10 +179,10 @@ function gearChartMicroBinaryBar(svgHeight, svgWidth, dataArray, selectionClass,
 		var averageValue = 0; 
 		var sumValue = 0;
 		for(binaryIndex=0; binaryIndex<data.length; binaryIndex++){
-			sumValue = sumValue + data[binaryIndex];
+			sumValue = sumValue + parseFloat(data[binaryIndex]);
 		} 
 
-		averageValue = sumValue / data.length;
+		averageValue = (sumValue / data.length).toFixed(2);
 		var microDataCircleClassName = "micro_circle_"+dataKey;
 		var microBarsCircle = dashboardSvg.selectAll(microDataCircleClassName)
 			.data([averageValue])

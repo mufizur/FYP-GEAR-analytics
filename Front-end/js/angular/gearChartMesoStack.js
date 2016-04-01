@@ -137,6 +137,7 @@ function gearChartMesoStack(svgHeight, svgWidth, dataArray, selectionClass, data
 				.classed(curveLineClassName, true)
 					.attr('resultIndex', resultIndex)
 					.attr('fieldIndex', fieldIndex)
+					.attr('resultKey', resultKey)
 					.attr('d', function(d){
 						return d;
 					})
@@ -150,16 +151,17 @@ function gearChartMesoStack(svgHeight, svgWidth, dataArray, selectionClass, data
 						d3.select(this).style('fill-opacity',0.3);
 						var resultId   = parseInt(this.getAttribute('resultIndex')) + 1;
 						var fieldIndex = parseInt(this.getAttribute('fieldIndex'))
+						var resultKey  = parseInt(this.getAttribute('resultKey'))
 						var fieldKey   = dataArray['fields'][fieldIndex];
 						var resultKey  = dataArray['results'][resultId-1];
 						var dataArr    = dataArray[fieldKey][resultKey];
 						var dataTotal = 0;
 						var dataAverage = 0;
 						for(dataIndex=0; dataIndex<dataArr.length; dataIndex++){
-							dataTotal = dataTotal + dataArr[dataIndex];
+							dataTotal = dataTotal + parseFloat(dataArr[dataIndex]);
 						}
 						dataAverage = parseInt(dataTotal / dataArr.length);
-						var toolTipHeader = "<div class = 'toolTipHeader'>Session "+resultId+"</div>";
+						var toolTipHeader = "<div class = 'toolTipHeader'>Session "+resultKey+"</div>";
 						var toolTipValue  = "<div class = 'toolTipData'>Avg "+fieldKey+" : "+dataAverage+"</div>";
 						var toolTipHtml   = "<div class = 'toolTipHtml'>"+toolTipHeader+toolTipValue+"</div>";
 						var widthOffset   = ($("."+selectionClass).width() / totalDataLen) * (resultId-1);
@@ -197,6 +199,7 @@ function gearChartMesoStack(svgHeight, svgWidth, dataArray, selectionClass, data
 					})
 					.attr('resultIndex', resultIndex)
 					.attr('fieldIndex', fieldIndex)
+					.attr('resultValue', resultKey)
 					.attr('x', function(d, i){
 						return 0;
 					})
@@ -216,17 +219,18 @@ function gearChartMesoStack(svgHeight, svgWidth, dataArray, selectionClass, data
 					})
 					.on('mouseover', function(d,i){
 						d3.select(this).style('fill-opacity',1.0);
-						var resultId   = parseInt(this.getAttribute('resultIndex')) + 1;
-						var fieldIndex = parseInt(this.getAttribute('fieldIndex'))
-						var fieldKey   = dataArray['fields'][fieldIndex];
-						var resultKey  = dataArray['results'][resultId-1];
-						var dataArr    = dataArray[fieldKey][resultKey];
-						var dataTotal = 0;
+						var resultId    = parseInt(this.getAttribute('resultIndex')) + 1;
+						var fieldIndex  = parseInt(this.getAttribute('fieldIndex'));
+						var resultValue = this.getAttribute('resultValue'); 
+						var fieldKey    = dataArray['fields'][fieldIndex];
+						var resultKey   = dataArray['results'][resultId-1];
+						var dataArr     = dataArray[fieldKey][resultKey];
+						var dataTotal   = 0;
 						var dataAverage = 0;
 						var widthOffset   = ($("."+selectionClass).width() / totalDataLen) * (resultId-1);
 						var widthLength   = ($("."+selectionClass).width() / (2*totalDataLen));
 						for(dataIndex=0; dataIndex<dataArr.length; dataIndex++){
-							dataTotal = dataTotal + dataArr[dataIndex];
+							dataTotal = dataTotal + parseFloat(dataArr[dataIndex]);
 						}
 						dataAverage = parseInt(dataTotal / dataArr.length);
 
@@ -242,7 +246,7 @@ function gearChartMesoStack(svgHeight, svgWidth, dataArray, selectionClass, data
 								'display' : 'block'
 							})
 
-						var toolTipHeader = "<div class = 'toolTipHeader'>Session "+resultId+"</div>";
+						var toolTipHeader = "<div class = 'toolTipHeader'>Session "+resultValue+"</div>";
 						var toolTipValue  = "<div class = 'toolTipData'>Avg "+fieldKey+" : "+dataAverage+"</div>";
 						var toolTipHtml   = "<div class = 'toolTipHtml'>"+toolTipHeader+toolTipValue+"</div>";
 						toolTip.html(toolTipHtml)

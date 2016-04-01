@@ -10,9 +10,6 @@ var GLOBAL_OBJECTS = {
 	'DOCTOR_ID ' : '-1',
 	'PATIENT_ID' : '-1',
 	'INJURY_ID'  : '-1',
-	'SESSION_ID' : '1',
-	'LEVEL_ID'	 : '1',
-	'ACTION_ID'	 : '1'
 }
 
 gearAppControllers.controller('dashboardController', ['$scope', '$http', '$location', function($scope, $http, $location) {
@@ -28,10 +25,22 @@ gearAppControllers.controller('LoginController',   ['$scope', '$http', '$locatio
 
 gearAppControllers.controller('OverviewController', ['$scope', '$http', '$location', function($scope, $http, $location) {
 	setGlobalObjects($scope);
-	getDoctorBasicDetails($http, $scope, GLOBAL_OBJECTS['DOCTOR_ID']=1);
-	getAllPatients($http, $scope, GLOBAL_OBJECTS['DOCTOR_ID'], 'overview');
-	getPatientsAverageData($http, $scope, GLOBAL_OBJECTS['DOCTOR_ID']);
-	addGraphsMacro();
+	$scope.showGroups = 0;
+	$scope.groupName  = 'All'
+	GLOBAL_OBJECTS['DOCTOR_ID'] = 1;
+	getDoctorBasicDetails	($http, $scope, GLOBAL_OBJECTS['DOCTOR_ID']);
+
+	//Overview Data
+	getOverviewMacro ($http, $scope, GLOBAL_OBJECTS['DOCTOR_ID']);
+	getOverviewData	($http, $scope, groupId = -1);
+	getOverviewMacroGroups ($http, $scope);
+
+	$scope.viewGroupData = function(groupId, groupName){
+		getOverviewData	($http, $scope, groupId);
+		$scope.groupName = groupName;
+		$scope.showGroups = 0;
+	}
+
 	$scope.logout = function(){$location.path('login');}
 	$scope.selectMenu = function(routeOption) {
 		menuSelection(routeOption, CONSTANT_GLOBALS.OVERVIEW_ROUTE, $location);
@@ -39,18 +48,41 @@ gearAppControllers.controller('OverviewController', ['$scope', '$http', '$locati
 }]);
 
 gearAppControllers.controller('PatientsController', ['$scope', '$http', '$location', function($scope, $http, $location) {
+	setGlobalObjects($scope);
 	$scope.showFeedback = 0;
+	$scope.currSession  = 0;
+	$scope.feedbacks = [];
+	$scope.showSessionsList = 0;
 	getDoctorBasicDetails($http, $scope, GLOBAL_OBJECTS['DOCTOR_ID']=1);
 	getAllPatients($http, $scope, GLOBAL_OBJECTS['DOCTOR_ID'], 'patients');
+	
 	$scope.logout = function(){$location.path('login');}
-
 	$scope.viewPatientPerformance = function(patientId, injuryId){
-		setGlobalObjectsPatients($scope, patientId, injuryId, 1, 1, 1);
+		$scope.currSession  = 0;
+		$scope.feedbacks= [];
+		$scope.showFeedback = 0;
+		setGlobalObjectsPatients($scope, patientId, injuryId);
 		getPatient($http, $scope, patientId);
-		//getPatientSessions($http, $scope, patientId, injuryId);
-		//getPatientSessionLevels($http, $scope, patientId, injuryId, 1);
-		//getPatientSessionLevelActions($http, $scope, patientId, injuryId, 1, 1);
-		//getPatientSessionLevelActionMovement($http, $scope, patientId, injuryId, 1, 1, 1);
+	}
+	$scope.updateSessionData = function(sessionIndex){
+		getPatientMesoAccuracy($http, $scope, $scope.patientId, $scope.injuryId, sessionIndex)
+		getPatientMesoDuration($http, $scope, $scope.patientId, $scope.injuryId, sessionIndex)
+		getPatientMicroMoves  ($http, $scope, $scope.patientId, $scope.injuryId, sessionIndex)
+		$scope.showSessionsList = 0;
+	}
+	$scope.postDoctorFeedback = function(feedback){
+		postDoctorFeedback($http, $scope, $scope.doctorId, $scope.patientId, $scope.injuryId, feedback);
+		var dateArr  = String(new Date()).split(" ")
+		var date     = dateArr[0]+", "+dateArr[1]+" "+dateArr[2]+" "+dateArr[3] 
+		$scope.feedbacks.push({
+			'date' 	  : date, 
+			'message' : feedback
+		})
+		$('.patientFeedbackInputBox').val('');
+	}
+	$scope.showDoctorFeedback = function(){
+		$scope.showFeedback = 1;
+		getDoctorFeedbacks($http, $scope, $scope.doctorId, $scope.patientId, $scope.injuryId);
 	}
 	$scope.selectMenu = function(routeOption) {
 		menuSelection(routeOption, CONSTANT_GLOBALS.PATIENTS_ROUTE, $location);
@@ -59,6 +91,7 @@ gearAppControllers.controller('PatientsController', ['$scope', '$http', '$locati
 }]);
 
 gearAppControllers.controller('SettingsController', ['$scope', '$http', '$location', function($scope, $http, $location) {
+	setGlobalObjects($scope);
 	getDoctorFullDetails($http, $scope, GLOBAL_OBJECTS['DOCTOR_ID']=1);
 	getAllPatients($http, $scope, GLOBAL_OBJECTS['DOCTOR_ID'], 'patients');
 	$scope.logout = function(){$location.path('login');}
@@ -67,149 +100,6 @@ gearAppControllers.controller('SettingsController', ['$scope', '$http', '$locati
 	};
 }]);
 
-function addGraphsMacro(){
-
-	var dataFeedback = {
-		'upperBound' : 10,
-		'results' : ['S1'], 
-		'fields'  : ['Relief', 'Strength', 'Rom'],
-		'Relief'  : {
-			'S1'  : [2,3,10]
-		},
-		'Strength' : {
-			'S1' : [5,8,10]
-		},
-		'Rom' : {
-			'S1' : [9,9,10]
-		}
-	}
-
-	var dataLevels = {
-		'upperBound' : 100,
-		'results' : ['L1', 'L2', 'L3', 'L4', 'L5', 'L6', 'L7', 'L8', 'L9'],
-		'dataTags': ['Start', 'End'],
-		'L1' : [10.00, 12.00],
-		'L2' : [14.00, 16.00],
-		'L3' : [18.00, 20.00],
-		'L4' : [22.00, 24.00],
-		'L5' : [26.00, 28.00],
-		'L6' : [30.00, 32.00],
-		'L7' : [40.00, 50.00],
-		'L8' : [60.00, 70.00],
-		'L9' : [20.00, 100.00]
-	}
-
-	var dataGender = {
-		'total' : 50,
-		'results' : ['Male', 'Female'],
-		'Male'    : 35,
-		'Female'  : 15
-	}
-
-	var ageGroup = {
-		'total' : 50,
-		'results' : ['20', '21', '22', '23', '24'],
-		'20'  : 25,
-		'21'  : 15,
-		'22'  : 7,
-		'23'  : 4,
-		'24'  : 4
-	}
-
-	var selectionClass = "dashboard";
-	gearChartMicroBinaryBar(300, 600, dataLevels, "overviewMacroObjectiveAccuracy", "Recovery", "%", hueIndex=2);
-	gearChartMicroBinaryBar(300, 600, dataLevels, "overviewMacroObjectiveTime", "Duration", "ms", hueIndex=3);
-	gearChartMesoStack(300, 600, dataFeedback, "overviewMacroGeneralSubjective", "Feedback");
-	gearChartMesoPie(300, 600, dataGender, "overviewMacroGeneralGender", "Gender")	
-	gearChartMesoPie(300, 600, ageGroup, "overviewMacroGeneralAge", "Age")	
-
-}
-
-function addGraphs(){
-	var dataRecovery = {
-		'upperBound' : 100,
-		'results' : ['S1',  'S2'],
-		'S1'  : [65.01, 86.34, 87.89],
-		'S2'  : [92.34, 91.33, 100.00]
-	}
-
-	var dataDuration = {
-		'upperBound' : 900.00,
-		'results' : ['S1',  'S2'],
-		'S1'  : [100.45, 10.00, 46.67],
-		'S2'  : [300.45, 900.00, 100.00]
-	}
-
-	var dataFeedback = {
-		'upperBound' : 10,
-		'results' : ['S1', 'S2'], 
-		'fields'  : ['Relief', 'Strength', 'Rom'],
-		'Relief'  : {
-			'S1'  : [2,3,4],
-			'S2'  : [10,5,6]
-		},
-		'Strength' : {
-			'S1' : [5,8,9],
-			'S2' : [10,10,9]
-		},
-		'Rom' : {
-			'S1' : [9,9,9],
-			'S2' : [10,9,9]
-		}
-	}
-
-	var dataLevels = {
-		'upperBound' : 100,
-		'results' : ['L1', 'L2', 'L3', 'L4', 'L5', 'L6', 'L7', 'L8', 'L9'],
-		'dataTags': ['Start', 'End'],
-		'L1' : [10.00, 12.00],
-		'L2' : [14.00, 16.00],
-		'L3' : [18.00, 20.00],
-		'L4' : [22.00, 24.00],
-		'L5' : [26.00, 28.00],
-		'L6' : [30.00, 32.00],
-		'L7' : [40.00, 50.00],
-		'L8' : [60.00, 70.00],
-		'L9' : [20.00, 100.00]
-	}
-
-	var selectionClass = "dashboard";
-	gearChartMicroBinaryBar(300, 600, dataLevels, "patientDataMesoAccuracy", "Recovery", "%", hueIndex=0);
-	gearChartMicroBinaryBar(300, 600, dataLevels, "patientDataMesoTime", "Duration", "ms", hueIndex=1);
-	gearChartMesoStack(300, 600, dataFeedback, "patientDataMacroFeedback", "Feedback");	
-	gearChartMesoBar(300, 600, dataRecovery, "patientDataMacroAccuracy", "Accuracy", "%",  hueIndex=0);	
-	gearChartMesoBar(300, 600, dataDuration, "patientDataMacroTime", "Duration", "ms", hueIndex=1);
-
-	var moves_1 = {'moveId'  : 1, 'angle'   : 45, 'expected' : 60, 'calibration' : 330}
-	var moves_2 = {'moveId'  : 2, 'angle'   : 45, 'expected' : 60, 'calibration' : 180}
-	var moves_3 = {'moveId'  : 3, 'angle'   : 45, 'expected' : 60, 'calibration' : 45}
-	var moves_4 = {'moveId'  : 4, 'angle'   : 45, 'expected' : 60, 'calibration' : 20}
-	var moves_5 = {'moveId'  : 5, 'angle'   : 45, 'expected' : 60, 'calibration' : 20}
-	var moves_6 = {'moveId'  : 6, 'angle'   : 45, 'expected' : 60, 'calibration' : 20}
-	var moves_7 = {'moveId'  : 7, 'angle'   : 45, 'expected' : 60, 'calibration' : 20}
-	var moves_8 = {'moveId'  : 8, 'angle'   : 45, 'expected' : 60, 'calibration' : 20}
-	var moves_9 = {'moveId'  : 9, 'angle'   : 45, 'expected' : 60, 'calibration' : 20}
-
-	gearChartMicroMoves(200, 'patientDataMicroMove_1_start', moves_1, 'Start');
-	gearChartMicroMoves(200, 'patientDataMicroMove_2_start', moves_2, 'Start');
-	gearChartMicroMoves(200, 'patientDataMicroMove_3_start', moves_3, 'Start');
-	gearChartMicroMoves(200, 'patientDataMicroMove_4_start', moves_4, 'Start');
-	gearChartMicroMoves(200, 'patientDataMicroMove_5_start', moves_5, 'Start');
-	gearChartMicroMoves(200, 'patientDataMicroMove_6_start', moves_6, 'Start');
-	gearChartMicroMoves(200, 'patientDataMicroMove_7_start', moves_7, 'Start');
-	gearChartMicroMoves(200, 'patientDataMicroMove_8_start', moves_8, 'Start');
-	gearChartMicroMoves(200, 'patientDataMicroMove_9_start', moves_9, 'Start');
-
-	gearChartMicroMoves(200, 'patientDataMicroMove_1_end', moves_1, 'End');
-	gearChartMicroMoves(200, 'patientDataMicroMove_2_end', moves_2, 'End');
-	gearChartMicroMoves(200, 'patientDataMicroMove_3_end', moves_3, 'End');
-	gearChartMicroMoves(200, 'patientDataMicroMove_4_end', moves_4, 'End');
-	gearChartMicroMoves(200, 'patientDataMicroMove_5_end', moves_5, 'End');
-	gearChartMicroMoves(200, 'patientDataMicroMove_6_end', moves_6, 'End');
-	gearChartMicroMoves(200, 'patientDataMicroMove_7_end', moves_7, 'End');
-	gearChartMicroMoves(200, 'patientDataMicroMove_8_end', moves_8, 'End');
-	gearChartMicroMoves(200, 'patientDataMicroMove_9_end', moves_9, 'End');
-}
 
 function menuSelection(routeSelected, currentRoute, $location){
 	if (routeSelected != currentRoute){
@@ -217,6 +107,7 @@ function menuSelection(routeSelected, currentRoute, $location){
 	}
 }
 
+//Doctors
 function authenticateDoctors($http, $scope, $location, username, password){
 	var loginUrl = 'http://localhost:3000/api/authenticate/doctors/'+username+'/'+password+"?callback=JSON_CALLBACK";
 	$http.jsonp(loginUrl)
@@ -256,7 +147,6 @@ function getDoctorFullDetails($http, $scope, doctorId){
 		 	$scope.profileName = data['firstName'] + ' ' + data['lastName'];
 		 	$scope.proifleImg  = data['imgId'];
 		 	$scope.profileDetails = data;
-		 	console.log(data);
 		})
 		.error(function(data){
 		 	console.log("Error in loading doctor's data");
@@ -266,46 +156,32 @@ function getDoctorFullDetails($http, $scope, doctorId){
 		})
 }
 
-function getPatientsAverageData($http, $scope, doctorId){
-	var averageDataUrl = 'http://localhost:3000/api/doctors/1/patients/averageData?callback=JSON_CALLBACK';
-	$http.jsonp(averageDataUrl)
-		 .success(function(data){
-		 	var averageData = data['averageData'];
-		 	$scope.totalPatients 	= averageData['totalPatients'];
-		 	$scope.averageRecovery	= averageData['averageRecovery'];
-		 	$scope.averageProgress	= averageData['averageProgress'];
-		 	$scope.averageBMI		= averageData['averageBMI'];
-		 })
-		 .error(function(){
-		 	console.log("Error in loading patients average data");
-		 })
-		 .finally(function(){
-		 	console.log("patients average data loaded");
-		 })
-}
 
+//Patients Information
 function getAllPatients($http, $scope, doctorId, currPage){
 	var allPatientsUrl = 'http://localhost:3000/api/doctors/1/patients?callback=JSON_CALLBACK';
 	$http.jsonp(allPatientsUrl)
 		 .success(function(data){
 		 	$scope.patients = data['patients'];
-		 	//patientOverallGraph(currPage, data['patients'], $http, $scope);
-		 	console.log(data['patients']);
 		 })
 		 .error(function(){
 		 	console.log("Error in loading patients data");
 		 })
 		 .finally(function(){
 		 	console.log("patients data loaded");
-		 	addGraphs();
 		 })
 }
 
 function getPatient($http, $scope, patientId){
 	var patientUrl = "http://localhost:3000/api/patients/" + patientId + '?callback=JSON_CALLBACK';
+	var maxSessionId = 0;
+	var injuryId = 0;
 	$http.jsonp(patientUrl)
 		 .success(function(data){
 		 	$scope.patientInfo = data['patient'];
+		 	$scope.currSession = data['patient']['sessionsCompleted'];
+		 	var injuryId = data['patient']['injuryId'];
+		 	getPatientData($http, $scope, patientId, injuryId, $scope.currSession);
 		 })
 		 .error(function(){
 		 	console.log("Error in loading patient data");
@@ -315,111 +191,179 @@ function getPatient($http, $scope, patientId){
 		 })	
 }
 
+function getOverviewData($http, $scope, groupId){
+	getOverviewMesoGender	($http, $scope, groupId); //Negative group id for all
+	getOverviewMesoAge		($http, $scope, groupId); 
+	getOverviewMesoFeedback	($http, $scope, groupId);
+	getOverviewMesoAccuracy	($http, $scope, groupId);
+	getOverviewMesoDuration	($http, $scope, groupId);
+}
+
+function getPatientData($http, $scope, patientId, injuryId, maxSessionId){
+	getPatientSessions($http, $scope, patientId, injuryId);
+	getPatientMacroAccuracy($http, $scope, patientId, injuryId)
+	getPatientMacroDuration($http, $scope, patientId, injuryId)
+	getPatientMacroFeedback($http, $scope, patientId, injuryId)
+	getPatientMesoAccuracy($http, $scope, patientId, injuryId, maxSessionId)
+	getPatientMesoDuration($http, $scope, patientId, injuryId, maxSessionId)
+	getPatientMicroMoves($http, $scope, patientId, injuryId, maxSessionId)
+}
+
+//Overview Data
+function getOverviewMacro($http, $scope, doctorId){
+	var url = "http://localhost:3000/api/doctors/"+doctorId+"/overview/macro?callback=JSON_CALLBACK"
+	$http.jsonp(url).success(function(data){
+		$scope.totalPatients = data['totalPatients'];
+		$scope.totalGroups   = data['totalGroups'];
+		$scope.avgAccuracy   = data['avgAccuracy'];
+		$scope.avgProgress   = data['avgProgress'];
+	})
+}
+
+function getOverviewMacroGroups($http, $scope){
+	var url = "http://localhost:3000/api/overview/groups?callback=JSON_CALLBACK"
+	$http.jsonp(url).success(function(data){
+		data.unshift({
+			"injuryId": "-1", 
+			"injuryName": "All", 
+			"injuryDescription": ""
+		});
+		$scope.groups = data;
+	})
+}	
+
+function getOverviewMesoGender($http, $scope, groupId){
+	var url = "http://localhost:3000/api/overview/groups/"+groupId+"/gender?callback=JSON_CALLBACK"
+	$http.jsonp(url).success(function(dataGender){
+		$(".overviewMacroGeneralGender").empty();
+		gearChartMesoPie(300, 600, dataGender, "overviewMacroGeneralGender", "Gender");
+	})
+}
+
+function getOverviewMesoAge($http, $scope, groupId){
+	var url = "http://localhost:3000/api/overview/groups/"+groupId+"/age?callback=JSON_CALLBACK"
+	$http.jsonp(url).success(function(dataAge){
+		$(".overviewMacroGeneralAge").empty();
+		gearChartMesoPie(300, 600, dataAge, "overviewMacroGeneralAge", "Age")
+	})
+}
+
+function getOverviewMesoFeedback($http, $scope, groupId){
+	var url = "http://localhost:3000/api/overview/groups/"+groupId+"/feedback?callback=JSON_CALLBACK"
+	$http.jsonp(url).success(function(dataFeedback){
+		$(".overviewMacroGeneralSubjective").empty();
+		gearChartMesoStack(300, 600, dataFeedback, "overviewMacroGeneralSubjective", "Feedback");
+	})
+}
+
+function getOverviewMesoAccuracy($http, $scope, groupId){
+	var url = "http://localhost:3000/api/overview/groups/"+groupId+"/accuracy?callback=JSON_CALLBACK"
+	$http.jsonp(url).success(function(dataAccuracy){
+		$(".overviewMacroObjectiveAccuracy").empty();
+		gearChartMicroBinaryBar(300, 600, dataAccuracy, "overviewMacroObjectiveAccuracy", "Recovery", "%", hueIndex=2);
+	})
+}
+
+function getOverviewMesoDuration($http, $scope, groupId){
+	var url = "http://localhost:3000/api/overview/groups/"+groupId+"/duration?callback=JSON_CALLBACK"
+	$http.jsonp(url).success(function(dataDuration){
+		$(".overviewMacroObjectiveTime").empty();
+		gearChartMicroBinaryBar(300, 600, dataDuration, "overviewMacroObjectiveTime", "Duration", "s", hueIndex=3);
+	})
+}
+
+//Patient Data
 function getPatientSessions($http, $scope, patientId, injuryId){
-	patientSessionUrl = "http://localhost:3000/api/patients/" + patientId + '/injury/'+injuryId+'/sessions?callback=JSON_CALLBACK';
-	$http.jsonp(patientSessionUrl)
-		 .success(function(data){
-		 	$scope.sessions = data['sessions'];
-		 	appendChart(data['sessions'], '#patient-sessions-chart', $http, $scope);
-		 	console.log(data['sessions']);
-		 })
-		 .error(function(){
-		 	console.log("Error in loading patient session data");
-		 })
-		 .finally(function(data){
-		 	console.log("patient session loaded");
-		 })		
+	var url = "http://localhost:3000/api/patients/"+patientId+"/injury/"+injuryId+"/sessions?callback=JSON_CALLBACK";
+	$http.jsonp(url).success(function(dataSessions){
+		$scope.dataSessions = dataSessions['sessions'];
+	})
 }
 
-function getPatientSessionLevels($http, $scope, patientId, injuryId, sessionId){
-	patientSessionLevelsUrl = "http://localhost:3000/api/patients/" + patientId + '/injury/'+injuryId+'/sessions/'+sessionId+'/levels?callback=JSON_CALLBACK';
-	$http.jsonp(patientSessionLevelsUrl)
-		 .success(function(data){
-		 	$scope.levels = data['levels'];
-		 	appendChart(data['levels'], '#patient-levels-chart', $http, $scope);
-		 	console.log(data['levels'])
-		 })
-		 .error(function(){
-		 	console.log("Error in loading patient level data");
-		 })
-		 .finally(function(){
-		 	console.log("patient level data loaded");
-		 })	
+function getPatientMacroAccuracy($http, $scope, patientId, injuryId){
+	var url = "http://localhost:3000/api/patients/"+patientId+"/injury/"+injuryId+"/macro/accuracy?callback=JSON_CALLBACK"
+	$http.jsonp(url).success(function(dataAccuracy){
+		$(".patientDataMacroAccuracy").empty();
+		gearChartMesoBar(300, 600, dataAccuracy, "patientDataMacroAccuracy", "Accuracy", "%", hueIndex=0);
+	})
 }
 
-function getPatientSessionLevelActions($http, $scope, patientId, injuryId, sessionId, levelId){
-	patientSessionLevelActionsUrl = "http://localhost:3000/api/patients/"+patientId+"/injury/"+injuryId+"/sessions/"+sessionId+"/levels/"+levelId+"/actions?callback=JSON_CALLBACK";
-	$http.jsonp(patientSessionLevelActionsUrl)
-		 .success(function(data){
-		 	$scope.actions = data['actions'];
-		 	appendBarChart(data['actions'], '#patient-actions-chart', $http, $scope);
-		 	console.log(data['actions']);
-		 })
-		 .error(function(){
-		 	console.log("Error in loading patient action data");
-		 })
-		 .finally(function(){
-		 	console.log("patient action data loaded");
-		 })	
+function getPatientMacroDuration($http, $scope, patientId, injuryId){
+	var url = "http://localhost:3000/api/patients/"+patientId+"/injury/"+injuryId+"/macro/duration?callback=JSON_CALLBACK"
+	$http.jsonp(url).success(function(dataDuration){
+		$(".patientDataMacroTime").empty();
+		gearChartMesoBar(300, 600, dataDuration, "patientDataMacroTime", "Duration", "s", hueIndex=1);
+	})
 }
 
-function getPatientSessionLevelActionMovement($http, $scope, patientId, injuryId, sessionId, levelId, actionId){
-	patientSessionLevelActionMovementUrl = "http://localhost:3000/api/patients/"+patientId+"/injury/"+injuryId+"/sessions/"+sessionId+"/levels/"+levelId+"/actions/"+actionId+"?callback=JSON_CALLBACK";
-	$http.jsonp(patientSessionLevelActionMovementUrl)
-	 .success(function(data){
-	 	$scope.movementStart = data['movement'][0];
-	 	$scope.movementEnd   = data['movement'][1];
-	 })
-	 .error(function(){
-	 	console.log("Error in loading patient movement data");
-	 })
-	 .finally(function(){
-	 	console.log("patient movement data loaded");
-	 })	
+function getPatientMacroFeedback($http, $scope, patientId, injuryId){
+	var url = "http://localhost:3000/api/patients/"+patientId+"/injury/"+injuryId+"/macro/feedback?callback=JSON_CALLBACK"
+	$http.jsonp(url).success(function(dataFeedback){
+		$(".patientDataMacroFeedback").empty();
+		gearChartMesoStack(300, 600, dataFeedback, "patientDataMacroFeedback", "Feedback");	
+	})
 }
 
-function patientOverallGraph(currPage, patients, $http, $scope){ 
-	if (currPage == "overview"){
-		var data = getSummaryOverviewData(patients);
-		appendChart(data, '#overview-overall-chart', $http, $scope);
-	}
+function getPatientMesoAccuracy($http, $scope, patientId, injuryId, maxSessionId){
+	var url = "http://localhost:3000/api/patients/"+patientId+"/injury/"+injuryId+"/session/"+maxSessionId+"/meso/accuracy?callback=JSON_CALLBACK";
+	$http.jsonp(url).success(function(dataAccuracy){
+		$(".patientDataMesoAccuracy").empty();
+		gearChartMicroBinaryBar(300, 600, dataAccuracy, "patientDataMesoAccuracy", "Recovery", "%", hueIndex=0);
+	})
 }
 
-function getSummaryOverviewData(patients){
-	allData = [];
-	for (patientIndex=0; patientIndex < patients.length; patientIndex++){
-		data = {
-			"recovery" : "",
-			"progress" : ""
+function getPatientMesoDuration($http, $scope, patientId, injuryId, maxSessionId){
+	var url = "http://localhost:3000/api/patients/"+patientId+"/injury/"+injuryId+"/session/"+maxSessionId+"/meso/duration?callback=JSON_CALLBACK";
+	$http.jsonp(url).success(function(dataDuration){
+		$(".patientDataMesoTime").empty();
+		gearChartMicroBinaryBar(300, 600, dataDuration, "patientDataMesoTime", "Duration", "s", hueIndex=1);
+	})
+}
+
+function getPatientMicroMoves($http, $scope, patientId, injuryId, maxSessionId){
+	var url = "http://localhost:3000/api/patients/"+patientId+"/injury/"+injuryId+"/session/"+maxSessionId+"/micro/moves?callback=JSON_CALLBACK";
+	$http.jsonp(url).success(function(dataMoves){
+		$scope.microMoves = dataMoves;
+		for(moveIndex=0; moveIndex<dataMoves['results'].length; moveIndex++){
+			var moveId = moveIndex + 1;
+			var moveDataStart = dataMoves['start']['L'+moveId];
+			var moveDataEnd   = dataMoves['end']['L'+moveId];
+			var startDiv = "patientDataMicroMove_"+moveId+"_start";
+			var endDiv   = "patientDataMicroMove_"+moveId+"_end";
+			$("."+startDiv).empty();
+			$("."+endDiv).empty();
+
+			gearChartMicroMoves(200, startDiv, moveDataStart, 'Start');
+			gearChartMicroMoves(200, endDiv,   moveDataEnd,    'end');
 		}
-		data['recovery'] = patients[patientIndex]['ROMrecovery']
-		data['progress'] = parseInt((patients[patientIndex]['sessionsCompleted'] / patients[patientIndex]['totalSessions']) * 100)
-		allData.push(data);
-	}
 
-	return allData.sort(sortByProgress);
+	})
 }
 
-function sortByProgress(a, b){
-	var aProgress = a.progress;
-	var bProgress = b.progress;
-	return ((aProgress < bProgress) ? -1 : ((aProgress > bProgress) ? 1 : 0));
+//Doctor Feedback
+function postDoctorFeedback($http, $scope, doctorId, patientId, injuryId, feedback){
+	var url = "http://localhost:3000/api//doctors/"+doctorId+"/patients/"+patientId+"/injury/"+injuryId+"/post/feedback?callback=JSON_CALLBACK&doctorFeedback="+feedback;
+	$http.jsonp(url).success(function(response){
+		console.log("Feedback added")
+	})
+}
+
+function getDoctorFeedbacks($http, $scope, doctorId, patientId, injuryId){
+	var url = "http://localhost:3000/api//doctors/"+doctorId+"/patients/"+patientId+"/injury/"+injuryId+"/get/feedbacks?callback=JSON_CALLBACK";
+	$http.jsonp(url).success(function(dataFeedback){
+		$scope.feedbacks = dataFeedback;
+		console.log(dataFeedback);
+	})
+}
+
+function setGlobalObjectsPatients($scope, patientId, injuryId){
+	GLOBAL_OBJECTS['PATIENT_ID'] = patientId;
+	GLOBAL_OBJECTS['INJURY_ID']  = injuryId;
+	setGlobalObjects($scope);
 }
 
 function setGlobalObjects($scope){
 	$scope.doctorId  = GLOBAL_OBJECTS['DOCTOR_ID'];
 	$scope.patientId = GLOBAL_OBJECTS['PATIENT_ID'];
 	$scope.injuryId  = GLOBAL_OBJECTS['INJURY_ID'];
-	$scope.sessionId = GLOBAL_OBJECTS['SESSION_ID'];
-	$scope.levelId   = GLOBAL_OBJECTS['LEVEL_ID'];
-	$scope.actionId  = GLOBAL_OBJECTS['ACTION_ID'];
-}
-
-function setGlobalObjectsPatients($scope, patientId, injuryId, sectionId, levelId, actionId){
-	GLOBAL_OBJECTS['PATIENT_ID'] = patientId;
-	GLOBAL_OBJECTS['INJURY_ID']  = injuryId;
-	GLOBAL_OBJECTS['SESSION_ID'] = sectionId;
-	GLOBAL_OBJECTS['LEVEL_ID']   = levelId;
-	GLOBAL_OBJECTS['ACTION_ID']  = actionId;
-	setGlobalObjects($scope);
 }

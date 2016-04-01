@@ -107,15 +107,15 @@
 											<div class = "progress round patientProgress">
 												<span class="meter progressMeter" 
 													  style="width:{{patient.ROMrecovery}}%"
-													  ng-class = "{'highBG'    : patient.ROMrecovery >= 80, 
-															 		'lowBG'    : patient.ROMrecovery <= 40,
-															 		'mediumBG' : patient.ROMrecovery > 40 && patient.ROMrecovery < 80}">
+													  ng-class = "{'highBG'    : patient.ROMrecovery >= 70, 
+															 		'lowBG'    : patient.ROMrecovery <= 60,
+															 		'mediumBG' : patient.ROMrecovery > 60 && patient.ROMrecovery < 70}">
 												</span>
 											</div>
 											<div class = "patientListRecoveryValue" 
-												ng-class = "{'high'   : patient.ROMrecovery >= 80, 
-															 'low'    : patient.ROMrecovery <= 40,
-															 'medium' : patient.ROMrecovery > 40 && patient.ROMrecovery < 80}">
+												ng-class = "{'high'   : patient.ROMrecovery >= 70, 
+															 'low'    : patient.ROMrecovery <= 60,
+															 'medium' : patient.ROMrecovery > 60 && patient.ROMrecovery < 70}">
 													{{patient.ROMrecovery}}% <span class = "settingsPatientRecoveryTag">({{patient.recoveryRange}})</span>
 											</div>
 										</div>

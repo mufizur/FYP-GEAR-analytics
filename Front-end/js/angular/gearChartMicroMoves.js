@@ -12,9 +12,8 @@ function gearChartMicroMoves(svgSquare, selectionClass, moves, moveType){
 	var svgHeight = svgSquare;
 	var moveId = moves['moveId'];
 	var moveAngle = moves['angle'];
-	var moveCalibration = moves['calibration'];
 	var moveExpected = moves['expected'];
-	var accuracy = 100 - ((Math.abs(moveCalibration - moveAngle) / 360) * 100)
+	var accuracy = moves['accuracy'];
 	var angleColor = GEAR_CHART_MICRO_MOVES_SETTINGS['GREEN_COLOR'];
 
 	if(accuracy < 40){
@@ -351,15 +350,9 @@ function gearChartMicroMoves(svgSquare, selectionClass, moves, moveType){
 	var textResult = dashboardSvg.append('text')
 			.classed('textMicroDataResult', true)
 			.attr('x', 10)
-			.attr('y', svgSquare - 60)
+			.attr('y', svgSquare - 40)
 			.text((moveAngle*-1)+'°')
 			.style('fill', 'rgb('+angleColor+')')
-
-	var textResult = dashboardSvg.append('text')
-			.classed('textMicroDataCalibration', true)
-			.attr('x', 10)
-			.attr('y', svgSquare - 40)
-			.text('Ref : '+moveCalibration+'°')
 
 	var textResult = dashboardSvg.append('text')
 			.classed('textMicroExpected', true)

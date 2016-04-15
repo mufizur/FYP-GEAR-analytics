@@ -16,9 +16,8 @@ gearAppControllers.controller('dashboardController', ['$scope', '$http', '$locat
 }]);
 
 gearAppControllers.controller('LoginController',   ['$scope', '$http', '$location', function($scope, $http, $location) {
-	$scope.login = function(user){
-		var username = user.username;
-		var password = user.password;
+	$scope.loginErrorMsg = "";
+	$scope.login = function(username, password){
 		authenticateDoctors($http, $scope, $location, username, password);
 	}
 }]);
@@ -98,8 +97,35 @@ gearAppControllers.controller('SettingsController', ['$scope', '$http', '$locati
 	$scope.selectMenu = function(routeOption) {
 		menuSelection(routeOption, CONSTANT_GLOBALS.SETTINGS_ROUTE, $location);
 	};
+
+	$scope.updateSessions = function(updateSessionsValue, patientIndex, patientId){
+		var currMaxSessions = $scope.patients[patientIndex].sessionsCompleted;
+		var totalSessions   = $scope.patients[patientIndex].totalSessions;
+		if(totalSessions != updateSessionsValue){
+			if (parseInt(updateSessionsValue) < parseInt(currMaxSessions)){
+				$scope.patients[patientIndex]['updateStatus'] = 0;
+			} else {
+				updateTotalSessions($http, $scope, updateSessionsValue, patientIndex, patientId)
+			}
+		}
+	}
 }]);
 
+
+function updateTotalSessions($http, $scope, updateValue, patientIndex, patientId){
+	var updateUrl = 'http://localhost:3000/api/patients/'+patientId+'/updateSessions/'+updateValue+"?callback=JSON_CALLBACK";
+	$http.jsonp(updateUrl)
+		.success(function(data){
+			$scope.patients[patientIndex]['totalSessions'] = updateValue;
+			$scope.patients[patientIndex]['updateStatus'] = 1;
+		})
+		.error(function(data){
+			console.log("Error in updating total sessions of patient")
+		})
+		.finally(function(){
+			console.log("Update sessions completede")
+		})
+}
 
 function menuSelection(routeSelected, currentRoute, $location){
 	if (routeSelected != currentRoute){
@@ -109,20 +135,31 @@ function menuSelection(routeSelected, currentRoute, $location){
 
 //Doctors
 function authenticateDoctors($http, $scope, $location, username, password){
-	var loginUrl = 'http://localhost:3000/api/authenticate/doctors/'+username+'/'+password+"?callback=JSON_CALLBACK";
-	$http.jsonp(loginUrl)
-		.success(function(data){
-		 	if (data.doctorId != -1){ //Authenticated
-		 		GLOBAL_OBJECTS['DOCTOR_ID'] = data.doctorId;
-		 		$location.path('overview');
-		 	}
-		})
-		.error(function(data){
-		 	console.log("Error in authentication");
-		})
-		.finally(function(){
-			console.log("Authentication Successful");
-		})
+	if (typeof username === 'undefined' || username.length == 0){
+		$scope.loginErrorMsg = "Username is empty";
+
+	} else if (typeof password === 'undefined' || password.length == 0){
+		$scope.loginErrorMsg = "Password is empty";
+
+	} else {
+		var loginUrl = 'http://localhost:3000/api/authenticate/doctors/'+username+'/'+password+"?callback=JSON_CALLBACK";
+		$http.jsonp(loginUrl)
+			.success(function(data){
+				if ("error" in data){
+					$scope.loginErrorMsg = data.error;
+
+				} else if (data.doctorId != -1){ //Authenticated
+			 		GLOBAL_OBJECTS['DOCTOR_ID'] = data.doctorId;
+			 		$location.path('overview');
+			 	}
+			})
+			.error(function(data){
+			 	console.log("Error in authentication");
+			})
+			.finally(function(){
+				console.log("Authentication Successful");
+			})
+	}
 }
 
 function getDoctorBasicDetails($http, $scope, doctorId){

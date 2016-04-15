@@ -15,33 +15,51 @@
 
 .profileSettingsImg{
 	border-radius: 50%;
-	max-width: 200px;
-	max-height: 200px;
+	max-width: 180px;
+	max-height: 180px;
 }
 
 .profileSettingsImgWrapper{
 	text-align: center;
 }
 
-.profileSettingsDivWrapper{
+.profileInformationWrapper{
+	background-color: #e1e1e1;
+	margin: 10px;
 	width: 33.33%;
+}
+.profileSettingsDivWrapperLeft{
+	width: 25%;
+}
+
+.profileSettingsDivRight{
+	width: 75%;
+}
+
+.profileInformationDivWrapper{
+	display: flex;
+	flex-direction: row;
 }
 
 .profileSettingsParticularElement{
 	margin: 5px;
 	padding: 5px;
+	color: #8f8f8f;
+	font-size: 0.8em;
 }
 
 .profileSettingsParticularValue{
-	background-color: #e1e1e1 !important;
-	border: 0px !important;
+	color: black;
+	font-size: 1.2em;
 }
 
+/*
 .profileSettingsParticularValue:focus{
 	color: white !important;
 	background-color: #f39c12 !important;
 	transition: background-color 300ms ease-out;
 }
+*/
 
 .profileSettingsSaveBtnWrapper{
 	text-align: center;
@@ -128,12 +146,28 @@
 	padding-top: 20px;
 }
 
+.updateMessages{
+	min-height: 40px;
+}
+
+.successfulUpdate{
+	color: #16a085;
+}
+
+.unsuccessfulUpdate{
+	color: #c0392b;
+}
+
 @media only screen and (max-width: 1020px){
-	.profileSettings{
+	.profileSettings, .profileInformationDivWrapper{
 		flex-direction: column;
 	}
 
 	.profileSettingsDivWrapper{
 		width: 100%;
+	}
+
+	.profileInformationWrapper{
+		width: calc(100% - 20px);
 	}
 }

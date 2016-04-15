@@ -34,59 +34,73 @@
 		<div class = "subViewDiv settingsSubView">
 			<div class = "settingsWrapper">
 				<div class = "profileSettingsWrapper">
-					<div class = "settingsDataHeader">Edit Profile</div><br>
+					<div class = "settingsDataHeader">Profile Information</div><br>
 					<div class = "profileSettings">
-						<div class = "profileSettingsDivWrapper profileSettingsImgWrapper">
+						<div class = "profileSettingsDivWrapper profileSettingsImgWrapper profileSettingsDivWrapperLeft">
 							<img class = "profileSettingsImg" ng-src="{{profileDetails.imgId}}" alt="Img">
-							<br>
+							<!-- <br>
 							<div class = "profileSettingsParticularElement">
 								Image Url
 								<input type="text" class = "profileSettingsParticularValue" value = "{{profileDetails.imgId}}"/>
 							</div>
+							-->
 						</div>
-						<div class = "profileSettingsDivWrapper">
-							<div class = "profileSettingsParticularElement">
-								First Name 
-								<input type="text" class = "profileSettingsParticularValue" value = "{{profileDetails.firstName}}"/>
-							</div>
-							<div class = "profileSettingsParticularElement">
-								Last Name 
-								<input type="text" class = "profileSettingsParticularValue" value = "{{profileDetails.lastName}}"/>
-							</div>
-							<div class = "profileSettingsParticularElement">
-								Telephone
-								<input type="text" class = "profileSettingsParticularValue" value = "{{profileDetails.telephone}}"/>
-							</div>
-							<div class = "profileSettingsParticularElement">
-								Fax
-								<input type="text" class = "profileSettingsParticularValue" value = "{{profileDetails.fax}}"/>
-							</div>
+						<div class = "profileSettingsDivWrapper profileSettingsDivRight">
+							<div class = "profileInformationDivWrapper">
+								<div class = "profileInformationWrapper">
+									<div class = "profileSettingsParticularElement">
+										First Name 
+										<div class = "profileSettingsParticularValue">{{profileDetails.firstName}}</div>
+									</div>
+									<div class = "profileSettingsParticularElement">
+										Last Name 
+										<div class = "profileSettingsParticularValue">{{profileDetails.lastName}}</div>
+									</div>
+									<div class = "profileSettingsParticularElement">
+										Qualification
+										<div class = "profileSettingsParticularValue">{{profileDetails.qualification}}</div>
+									</div>
+								</div>
+
+								<div class = "profileInformationWrapper">
+									<div class = "profileSettingsParticularElement">
+										Institution 
+										<div class = "profileSettingsParticularValue">{{profileDetails.institution}}</div>
+									</div>
+									<div class = "profileSettingsParticularElement">
+										Speciality 
+										<div class = "profileSettingsParticularValue">{{profileDetails.speciality}}</div>
+									</div>
+									<div class = "profileSettingsParticularElement">
+										Department
+										<div class = "profileSettingsParticularValue">{{profileDetails.department}}</div>
+									</div>
+								</div>	
+
+								<div class = "profileInformationWrapper">
+									<div class = "profileSettingsParticularElement">
+										Telephone
+										<div class = "profileSettingsParticularValue">{{profileDetails.telephone}}</div>
+									</div>
+									<div class = "profileSettingsParticularElement">
+										Fax
+										<div class = "profileSettingsParticularValue">{{profileDetails.fax}}</div>
+									</div>
+								</div>
+
+							</div>						
 						</div>
-						<div class = "profileSettingsDivWrapper">
-							<div class = "profileSettingsParticularElement">
-								Institution 
-								<input type="text" class = "profileSettingsParticularValue" value = "{{profileDetails.institution}}"/>
-							</div>
-							<div class = "profileSettingsParticularElement">
-								Speciality 
-								<input type="text" class = "profileSettingsParticularValue" value = "{{profileDetails.speciality}}"/>
-							</div>
-							<div class = "profileSettingsParticularElement">
-								Department
-								<input type="text" class = "profileSettingsParticularValue" value = "{{profileDetails.department}}"/>
-							</div>
-							<div class = "profileSettingsParticularElement">
-								Qualification
-								<input type="text" class = "profileSettingsParticularValue" value = "{{profileDetails.qualification}}"/>
-							</div>
-						</div>
+
 					</div>
 				</div>
+				
+				<!--
 				<div class = "profileSettingsSaveBtnWrapper">
 					<div class = "profileSettingsSaveBtn">
 						Update
 					</div>
 				</div>
+				-->
 
 				<div class = "patientsSettingsWrapper">
 					<div class = "settingsDataHeader">Edit Patient's sessions</div><br>
@@ -129,11 +143,22 @@
 									<div class = "settingsPatientsTotalSessionsWrapper">
 										<div class = "settingTotalSessions">
 											<div class = "settingListDetialHeader">Total Sessions</div>
-											<input type="text" class = "profileSettingsParticularValue" value = "{{patient.totalSessions}}"/>
+											<input type="text" class  = "profileSettingsParticularValue" ng-model = "updateSessionsValue" ng-init = "updateSessionsValue = patient.totalSessions"/>
+										</div>
+
+										<div class = "updateMessages">
+											<div class = "successfulUpdate" ng-if="patient.updateStatus == 1">
+												Updated Successfully
+											</div>
+
+											<div class = "unsuccessfulUpdate" ng-if="patient.updateStatus == 0">
+												Completed sessions cannot be more than total
+											</div>
+
 										</div>
 
 										<div class = "profileSettingsSaveBtnWrapper">
-											<div class = "profileSettingsSaveBtn">
+											<div class = "profileSettingsSaveBtn" ng-click="updateSessions(updateSessionsValue, patients.indexOf(patient), patient.patientId)">
 												Update
 											</div>
 										</div>

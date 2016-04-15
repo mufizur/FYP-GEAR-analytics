@@ -29,29 +29,37 @@ router.route('/update')
 				databaseConnection.query(updateQuery);
 			}
 		});*/
-		var password = "password";
-		var hashpassword = bCrypt.hashSync(password, bCrypt.genSaltSync(10), null);
-		res.jsonp(hashpassword);
 	});	
 
 
 //Doctor Data
-router.route('/authenticate/doctors/:email/:hashpassword')
+router.route('/authenticate/doctors/:email/:password')
 	.get(function(req, res){
-		var hashpassword   = bCrypt.hashSync(req.params.hashpassword, bCrypt.genSaltSync(10), null);
-		var doctorJson	   = {};
+		var returnJson	   = {};
 		var selectTable    = "doctors";
-		var selectParams   = "DoctorId";
-		var filterPassword = "hashpassword = '" + hashpassword + "'";
+		var selectParams   = "DoctorId, hashPassword, hashSalt";
 		var filterEmail    = "email = '" + req.params.email + "'";
-		var sqlQuery = 'SELECT ' + selectParams + ' FROM ' + selectTable + ' WHERE ' + filterPassword + ' AND ' + filterEmail;
+		var sqlQuery = 'SELECT ' + selectParams + ' FROM ' + selectTable + ' WHERE ' + filterEmail;
 		databaseConnection.query(sqlQuery, function(err, result){
 			if (typeof result[0] !== 'undefinied' && result[0]){
-				doctorJson = {
-					"doctorId" : result[0]['DoctorId']
+				var hashSalt = result[0]['hashSalt'];
+				var password = req.params.password;
+				var prevHashpassword = result[0]['hashPassword'];
+				if (bCrypt.compareSync((password + hashSalt), prevHashpassword)){
+					returnJson = {
+						"doctorId" : result[0]['DoctorId']
+					}	
+				} else {
+					returnJson = {
+						"error" : "Please check if your password is correct"
+					}
+				}
+			} else {
+				returnJson = {
+					"error" : "Please check if your username is correct"
 				}
 			}
-			res.jsonp(doctorJson);
+			res.jsonp(returnJson);
 		});
 	});
 
@@ -188,6 +196,15 @@ router.route('/patients/:patientId')
 		});
 	});
 
+
+router.route('/patients/:patientId/updateSessions/:newSessions')
+	.get(function(req, res){
+		var updateQuery = "UPDATE patients SET totalSessions = "+req.params.newSessions+" where patientId = "+req.params.patientId;
+		databaseConnection.query(updateQuery, function(err, result){
+			res.jsonp({"status" : "successful"})
+		});
+	})
+	
 router.route('/patients/:patientId/injury/:injuryId/sessions')
 	.get(function(req, res){
 		var sessions      = [];

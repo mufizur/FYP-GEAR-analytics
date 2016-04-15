@@ -6,14 +6,18 @@
 
 	<form class = "loginForm">
 		<label><div class = "labelDiv"> Username</div>
-			<input class = "formInput" type="text" placeholder="user@client.com" ng-model="user.username"/>
+			<input class = "formInput" type="text" placeholder="user@client.com" ng-model="username"/>
 		</label>
 
 		<label><div class = "labelDiv"> Password</div>
-			<input class = "formInput" type="password" placeholder="user123" ng-model="user.password"/>
+			<input class = "formInput" type="password" placeholder="user123" ng-model="password"/>
 		</label>
 
+		<div class = "errorMsgDiv" ng-show = "loginErrorMsg.length > 0">
+			{{loginErrorMsg}}
+		</div>
+
 		<br/>
-		<a ng-click="login(user)" class="button success loginButton">Enter</a>
+		<a ng-click="login(username, password)" class="button success loginButton">Enter</a>
 	</form>
 </div>

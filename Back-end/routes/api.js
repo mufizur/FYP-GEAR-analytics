@@ -9,12 +9,23 @@ router.route('/test')
 	});	
 
 
-var databaseConnection = mysql.createConnection({
+//Web connection 
+/*var databaseConnection = mysql.createConnection({
   host     : 'sql6.freemysqlhosting.net',
   user     : 'sql6115444',
   password : 'nBsA7B2C21',
   database : 'sql6115444'
 });
+*/
+
+//Local connection 
+var databaseConnection = mysql.createConnection({
+  host     : 'localhost',
+  user     : 'root',
+  password : '',
+  database : 'rehabilitation'
+});
+
 
 databaseConnection.connect();
 

@@ -8,7 +8,7 @@ router.route('/test')
 		res.jsonp({"status" : "successful"});
 	});	
 
-/*
+
 var databaseConnection = mysql.createConnection({
   host     : 'sql6.freemysqlhosting.net',
   user     : 'sql6115444',
@@ -19,6 +19,7 @@ var databaseConnection = mysql.createConnection({
 databaseConnection.connect();
 
 
+/*
 //Doctor Data
 router.route('/authenticate/doctors/:email/:password')
 	.get(function(req, res){

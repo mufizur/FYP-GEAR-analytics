@@ -18,17 +18,9 @@ router.get('/users', function(req, res, next) {
   res.send('respond with a resource');
 });*/
 
-router.route('/update')
+router.route('/test')
 	.get(function(req, res){
-		/*var selectQuery = "SELECT PatientId, AVG(sessionAccuracy) as Accuracy FROM `recordsessions` group by PatientId";
-		databaseConnection.query(selectQuery, function(err, result){
-			for(index=0; index<result.length; index++){
-				var patientId = result[index]['PatientId'];
-				var accuracy  = parseInt(result[index]['Accuracy']);
-				var updateQuery = "UPDATE patients SET ROMrecovery = '"+accuracy+"' where patientId = "+patientId;
-				databaseConnection.query(updateQuery);
-			}
-		});*/
+		res.jsonp({"status" : "successful"});
 	});	
 
 
@@ -204,7 +196,7 @@ router.route('/patients/:patientId/updateSessions/:newSessions')
 			res.jsonp({"status" : "successful"})
 		});
 	})
-	
+
 router.route('/patients/:patientId/injury/:injuryId/sessions')
 	.get(function(req, res){
 		var sessions      = [];

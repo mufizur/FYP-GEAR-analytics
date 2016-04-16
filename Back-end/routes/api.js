@@ -19,7 +19,6 @@ var databaseConnection = mysql.createConnection({
 databaseConnection.connect();
 
 
-/*
 //Doctor Data
 router.route('/authenticate/doctors/:email/:password')
 	.get(function(req, res){
@@ -98,6 +97,7 @@ router.route('/doctors/:doctorId')
 	});
 
 
+/*
 //Patient Data
 router.route('/doctors/:doctorId/patients')
 	.get(function(req, res){

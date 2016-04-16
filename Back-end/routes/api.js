@@ -3,6 +3,11 @@ var mysql   = require('mysql');
 var router  = express.Router();
 var bCrypt  = require('bcrypt-nodejs');
 
+router.route('/test')
+	.get(function(req, res){
+		res.jsonp({"status" : "successful"});
+	});	
+
 /*
 var databaseConnection = mysql.createConnection({
   host     : 'sql6.freemysqlhosting.net',
@@ -12,12 +17,6 @@ var databaseConnection = mysql.createConnection({
 });
 
 databaseConnection.connect();
-
-
-router.route('/test')
-	.get(function(req, res){
-		res.jsonp({"status" : "successful"});
-	});	
 
 
 //Doctor Data

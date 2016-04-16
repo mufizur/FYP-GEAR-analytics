@@ -3,20 +3,16 @@ var mysql   = require('mysql');
 var router  = express.Router();
 var bCrypt  = require('bcrypt-nodejs');
 
-
+/*
 var databaseConnection = mysql.createConnection({
-  host     : 'localhost',
-  user     : 'root',
-  password : '',
-  database : 'rehabilitation'
+  host     : 'sql6.freemysqlhosting.net',
+  user     : 'sql6115444',
+  password : 'nBsA7B2C21',
+  database : 'sql6115444'
 });
 
 databaseConnection.connect();
 
-/*
-router.get('/users', function(req, res, next) {
-  res.send('respond with a resource');
-});*/
 
 router.route('/test')
 	.get(function(req, res){
@@ -744,5 +740,5 @@ router.route('/doctors/:doctorId/patients/:patientId/injury/:injuryId/get/feedba
 			res.jsonp(feedbacks)
 		});
 	});
-
+*/
 module.exports = router;

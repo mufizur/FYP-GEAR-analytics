@@ -8,24 +8,26 @@ router.route('/test')
 		res.jsonp({"status" : "successful"});
 	});	
 
+//var CONNECTION_TYPE = 'local';
+var CONNECTION_TYPE = 'server';
+var databaseConnection;
 
-//Web connection 
-/*var databaseConnection = mysql.createConnection({
-  host     : 'sql6.freemysqlhosting.net',
-  user     : 'sql6115444',
-  password : 'nBsA7B2C21',
-  database : 'sql6115444'
-});
-*/
+if (CONNECTION_TYPE == 'local'){
+	databaseConnection = mysql.createConnection({
+	  host     : 'localhost',
+	  user     : 'root',
+	  password : '',
+	  database : 'rehabilitation'
+	});
 
-//Local connection 
-var databaseConnection = mysql.createConnection({
-  host     : 'localhost',
-  user     : 'root',
-  password : '',
-  database : 'rehabilitation'
-});
-
+} else if (CONNECTION_TYPE == 'server'){
+	databaseConnection = mysql.createConnection({
+	  host     : 'sql6.freemysqlhosting.net',
+	  user     : 'sql6115444',
+	  password : 'nBsA7B2C21',
+	  database : 'sql6115444'
+	});	
+}
 
 databaseConnection.connect();
 

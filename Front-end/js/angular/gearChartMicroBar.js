@@ -147,7 +147,7 @@ function gearChartMicroBinaryBar(svgHeight, svgWidth, dataArray, selectionClass,
 					.on('mouseover', function(d){
 						d3.select(this).style('fill-opacity',1.0)
 						var dataTagIndex  = parseInt(this.getAttribute('binaryIndex'))
-						var toolTipHeader = "<div class = 'toolTipHeader'>Level "+(parseInt(this.getAttribute('dataIndex'))+1)+" ("+dataArray['dataTags'][dataTagIndex]+")</div>";
+						var toolTipHeader = "<div class = 'toolTipHeader'>Move "+(parseInt(this.getAttribute('dataIndex'))+1)+" ("+dataArray['dataTags'][dataTagIndex]+")</div>";
 						var toolTipValue  = "<div class = 'toolTipData'>"+dataTag+": "+d+dataUnits+"</div>";
 						var toolTipHtml   = "<div class = 'toolTipHtml'>"+toolTipHeader+toolTipValue+"</div>";
 						toolTip.html(toolTipHtml)
@@ -203,7 +203,7 @@ function gearChartMicroBinaryBar(svgHeight, svgWidth, dataArray, selectionClass,
 				})
 				.on('mouseover', function(d){
 					d3.select(this).style('fill-opacity',1.0);
-					var toolTipHeader = "<div class = 'toolTipHeader'>Level "+(parseInt(this.getAttribute('dataIndex'))+1)+"</div>";
+					var toolTipHeader = "<div class = 'toolTipHeader'>Move "+(parseInt(this.getAttribute('dataIndex'))+1)+"</div>";
 					var toolTipValue  = "<div class = 'toolTipData'>Avg "+dataTag+": "+d+dataUnits+"</div>";
 					var toolTipHtml   = "<div class = 'toolTipHtml'>"+toolTipHeader+toolTipValue+"</div>";
 					toolTip.html(toolTipHtml)

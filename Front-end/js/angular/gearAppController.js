@@ -15,8 +15,8 @@ var GLOBAL_OBJECTS = {
 var SERVER_URL = 'https://api-gear-analytics-2016.herokuapp.com/api/'
 var BASE_URL   = 'http://localhost:3000/api/'
 
-var API_URL    = SERVER_URL
-//var API_URL    = BASE_URL
+//var API_URL    = SERVER_URL
+var API_URL    = BASE_URL
 
 gearAppControllers.controller('dashboardController', ['$scope', '$http', '$location', function($scope, $http, $location) {
 }]);
@@ -73,6 +73,7 @@ gearAppControllers.controller('PatientsController', ['$scope', '$http', '$locati
 		getPatientMesoAccuracy($http, $scope, $scope.patientId, $scope.injuryId, sessionIndex)
 		getPatientMesoDuration($http, $scope, $scope.patientId, $scope.injuryId, sessionIndex)
 		getPatientMicroMoves  ($http, $scope, $scope.patientId, $scope.injuryId, sessionIndex)
+		$scope.currSession  = sessionIndex;
 		$scope.showSessionsList = 0;
 	}
 	$scope.postDoctorFeedback = function(feedback){
@@ -156,7 +157,7 @@ function authenticateDoctors($http, $scope, $location, username, password){
 
 				} else if (data.doctorId != -1){ //Authenticated
 			 		GLOBAL_OBJECTS['DOCTOR_ID'] = data.doctorId;
-			 		$location.path('overview');
+			 		$location.path('patients');
 			 	}
 			})
 			.error(function(data){

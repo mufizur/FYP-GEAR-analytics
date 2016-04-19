@@ -8,8 +8,8 @@ router.route('/test')
 		res.jsonp({"status" : "successful"});
 	});	
 
-//var CONNECTION_TYPE = 'local';
-var CONNECTION_TYPE = 'server';
+var CONNECTION_TYPE = 'local';
+//var CONNECTION_TYPE = 'server';
 var databaseConnection;
 
 if (CONNECTION_TYPE == 'local'){

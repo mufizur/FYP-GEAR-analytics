@@ -53,13 +53,12 @@
 	font-size: 1.2em;
 }
 
-/*
 .profileSettingsParticularValue:focus{
 	color: white !important;
 	background-color: #f39c12 !important;
+	border: 0px;
 	transition: background-color 300ms ease-out;
 }
-*/
 
 .profileSettingsSaveBtnWrapper{
 	text-align: center;
